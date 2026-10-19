@@ -1012,6 +1012,9 @@ html, body {
 .seat-class-icon.class-green {
   color: var(--seat-green);
 }
+.seat-class-icon.class-ekonomiPremium {
+  color: #A67C52;
+}
 .seat-class-icon.class-ordinary {
   color: var(--seat-ordinary);
 }

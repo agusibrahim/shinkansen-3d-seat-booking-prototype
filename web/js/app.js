@@ -453,9 +453,10 @@ class ShinkansenPrototypeApp {
     filtered.forEach((sched, index) => {
       const granObj = sched.seatClasses.find((c) => c.seatClass === 'granClass');
       const greenObj = sched.seatClasses.find((c) => c.seatClass === 'green');
+      const premObj = sched.seatClasses.find((c) => c.seatClass === 'ekonomiPremium');
       const ordObj = sched.seatClasses.find((c) => c.seatClass === 'ordinary');
 
-      const availPrices = [granObj, greenObj, ordObj].filter(Boolean).map((c) => c.price);
+      const availPrices = [granObj, greenObj, premObj, ordObj].filter(Boolean).map((c) => c.price);
       const cheapest = availPrices.length > 0 ? Math.min(...availPrices) : null;
 
       const fromTimeStr = formatTimeWithOffset(sched.fromTime, this.timeOffsetSec);
@@ -487,6 +488,11 @@ class ShinkansenPrototypeApp {
                 ${
                   greenObj
                     ? `<span class="seat-class-icon size-small class-green${!greenObj.isAvailable ? ' unavailable' : ''}">${ICONS.green}</span>`
+                    : ''
+                }
+                ${
+                  premObj
+                    ? `<span class="seat-class-icon size-small class-ekonomiPremium${!premObj.isAvailable ? ' unavailable' : ''}">${ICONS.green}</span>`
                     : ''
                 }
                 ${
@@ -566,6 +572,7 @@ class ShinkansenPrototypeApp {
       const imgMap = {
         granClass: 'gran',
         green: 'green',
+        ekonomiPremium: 'premium',
         ordinary: 'ordinary'
       };
       const seatImgName = imgMap[sc.seatClass] || 'ordinary';
@@ -577,7 +584,7 @@ class ShinkansenPrototypeApp {
           <div class="card-content">
             <div class="seat-class-left">
               <div class="seat-class-icon-wrap">
-                <span class="seat-class-icon size-regular class-${sc.seatClass}">${ICONS[sc.seatClass] || ICONS.ordinary}</span>
+                <span class="seat-class-icon size-regular class-${sc.seatClass}">${ICONS[sc.seatClass] || ICONS.green}</span>
               </div>
               <div class="seat-class-text-stack">
                 <div class="label-set-view align-left">

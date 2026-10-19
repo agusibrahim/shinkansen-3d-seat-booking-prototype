@@ -455,15 +455,21 @@ export class NodeFactory {
   }
 
   attachKAICustom3DDetails(modelName, rootGroup, collector) {
-    // 1. KAI Eksekutif Next Gen Winged Headrest ("Telinga" Sandaran) & Stitched Ribs (Image 2)
-    const isEksekutifSeat =
-      modelName === 'e7-green-seat-a' ||
-      modelName === 'e7-green-seat-b' ||
-      modelName.startsWith('e7-ordinary-seat-');
-    const isCompleteSeat =
-      modelName === '_e7_green_seat_complete' || modelName === '_e7_ordinary_seat_complete';
+    // 1A. Eksekutif Maroon 2-2 & Ekonomi New Gen Biru 2-2 (Winged Headrest + 4 Horizontal Ribs + Center Divider)
+    const isMaroonSeat =
+      modelName.startsWith('kai-maroon-seat-') || modelName === '_kai_maroon_seat_complete';
+    const isBlueSeat =
+      modelName.startsWith('kai-blue-seat-') ||
+      modelName.startsWith('e7-green-seat-') ||
+      modelName === '_kai_blue_seat_complete' ||
+      modelName === '_e7_green_seat_complete';
+    const isPremSeat =
+      modelName.startsWith('kai-prem-seat-') || modelName === '_kai_prem_seat_complete';
+    const isEko23Seat =
+      modelName.startsWith('e7-ordinary-seat-') || modelName === '_e7_ordinary_seat_complete';
+    const isCompleteSeat = modelName.endsWith('_complete');
 
-    if (isEksekutifSeat || isCompleteSeat) {
+    if (isMaroonSeat || isBlueSeat || isPremSeat || isEko23Seat) {
       let backrestObj = null;
       let seatBaseObj = null;
       rootGroup.traverse((ch) => {
@@ -480,11 +486,16 @@ export class NodeFactory {
         }
       });
 
-      if (backrestObj) {
+      if (backrestObj && (isMaroonSeat || isBlueSeat)) {
+        const wingNormalColor = isMaroonSeat ? [0.467, 0.2, 0.263, 1.0] : [0.278, 0.369, 0.545, 1.0];
+        const wingHiColor = isMaroonSeat ? [0.345, 0.133, 0.184, 1.0] : [0.196, 0.267, 0.412, 1.0];
+        const ribNormalColor = isMaroonSeat ? [0.35, 0.13, 0.18, 1.0] : [0.18, 0.25, 0.4, 1.0];
+        const ribHiColor = isMaroonSeat ? [0.25, 0.08, 0.12, 1.0] : [0.12, 0.18, 0.3, 1.0];
+
         const wingMatDefList = [
           {
             name: 'kai-wing-normal',
-            diffuse: { type: 'color', color: [0.467, 0.2, 0.263, 1.0] },
+            diffuse: { type: 'color', color: wingNormalColor },
             multiply: { type: 'color', color: [1, 1, 1, 1] },
             multiplyIntensity: 1,
             transparency: 1,
@@ -493,7 +504,7 @@ export class NodeFactory {
           },
           {
             name: 'kai-wing-highlighted',
-            diffuse: { type: 'color', color: [0.345, 0.133, 0.184, 1.0] },
+            diffuse: { type: 'color', color: wingHiColor },
             multiply: { type: 'color', color: [1, 1, 1, 1] },
             multiplyIntensity: 1,
             transparency: 1,
@@ -523,7 +534,7 @@ export class NodeFactory {
         const ribMatDefList = [
           {
             name: 'kai-rib-normal',
-            diffuse: { type: 'color', color: [0.35, 0.13, 0.18, 1.0] },
+            diffuse: { type: 'color', color: ribNormalColor },
             multiply: { type: 'color', color: [1, 1, 1, 1] },
             multiplyIntensity: 1,
             transparency: 1,
@@ -532,7 +543,7 @@ export class NodeFactory {
           },
           {
             name: 'kai-rib-highlighted',
-            diffuse: { type: 'color', color: [0.25, 0.08, 0.12, 1.0] },
+            diffuse: { type: 'color', color: ribHiColor },
             multiply: { type: 'color', color: [1, 1, 1, 1] },
             multiplyIntensity: 1,
             transparency: 1,
@@ -564,7 +575,6 @@ export class NodeFactory {
         const zRib = isCompleteSeat ? -215 : 108;
         const yRibStart = isCompleteSeat ? 580 : 255;
 
-        // Left & Right Winged Headrest Ears ("Telinga" Sandaran Kepala)
         const wingGeo = new THREE.BoxGeometry(82, 225, 145);
         for (const side of [-1, 1]) {
           const wMat = createSCNShaderMaterial(wingMatDefList[0]);
@@ -580,7 +590,6 @@ export class NodeFactory {
           });
         }
 
-        // 4 Horizontal Stitched Ribs on Lumbar Backrest (Image 2)
         const ribGeo = new THREE.BoxGeometry(310, 10, 18);
         for (let r = 0; r < 4; r++) {
           const rMat = createSCNShaderMaterial(ribMatDefList[0]);
@@ -594,40 +603,173 @@ export class NodeFactory {
             allMaterials: ribMatDefList
           });
         }
+
+        if (seatBaseObj && modelName.endsWith('-a')) {
+          const divGeo = new THREE.BoxGeometry(28, 195, 220);
+          const divMat = new THREE.MeshBasicMaterial({
+            color: isMaroonSeat ? 0xb8c7dc : 0xe2e6ee
+          });
+          const divMesh = new THREE.Mesh(divGeo, divMat);
+          divMesh.position.set(-306, 515, -145);
+          divMesh.rotation.x = -0.18;
+          seatBaseObj.add(divMesh);
+        }
       }
 
-      // Ice-blue center divider armrest strictly between paired seats (A-B and C-D)
-      if (seatBaseObj && modelName === 'e7-green-seat-a') {
-        const divGeo = new THREE.BoxGeometry(28, 195, 220);
-        const divMat = new THREE.MeshBasicMaterial({ color: 0xb8c7dc });
-        const divMesh = new THREE.Mesh(divGeo, divMat);
-        divMesh.position.set(-306, 515, -145);
-        divMesh.rotation.x = -0.18;
-        seatBaseObj.add(divMesh);
+      // 1B. Ekonomi Premium (Taupe/Tan 2-2): Vertical Center Seam + Horizontal Lumbar Seams + Chrome Armrest Frame
+      if (backrestObj && isPremSeat) {
+        const seamMatDefList = [
+          {
+            name: 'kai-seam-normal',
+            diffuse: { type: 'color', color: [0.45, 0.38, 0.33, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-seam-highlighted',
+            diffuse: { type: 'color', color: [0.32, 0.27, 0.23, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-seam-selected',
+            diffuse: { type: 'color', color: [0.0, 0.48, 0.21, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-seam-disabled',
+            diffuse: { type: 'color', color: [0.58, 0.59, 0.62, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          }
+        ];
+        const zRib = isCompleteSeat ? -215 : 108;
+        const yRibStart = isCompleteSeat ? 590 : 265;
+        const ribGeo = new THREE.BoxGeometry(320, 9, 16);
+        for (let r = 0; r < 3; r++) {
+          const rMat = createSCNShaderMaterial(seamMatDefList[0]);
+          const ribMesh = new THREE.Mesh(ribGeo, rMat);
+          ribMesh.position.set(0, yRibStart + r * 85, zRib - r * 8);
+          backrestObj.add(ribMesh);
+          collector.geoNodes.push({
+            mesh: ribMesh,
+            baseMaterialNames: ['kai-seam'],
+            normalMaterials: [seamMatDefList[0]],
+            allMaterials: seamMatDefList
+          });
+        }
+        // Vertical center seam on upper backrest (Image 2 of new batch)
+        const vSeamGeo = new THREE.BoxGeometry(10, 260, 16);
+        const vMat = createSCNShaderMaterial(seamMatDefList[0]);
+        const vSeam = new THREE.Mesh(vSeamGeo, vMat);
+        vSeam.position.set(0, isCompleteSeat ? 960 : 640, isCompleteSeat ? -235 : 88);
+        backrestObj.add(vSeam);
+        collector.geoNodes.push({
+          mesh: vSeam,
+          baseMaterialNames: ['kai-seam'],
+          normalMaterials: [seamMatDefList[0]],
+          allMaterials: seamMatDefList
+        });
+      }
+
+      // 1C. Ekonomi 2-3 (Cream Bench 3-2): Tubular Stainless-Steel Pipe Frame around Top & Sides of Backrest!
+      if (backrestObj && isEko23Seat) {
+        const pipeMat = new THREE.MeshBasicMaterial({ color: 0xc8d0d8 });
+        const topY = isCompleteSeat ? 1105 : 725;
+        const midY = isCompleteSeat ? 780 : 400;
+        const pipeZ = isCompleteSeat ? -180 : 0;
+
+        // Top horizontal stainless steel bar
+        const topBar = new THREE.Mesh(new THREE.BoxGeometry(440, 24, 24), pipeMat);
+        topBar.position.set(0, topY, pipeZ);
+        backrestObj.add(topBar);
+
+        // Left & right vertical stainless steel side bars
+        const sideBarGeo = new THREE.BoxGeometry(22, 650, 24);
+        for (const side of [-1, 1]) {
+          const sBar = new THREE.Mesh(sideBarGeo, pipeMat);
+          sBar.position.set(side * 222, midY, pipeZ);
+          backrestObj.add(sBar);
+        }
       }
     }
 
-    // 2. Glowing Aisle LED Strips & Argo Bromo Anggrek Exterior Livery on Cabin Sections
+    // 2. Cabin Sections: Aisle LED Strips, Ekonomi Premium Wall Sockets, & Ekonomi 2-3 Blue Window Curtains
     if (
-      modelName.startsWith('e7-green-seat-section') ||
-      modelName.startsWith('e7-ordinary-seat-section')
+      modelName.includes('-section') &&
+      !modelName.includes('entrance') &&
+      !modelName.includes('multipurpose')
     ) {
-      const ledGeo = new THREE.PlaneGeometry(0.026, 1.18);
+      const isOrd23Section = modelName.startsWith('e7-ordinary-seat-section');
+      const isBlueSection = modelName.startsWith('kai-blue-') || modelName.startsWith('e7-green-seat-section');
+      const isPremSection = modelName.startsWith('kai-prem-');
+
+      const ledColor = isOrd23Section
+        ? 0xf4f7f2
+        : isBlueSection
+        ? 0xfffce0
+        : isPremSection
+        ? 0xc4f5ae
+        : 0xdffbe4;
+      const aisleX = isOrd23Section ? 0.22 : 0.255;
+
+      const ledGeo = new THREE.PlaneGeometry(0.028, 1.18);
       const ledMat = new THREE.MeshBasicMaterial({
-        color: 0xdffbe4,
+        color: ledColor,
         side: THREE.DoubleSide
       });
       for (const side of [-1, 1]) {
         const ledMesh = new THREE.Mesh(ledGeo, ledMat);
         ledMesh.rotation.x = -Math.PI / 2;
-        ledMesh.position.set(side * 0.255, 1.334, 0);
+        ledMesh.position.set(side * aisleX, 1.334, 0);
         rootGroup.add(ledMesh);
       }
 
-      // Exterior Argo Bromo Anggrek Magenta Stripe along outside of cabin walls
+      // Ekonomi 2-3: Iconic Bright Royal-Blue Pleated Window Curtains & White Mini-Table (Image 3)
+      if (isOrd23Section) {
+        const curtainGeo = new THREE.BoxGeometry(0.04, 0.68, 0.72);
+        const curtainMat = new THREE.MeshBasicMaterial({ color: 0x1b45b8 });
+        const tableGeo = new THREE.BoxGeometry(0.14, 0.03, 0.34);
+        const tableMat = new THREE.MeshBasicMaterial({ color: 0xf2f4f7 });
+        for (const side of [-1, 1]) {
+          const curtain = new THREE.Mesh(curtainGeo, curtainMat);
+          curtain.position.set(side * 1.51, 2.16, 0);
+          rootGroup.add(curtain);
+
+          const miniTable = new THREE.Mesh(tableGeo, tableMat);
+          miniTable.position.set(side * 1.46, 1.74, 0);
+          rootGroup.add(miniTable);
+        }
+      }
+
+      // Ekonomi Premium: Wall Power Socket Shelf under Windows (Image 2)
+      if (isPremSection) {
+        const socketGeo = new THREE.BoxGeometry(0.08, 0.08, 0.24);
+        const socketMat = new THREE.MeshBasicMaterial({ color: 0xdfe3ea });
+        for (const side of [-1, 1]) {
+          const sock = new THREE.Mesh(socketGeo, socketMat);
+          sock.position.set(side * 1.49, 1.76, 0);
+          rootGroup.add(sock);
+        }
+      }
+
+      // Exterior Argo Bromo Anggrek / KAI Livery Stripe
       const stripeGeo = new THREE.PlaneGeometry(1.18, 0.22);
       const stripeMat = new THREE.MeshBasicMaterial({
-        color: 0xd82b79,
+        color: isOrd23Section ? 0xf37021 : 0xd82b79,
         side: THREE.DoubleSide
       });
       for (const side of [-1, 1]) {
@@ -638,11 +780,8 @@ export class NodeFactory {
       }
     }
 
-    // 3. KAI Next Gen Partition Bulkhead (Sliding Glass Door + PIDS LCDs + Top LED Matrix Display)
-    if (
-      modelName.startsWith('e7-green-seat-partition') ||
-      modelName.startsWith('e7-ordinary-seat-partition')
-    ) {
+    // 3. KAI Partition Bulkhead (Sliding Glass Door + PIDS LCDs + Top LED Matrix Display)
+    if (modelName.includes('-partition-')) {
       const zFace = modelName.endsWith('-a') ? -0.042 : 0.042;
       const bulkhead = new THREE.Group();
       bulkhead.position.set(0, 0, zFace);
@@ -650,7 +789,6 @@ export class NodeFactory {
         bulkhead.rotation.y = Math.PI;
       }
 
-      // Automatic Sliding Door Frame & Glass
       const doorFrame = new THREE.Mesh(
         new THREE.PlaneGeometry(0.58, 1.32),
         new THREE.MeshBasicMaterial({ color: 0x1e222a, side: THREE.DoubleSide })
@@ -665,7 +803,6 @@ export class NodeFactory {
       doorGlass.position.set(0, 2.08, 0.003);
       bulkhead.add(doorGlass);
 
-      // Yellow Safety Decal in center of door glass (Image 2)
       const yellowDecal = new THREE.Mesh(
         new THREE.PlaneGeometry(0.09, 0.28),
         new THREE.MeshBasicMaterial({ color: 0xf2c935, side: THREE.DoubleSide })
@@ -673,7 +810,6 @@ export class NodeFactory {
       yellowDecal.position.set(0, 2.1, 0.006);
       bulkhead.add(yellowDecal);
 
-      // Left & Right PIDS LCD Monitors (Image 2)
       const bezelGeo = new THREE.PlaneGeometry(0.62, 0.42);
       const bezelMat = new THREE.MeshBasicMaterial({ color: 0xc8c4ba, side: THREE.DoubleSide });
       for (const side of [-1, 1]) {
@@ -690,7 +826,6 @@ export class NodeFactory {
         bulkhead.add(screen);
       }
 
-      // Top Overhead Digital LED Running Text Display ("Surabaya Pasar Turi (SBI) 7")
       const ledBoard = new THREE.Mesh(
         new THREE.PlaneGeometry(1.42, 0.16),
         new THREE.MeshBasicMaterial({ color: 0x14161c, side: THREE.DoubleSide })
@@ -1491,8 +1626,9 @@ export class SummaryPreviewView {
       this.contentNode.remove(this.contentNode.children[0]);
     }
     const completeMap = {
-      granClass: '_e7_gran_seat_complete',
-      green: '_e7_green_seat_complete',
+      granClass: '_kai_maroon_seat_complete',
+      green: '_kai_blue_seat_complete',
+      ekonomiPremium: '_kai_prem_seat_complete',
       ordinary: '_e7_ordinary_seat_complete'
     };
     const modelName = completeMap[seatClassType] || '_e7_ordinary_seat_complete';

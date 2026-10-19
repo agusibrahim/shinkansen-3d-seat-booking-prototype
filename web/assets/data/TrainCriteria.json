@@ -10,25 +10,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 0,
@@ -38,157 +46,213 @@
     },
     {
       "toTime": "1970-01-01T06:38:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 1,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T06:12:00+09:00",
+      "trainNumber": "Jayabaya 108"
+    },
+    {
+      "toTime": "1970-01-01T06:42:00+09:00",
       "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 1,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T06:12:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "id": 2,
+      "trainName": "New Gen & Premium",
+      "fromTime": "1970-01-01T06:16:00+09:00",
+      "trainNumber": "Gaya Baru 104"
     },
     {
-      "toTime": "1970-01-01T06:42:00+09:00",
+      "toTime": "1970-01-01T06:54:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 3,
+      "trainName": "Premium & Ekonomi",
+      "fromTime": "1970-01-01T06:28:00+09:00",
+      "trainNumber": "Kertajaya 218"
+    },
+    {
+      "toTime": "1970-01-01T06:58:00+09:00",
       "trainImageName": "e7-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 2,
+      "id": 4,
       "trainName": "Next Gen Stainless",
-      "fromTime": "1970-01-01T06:16:00+09:00",
+      "fromTime": "1970-01-01T06:32:00+09:00",
       "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime": "1970-01-01T06:54:00+09:00",
-      "trainImageName": "e6-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
-        },
-        {
-          "id": 2,
-          "seatClass": "ordinary",
-          "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 3,
-      "trainName": "Stainless Steel",
-      "fromTime": "1970-01-01T06:28:00+09:00",
-      "trainNumber": "Gumarang 70"
-    },
-    {
       "toTime": "1970-01-01T06:58:00+09:00",
-      "trainImageName": "e5-series",
+      "trainImageName": "e6-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
-          "seatClass": "ordinary",
+          "seatClass": "ekonomiPremium",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 4,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T06:32:00+09:00",
-      "trainNumber": "Sembrani 64"
-    },
-    {
-      "toTime": "1970-01-01T06:58:00+09:00",
-      "trainImageName": "e2-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
         },
         {
-          "id": 2,
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 5,
-      "trainName": "Stainless New Gen",
+      "trainName": "Stainless Steel",
       "fromTime": "1970-01-01T06:32:00+09:00",
-      "trainNumber": "Jayabaya 108"
+      "trainNumber": "Gumarang 70"
     },
     {
       "toTime": "1970-01-01T07:02:00+09:00",
@@ -198,57 +262,81 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 6,
-      "trainName": "Next Gen Stainless",
+      "trainName": "Eksekutif & Ekonomi",
       "fromTime": "1970-01-01T06:36:00+09:00",
-      "trainNumber": "Argo Bromo 6"
+      "trainNumber": "Brantas 112"
     },
     {
       "toTime": "1970-01-01T07:18:00+09:00",
       "trainImageName": "e3-series",
       "seatClasses": [
         {
-          "id": 1,
-          "seatClass": "green",
+          "id": 0,
+          "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
           "price": 650000
         },
         {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 7,
-      "trainName": "Stainless New Gen",
+      "trainName": "Rangkaian Ekonomi",
       "fromTime": "1970-01-01T06:52:00+09:00",
-      "trainNumber": "Kertajaya 218"
+      "trainNumber": "Airlangga 236"
     },
     {
       "toTime": "1970-01-01T07:34:00+09:00",
@@ -258,25 +346,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 8,
@@ -286,157 +382,213 @@
     },
     {
       "toTime": "1970-01-01T07:34:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 9,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T07:08:00+09:00",
+      "trainNumber": "Jayabaya 108"
+    },
+    {
+      "toTime": "1970-01-01T07:50:00+09:00",
       "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 9,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T07:08:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "id": 10,
+      "trainName": "New Gen & Premium",
+      "fromTime": "1970-01-01T07:24:00+09:00",
+      "trainNumber": "Gaya Baru 104"
     },
     {
-      "toTime": "1970-01-01T07:50:00+09:00",
+      "toTime": "1970-01-01T07:58:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 11,
+      "trainName": "Premium & Ekonomi",
+      "fromTime": "1970-01-01T07:32:00+09:00",
+      "trainNumber": "Kertajaya 218"
+    },
+    {
+      "toTime": "1970-01-01T08:02:00+09:00",
       "trainImageName": "e7-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 10,
+      "id": 12,
       "trainName": "Next Gen Stainless",
-      "fromTime": "1970-01-01T07:24:00+09:00",
+      "fromTime": "1970-01-01T07:36:00+09:00",
       "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime": "1970-01-01T07:58:00+09:00",
-      "trainImageName": "e6-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
-        },
-        {
-          "id": 2,
-          "seatClass": "ordinary",
-          "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 11,
-      "trainName": "Stainless Steel",
-      "fromTime": "1970-01-01T07:32:00+09:00",
-      "trainNumber": "Gumarang 70"
-    },
-    {
       "toTime": "1970-01-01T08:02:00+09:00",
-      "trainImageName": "e5-series",
+      "trainImageName": "e6-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
-          "seatClass": "ordinary",
+          "seatClass": "ekonomiPremium",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 12,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T07:36:00+09:00",
-      "trainNumber": "Sembrani 64"
-    },
-    {
-      "toTime": "1970-01-01T08:02:00+09:00",
-      "trainImageName": "e2-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
         },
         {
-          "id": 2,
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 13,
-      "trainName": "Stainless New Gen",
+      "trainName": "Stainless Steel",
       "fromTime": "1970-01-01T07:36:00+09:00",
-      "trainNumber": "Jayabaya 108"
+      "trainNumber": "Gumarang 70"
     },
     {
       "toTime": "1970-01-01T08:14:00+09:00",
@@ -446,57 +598,81 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 14,
-      "trainName": "Next Gen Stainless",
+      "trainName": "Eksekutif & Ekonomi",
       "fromTime": "1970-01-01T07:48:00+09:00",
-      "trainNumber": "Argo Bromo 6"
+      "trainNumber": "Brantas 112"
     },
     {
       "toTime": "1970-01-01T08:18:00+09:00",
       "trainImageName": "e3-series",
       "seatClasses": [
         {
-          "id": 1,
-          "seatClass": "green",
+          "id": 0,
+          "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
           "price": 650000
         },
         {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 15,
-      "trainName": "Stainless New Gen",
+      "trainName": "Rangkaian Ekonomi",
       "fromTime": "1970-01-01T07:52:00+09:00",
-      "trainNumber": "Kertajaya 218"
+      "trainNumber": "Airlangga 236"
     },
     {
       "toTime": "1970-01-01T08:26:00+09:00",
@@ -506,25 +682,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 16,
@@ -534,157 +718,213 @@
     },
     {
       "toTime": "1970-01-01T08:26:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 17,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:00:00+09:00",
+      "trainNumber": "Jayabaya 108"
+    },
+    {
+      "toTime": "1970-01-01T08:34:00+09:00",
       "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 17,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T08:00:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "id": 18,
+      "trainName": "New Gen & Premium",
+      "fromTime": "1970-01-01T08:08:00+09:00",
+      "trainNumber": "Gaya Baru 104"
     },
     {
       "toTime": "1970-01-01T08:34:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 19,
+      "trainName": "Premium & Ekonomi",
+      "fromTime": "1970-01-01T08:08:00+09:00",
+      "trainNumber": "Kertajaya 218"
+    },
+    {
+      "toTime": "1970-01-01T08:38:00+09:00",
       "trainImageName": "e7-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 18,
+      "id": 20,
       "trainName": "Next Gen Stainless",
-      "fromTime": "1970-01-01T08:08:00+09:00",
+      "fromTime": "1970-01-01T08:12:00+09:00",
       "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime": "1970-01-01T08:34:00+09:00",
+      "toTime": "1970-01-01T08:44:00+09:00",
       "trainImageName": "e6-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
-        },
-        {
-          "id": 2,
-          "seatClass": "ordinary",
-          "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 19,
-      "trainName": "Stainless Steel",
-      "fromTime": "1970-01-01T08:08:00+09:00",
-      "trainNumber": "Gumarang 70"
-    },
-    {
-      "toTime": "1970-01-01T08:38:00+09:00",
-      "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
-          "seatClass": "ordinary",
+          "seatClass": "ekonomiPremium",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 20,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T08:12:00+09:00",
-      "trainNumber": "Sembrani 64"
-    },
-    {
-      "toTime": "1970-01-01T08:44:00+09:00",
-      "trainImageName": "e2-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
         },
         {
-          "id": 2,
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 21,
-      "trainName": "Stainless New Gen",
+      "trainName": "Stainless Steel",
       "fromTime": "1970-01-01T08:20:00+09:00",
-      "trainNumber": "Jayabaya 108"
+      "trainNumber": "Gumarang 70"
     },
     {
       "toTime": "1970-01-01T08:58:00+09:00",
@@ -694,57 +934,81 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 22,
-      "trainName": "Next Gen Stainless",
+      "trainName": "Eksekutif & Ekonomi",
       "fromTime": "1970-01-01T08:32:00+09:00",
-      "trainNumber": "Argo Bromo 6"
+      "trainNumber": "Brantas 112"
     },
     {
       "toTime": "1970-01-01T09:02:00+09:00",
       "trainImageName": "e3-series",
       "seatClasses": [
         {
-          "id": 1,
-          "seatClass": "green",
+          "id": 0,
+          "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
           "price": 650000
         },
         {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 23,
-      "trainName": "Stainless New Gen",
+      "trainName": "Rangkaian Ekonomi",
       "fromTime": "1970-01-01T08:36:00+09:00",
-      "trainNumber": "Kertajaya 218"
+      "trainNumber": "Airlangga 236"
     },
     {
       "toTime": "1970-01-01T09:06:00+09:00",
@@ -754,25 +1018,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 24,
@@ -782,157 +1054,213 @@
     },
     {
       "toTime": "1970-01-01T09:06:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 25,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:40:00+09:00",
+      "trainNumber": "Jayabaya 108"
+    },
+    {
+      "toTime": "1970-01-01T09:09:00+09:00",
       "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 25,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T08:40:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "id": 26,
+      "trainName": "New Gen & Premium",
+      "fromTime": "1970-01-01T08:44:00+09:00",
+      "trainNumber": "Gaya Baru 104"
     },
     {
-      "toTime": "1970-01-01T09:09:00+09:00",
+      "toTime": "1970-01-01T09:22:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 27,
+      "trainName": "Premium & Ekonomi",
+      "fromTime": "1970-01-01T08:56:00+09:00",
+      "trainNumber": "Kertajaya 218"
+    },
+    {
+      "toTime": "1970-01-01T09:22:00+09:00",
       "trainImageName": "e7-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 26,
+      "id": 28,
       "trainName": "Next Gen Stainless",
-      "fromTime": "1970-01-01T08:44:00+09:00",
+      "fromTime": "1970-01-01T08:56:00+09:00",
       "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime": "1970-01-01T09:22:00+09:00",
+      "toTime": "1970-01-01T09:33:00+09:00",
       "trainImageName": "e6-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
-        },
-        {
-          "id": 2,
-          "seatClass": "ordinary",
-          "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 27,
-      "trainName": "Stainless Steel",
-      "fromTime": "1970-01-01T08:56:00+09:00",
-      "trainNumber": "Gumarang 70"
-    },
-    {
-      "toTime": "1970-01-01T09:22:00+09:00",
-      "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
-          "seatClass": "ordinary",
+          "seatClass": "ekonomiPremium",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 28,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T08:56:00+09:00",
-      "trainNumber": "Sembrani 64"
-    },
-    {
-      "toTime": "1970-01-01T09:33:00+09:00",
-      "trainImageName": "e2-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
         },
         {
-          "id": 2,
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 29,
-      "trainName": "Stainless New Gen",
+      "trainName": "Stainless Steel",
       "fromTime": "1970-01-01T09:08:00+09:00",
-      "trainNumber": "Jayabaya 108"
+      "trainNumber": "Gumarang 70"
     },
     {
       "toTime": "1970-01-01T09:33:00+09:00",
@@ -942,57 +1270,81 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 30,
-      "trainName": "Next Gen Stainless",
+      "trainName": "Eksekutif & Ekonomi",
       "fromTime": "1970-01-01T09:08:00+09:00",
-      "trainNumber": "Argo Bromo 6"
+      "trainNumber": "Brantas 112"
     },
     {
       "toTime": "1970-01-01T09:46:00+09:00",
       "trainImageName": "e3-series",
       "seatClasses": [
         {
-          "id": 1,
-          "seatClass": "green",
+          "id": 0,
+          "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
           "price": 650000
         },
         {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 31,
-      "trainName": "Stainless New Gen",
+      "trainName": "Rangkaian Ekonomi",
       "fromTime": "1970-01-01T09:20:00+09:00",
-      "trainNumber": "Kertajaya 218"
+      "trainNumber": "Airlangga 236"
     },
     {
       "toTime": "1970-01-01T09:48:00+09:00",
@@ -1002,25 +1354,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 32,
@@ -1030,157 +1390,213 @@
     },
     {
       "toTime": "1970-01-01T09:48:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 33,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T09:24:00+09:00",
+      "trainNumber": "Jayabaya 108"
+    },
+    {
+      "toTime": "1970-01-01T10:10:00+09:00",
       "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 33,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T09:24:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "id": 34,
+      "trainName": "New Gen & Premium",
+      "fromTime": "1970-01-01T09:44:00+09:00",
+      "trainNumber": "Gaya Baru 104"
     },
     {
-      "toTime": "1970-01-01T10:10:00+09:00",
+      "toTime": "1970-01-01T10:00:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 35,
+      "trainName": "Premium & Ekonomi",
+      "fromTime": "1970-01-01T09:48:00+09:00",
+      "trainNumber": "Kertajaya 218"
+    },
+    {
+      "toTime": "1970-01-01T10:00:00+09:00",
       "trainImageName": "e7-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 34,
+      "id": 36,
       "trainName": "Next Gen Stainless",
-      "fromTime": "1970-01-01T09:44:00+09:00",
+      "fromTime": "1970-01-01T09:48:00+09:00",
       "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime": "1970-01-01T10:00:00+09:00",
+      "toTime": "1970-01-01T10:18:00+09:00",
       "trainImageName": "e6-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
-        },
-        {
-          "id": 2,
-          "seatClass": "ordinary",
-          "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 35,
-      "trainName": "Stainless Steel",
-      "fromTime": "1970-01-01T09:48:00+09:00",
-      "trainNumber": "Gumarang 70"
-    },
-    {
-      "toTime": "1970-01-01T10:00:00+09:00",
-      "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
-          "seatClass": "ordinary",
+          "seatClass": "ekonomiPremium",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 36,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T09:48:00+09:00",
-      "trainNumber": "Sembrani 64"
-    },
-    {
-      "toTime": "1970-01-01T10:18:00+09:00",
-      "trainImageName": "e2-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
         },
         {
-          "id": 2,
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 37,
-      "trainName": "Stainless New Gen",
+      "trainName": "Stainless Steel",
       "fromTime": "1970-01-01T09:52:00+09:00",
-      "trainNumber": "Jayabaya 108"
+      "trainNumber": "Gumarang 70"
     },
     {
       "toTime": "1970-01-01T10:34:00+09:00",
@@ -1190,57 +1606,81 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 38,
-      "trainName": "Next Gen Stainless",
+      "trainName": "Eksekutif & Ekonomi",
       "fromTime": "1970-01-01T10:08:00+09:00",
-      "trainNumber": "Argo Bromo 6"
+      "trainNumber": "Brantas 112"
     },
     {
       "toTime": "1970-01-01T10:26:00+09:00",
       "trainImageName": "e3-series",
       "seatClasses": [
         {
-          "id": 1,
-          "seatClass": "green",
+          "id": 0,
+          "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
           "price": 650000
         },
         {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 39,
-      "trainName": "Stainless New Gen",
+      "trainName": "Rangkaian Ekonomi",
       "fromTime": "1970-01-01T10:14:00+09:00",
-      "trainNumber": "Kertajaya 218"
+      "trainNumber": "Airlangga 236"
     },
     {
       "toTime": "1970-01-01T10:26:00+09:00",
@@ -1250,25 +1690,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 40,
@@ -1278,157 +1726,213 @@
     },
     {
       "toTime": "1970-01-01T10:30:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 41,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:04:00+09:00",
+      "trainNumber": "Jayabaya 108"
+    },
+    {
+      "toTime": "1970-01-01T10:30:00+09:00",
       "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 41,
-      "trainName": "Stainless New Gen",
+      "id": 42,
+      "trainName": "New Gen & Premium",
       "fromTime": "1970-01-01T10:04:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "trainNumber": "Gaya Baru 104"
     },
     {
-      "toTime": "1970-01-01T10:30:00+09:00",
+      "toTime": "1970-01-01T10:38:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 43,
+      "trainName": "Premium & Ekonomi",
+      "fromTime": "1970-01-01T10:12:00+09:00",
+      "trainNumber": "Kertajaya 218"
+    },
+    {
+      "toTime": "1970-01-01T10:46:00+09:00",
       "trainImageName": "e7-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 42,
+      "id": 44,
       "trainName": "Next Gen Stainless",
-      "fromTime": "1970-01-01T10:04:00+09:00",
+      "fromTime": "1970-01-01T10:20:00+09:00",
       "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime": "1970-01-01T10:38:00+09:00",
-      "trainImageName": "e6-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
-        },
-        {
-          "id": 2,
-          "seatClass": "ordinary",
-          "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 43,
-      "trainName": "Stainless Steel",
-      "fromTime": "1970-01-01T10:12:00+09:00",
-      "trainNumber": "Gumarang 70"
-    },
-    {
       "toTime": "1970-01-01T10:46:00+09:00",
-      "trainImageName": "e5-series",
+      "trainImageName": "e6-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
-          "seatClass": "ordinary",
+          "seatClass": "ekonomiPremium",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 44,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T10:20:00+09:00",
-      "trainNumber": "Sembrani 64"
-    },
-    {
-      "toTime": "1970-01-01T10:46:00+09:00",
-      "trainImageName": "e2-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
         },
         {
-          "id": 2,
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 45,
-      "trainName": "Stainless New Gen",
+      "trainName": "Stainless Steel",
       "fromTime": "1970-01-01T10:20:00+09:00",
-      "trainNumber": "Jayabaya 108"
+      "trainNumber": "Gumarang 70"
     },
     {
       "toTime": "1970-01-01T10:48:00+09:00",
@@ -1438,57 +1942,81 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 46,
-      "trainName": "Next Gen Stainless",
+      "trainName": "Eksekutif & Ekonomi",
       "fromTime": "1970-01-01T10:24:00+09:00",
-      "trainNumber": "Argo Bromo 6"
+      "trainNumber": "Brantas 112"
     },
     {
       "toTime": "1970-01-01T10:54:00+09:00",
       "trainImageName": "e3-series",
       "seatClasses": [
         {
-          "id": 1,
-          "seatClass": "green",
+          "id": 0,
+          "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
           "price": 650000
         },
         {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 47,
-      "trainName": "Stainless New Gen",
+      "trainName": "Rangkaian Ekonomi",
       "fromTime": "1970-01-01T10:28:00+09:00",
-      "trainNumber": "Kertajaya 218"
+      "trainNumber": "Airlangga 236"
     },
     {
       "toTime": "1970-01-01T11:10:00+09:00",
@@ -1498,25 +2026,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 48,
@@ -1526,157 +2062,213 @@
     },
     {
       "toTime": "1970-01-01T11:10:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 49,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:44:00+09:00",
+      "trainNumber": "Jayabaya 108"
+    },
+    {
+      "toTime": "1970-01-01T11:14:00+09:00",
       "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 49,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T10:44:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "id": 50,
+      "trainName": "New Gen & Premium",
+      "fromTime": "1970-01-01T10:48:00+09:00",
+      "trainNumber": "Gaya Baru 104"
     },
     {
-      "toTime": "1970-01-01T11:14:00+09:00",
+      "toTime": "1970-01-01T11:26:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
+        {
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
+          "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
+        }
+      ],
+      "id": 51,
+      "trainName": "Premium & Ekonomi",
+      "fromTime": "1970-01-01T11:00:00+09:00",
+      "trainNumber": "Kertajaya 218"
+    },
+    {
+      "toTime": "1970-01-01T11:26:00+09:00",
       "trainImageName": "e7-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
-      "id": 50,
+      "id": 52,
       "trainName": "Next Gen Stainless",
-      "fromTime": "1970-01-01T10:48:00+09:00",
+      "fromTime": "1970-01-01T11:00:00+09:00",
       "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime": "1970-01-01T11:26:00+09:00",
+      "toTime": "1970-01-01T11:46:00+09:00",
       "trainImageName": "e6-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
-        },
-        {
-          "id": 2,
-          "seatClass": "ordinary",
-          "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 51,
-      "trainName": "Stainless Steel",
-      "fromTime": "1970-01-01T11:00:00+09:00",
-      "trainNumber": "Gumarang 70"
-    },
-    {
-      "toTime": "1970-01-01T11:26:00+09:00",
-      "trainImageName": "e5-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
-          "seatClass": "ordinary",
+          "seatClass": "ekonomiPremium",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
-        }
-      ],
-      "id": 52,
-      "trainName": "Stainless New Gen",
-      "fromTime": "1970-01-01T11:00:00+09:00",
-      "trainNumber": "Sembrani 64"
-    },
-    {
-      "toTime": "1970-01-01T11:46:00+09:00",
-      "trainImageName": "e2-series",
-      "seatClasses": [
-        {
-          "id": 1,
-          "seatClass": "green",
-          "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
         },
         {
-          "id": 2,
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 53,
-      "trainName": "Stainless New Gen",
+      "trainName": "Stainless Steel",
       "fromTime": "1970-01-01T11:20:00+09:00",
-      "trainNumber": "Jayabaya 108"
+      "trainNumber": "Gumarang 70"
     },
     {
       "toTime": "1970-01-01T11:46:00+09:00",
@@ -1686,57 +2278,81 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 54,
-      "trainName": "Next Gen Stainless",
+      "trainName": "Eksekutif & Ekonomi",
       "fromTime": "1970-01-01T11:20:00+09:00",
-      "trainNumber": "Argo Bromo 6"
+      "trainNumber": "Brantas 112"
     },
     {
       "toTime": "1970-01-01T11:50:00+09:00",
       "trainImageName": "e3-series",
       "seatClasses": [
         {
-          "id": 1,
-          "seatClass": "green",
+          "id": 0,
+          "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
           "price": 650000
         },
         {
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
+        },
+        {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 55,
-      "trainName": "Stainless New Gen",
+      "trainName": "Rangkaian Ekonomi",
       "fromTime": "1970-01-01T11:24:00+09:00",
-      "trainNumber": "Kertajaya 218"
+      "trainNumber": "Airlangga 236"
     },
     {
       "toTime": "1970-01-01T11:54:00+09:00",
@@ -1746,25 +2362,33 @@
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 56,
@@ -1774,41 +2398,49 @@
     },
     {
       "toTime": "1970-01-01T11:58:00+09:00",
-      "trainImageName": "e5-series",
+      "trainImageName": "e2-series",
       "seatClasses": [
         {
           "id": 0,
           "seatClass": "granClass",
           "isAvailable": true,
-          "name": "Luxury",
-          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
-          "price": 1350000
+          "name": "Eksekutif Next Gen",
+          "description": "Kursi kulit maroon ergonomis 2-2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
           "id": 1,
           "seatClass": "green",
           "isAvailable": true,
-          "name": "Eksekutif",
-          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
-          "price": 650000
+          "name": "Ekonomi New Gen",
+          "description": "Kursi captain seat biru ergonomis 2-2 searah laju kereta dengan winged headrest & armrest kayu.",
+          "price": 420000
         },
         {
           "id": 2,
+          "seatClass": "ekonomiPremium",
+          "isAvailable": true,
+          "name": "Ekonomi Premium",
+          "description": "Kursi kulit beige/tan 2-2 reclining dengan sandaran tinggi, armrest lengkung, & stopkontak.",
+          "price": 320000
+        },
+        {
+          "id": 3,
           "seatClass": "ordinary",
           "isAvailable": true,
-          "name": "Eksekutif (H)",
-          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
-          "price": 580000
+          "name": "Ekonomi (2-3)",
+          "description": "Kursi bench krem tegak 90\u00b0 konfigurasi 3-2 berbingkai pipa stainless, tirai biru, & lantai hijau.",
+          "price": 150000
         }
       ],
       "id": 57,
       "trainName": "Stainless New Gen",
       "fromTime": "1970-01-01T11:32:00+09:00",
-      "trainNumber": "Sembrani 62"
+      "trainNumber": "Jayabaya 108"
     }
   ],
   "date": "1970-01-01T00:00:00+09:00",
   "toStationJPName": "SBI",
-  "toStationName": "Surabaya Ps. Turi",
+  "toStationName": "Surabaya",
   "fromStationJPName": "GMR"
 }
