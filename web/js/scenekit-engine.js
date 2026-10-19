@@ -450,7 +450,263 @@ export class NodeFactory {
     rootGroup.name = modelName;
     const childObj = this.buildThreeNode(meta.rootNode, modelName, '0', collector);
     rootGroup.add(childObj);
+    this.attachKAICustom3DDetails(modelName, rootGroup, collector);
     return new SCNModelInstance(modelName, rootGroup, collector, meta);
+  }
+
+  attachKAICustom3DDetails(modelName, rootGroup, collector) {
+    // 1. KAI Eksekutif Next Gen Winged Headrest ("Telinga" Sandaran) & Stitched Ribs (Image 2)
+    const isEksekutifSeat =
+      modelName === 'e7-green-seat-a' ||
+      modelName === 'e7-green-seat-b' ||
+      modelName.startsWith('e7-ordinary-seat-');
+    const isCompleteSeat =
+      modelName === '_e7_green_seat_complete' || modelName === '_e7_ordinary_seat_complete';
+
+    if (isEksekutifSeat || isCompleteSeat) {
+      let backrestObj = null;
+      let seatBaseObj = null;
+      rootGroup.traverse((ch) => {
+        if (
+          ch.name === 'seat-rest' ||
+          ch.name.startsWith('ordinary-backrest') ||
+          ch.name === 'e7-seat-green-with-shadow-plane' ||
+          ch.name === 'e7-seat-ordinary-with-shadow-plane'
+        ) {
+          backrestObj = ch;
+        }
+        if (ch.name === 'seat' || ch.name.startsWith('ordinary-seat-')) {
+          seatBaseObj = ch;
+        }
+      });
+
+      if (backrestObj) {
+        const wingMatDefList = [
+          {
+            name: 'kai-wing-normal',
+            diffuse: { type: 'color', color: [0.467, 0.2, 0.263, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-wing-highlighted',
+            diffuse: { type: 'color', color: [0.345, 0.133, 0.184, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-wing-selected',
+            diffuse: { type: 'color', color: [0.176, 0.667, 0.384, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-wing-disabled',
+            diffuse: { type: 'color', color: [0.675, 0.682, 0.71, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          }
+        ];
+
+        const ribMatDefList = [
+          {
+            name: 'kai-rib-normal',
+            diffuse: { type: 'color', color: [0.35, 0.13, 0.18, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-rib-highlighted',
+            diffuse: { type: 'color', color: [0.25, 0.08, 0.12, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-rib-selected',
+            diffuse: { type: 'color', color: [0.0, 0.48, 0.21, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          },
+          {
+            name: 'kai-rib-disabled',
+            diffuse: { type: 'color', color: [0.58, 0.59, 0.62, 1.0] },
+            multiply: { type: 'color', color: [1, 1, 1, 1] },
+            multiplyIntensity: 1,
+            transparency: 1,
+            transparencyMode: 0,
+            blendMode: 0
+          }
+        ];
+
+        const yBase = isCompleteSeat ? 980 : 695;
+        const zWing = isCompleteSeat ? -195 : 115;
+        const zRib = isCompleteSeat ? -215 : 108;
+        const yRibStart = isCompleteSeat ? 580 : 255;
+
+        // Left & Right Winged Headrest Ears ("Telinga" Sandaran Kepala)
+        const wingGeo = new THREE.BoxGeometry(82, 225, 145);
+        for (const side of [-1, 1]) {
+          const wMat = createSCNShaderMaterial(wingMatDefList[0]);
+          const wingMesh = new THREE.Mesh(wingGeo, wMat);
+          wingMesh.position.set(side * 238, yBase, zWing);
+          wingMesh.rotation.set(0.08, -side * 0.42, side * 0.12);
+          backrestObj.add(wingMesh);
+          collector.geoNodes.push({
+            mesh: wingMesh,
+            baseMaterialNames: ['kai-wing'],
+            normalMaterials: [wingMatDefList[0]],
+            allMaterials: wingMatDefList
+          });
+        }
+
+        // 4 Horizontal Stitched Ribs on Lumbar Backrest (Image 2)
+        const ribGeo = new THREE.BoxGeometry(310, 10, 18);
+        for (let r = 0; r < 4; r++) {
+          const rMat = createSCNShaderMaterial(ribMatDefList[0]);
+          const ribMesh = new THREE.Mesh(ribGeo, rMat);
+          ribMesh.position.set(0, yRibStart + r * 58, zRib - r * 7);
+          backrestObj.add(ribMesh);
+          collector.geoNodes.push({
+            mesh: ribMesh,
+            baseMaterialNames: ['kai-rib'],
+            normalMaterials: [ribMatDefList[0]],
+            allMaterials: ribMatDefList
+          });
+        }
+      }
+
+      // Ice-blue center divider armrest strictly between paired seats (A-B and C-D)
+      if (seatBaseObj && modelName === 'e7-green-seat-a') {
+        const divGeo = new THREE.BoxGeometry(28, 195, 220);
+        const divMat = new THREE.MeshBasicMaterial({ color: 0xb8c7dc });
+        const divMesh = new THREE.Mesh(divGeo, divMat);
+        divMesh.position.set(-306, 515, -145);
+        divMesh.rotation.x = -0.18;
+        seatBaseObj.add(divMesh);
+      }
+    }
+
+    // 2. Glowing Aisle LED Strips & Argo Bromo Anggrek Exterior Livery on Cabin Sections
+    if (
+      modelName.startsWith('e7-green-seat-section') ||
+      modelName.startsWith('e7-ordinary-seat-section')
+    ) {
+      const ledGeo = new THREE.PlaneGeometry(0.026, 1.18);
+      const ledMat = new THREE.MeshBasicMaterial({
+        color: 0xdffbe4,
+        side: THREE.DoubleSide
+      });
+      for (const side of [-1, 1]) {
+        const ledMesh = new THREE.Mesh(ledGeo, ledMat);
+        ledMesh.rotation.x = -Math.PI / 2;
+        ledMesh.position.set(side * 0.255, 1.334, 0);
+        rootGroup.add(ledMesh);
+      }
+
+      // Exterior Argo Bromo Anggrek Magenta Stripe along outside of cabin walls
+      const stripeGeo = new THREE.PlaneGeometry(1.18, 0.22);
+      const stripeMat = new THREE.MeshBasicMaterial({
+        color: 0xd82b79,
+        side: THREE.DoubleSide
+      });
+      for (const side of [-1, 1]) {
+        const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+        stripe.rotation.y = Math.PI / 2;
+        stripe.position.set(side * 1.715, 0.98, 0);
+        rootGroup.add(stripe);
+      }
+    }
+
+    // 3. KAI Next Gen Partition Bulkhead (Sliding Glass Door + PIDS LCDs + Top LED Matrix Display)
+    if (
+      modelName.startsWith('e7-green-seat-partition') ||
+      modelName.startsWith('e7-ordinary-seat-partition')
+    ) {
+      const zFace = modelName.endsWith('-a') ? -0.042 : 0.042;
+      const bulkhead = new THREE.Group();
+      bulkhead.position.set(0, 0, zFace);
+      if (modelName.endsWith('-b')) {
+        bulkhead.rotation.y = Math.PI;
+      }
+
+      // Automatic Sliding Door Frame & Glass
+      const doorFrame = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.58, 1.32),
+        new THREE.MeshBasicMaterial({ color: 0x1e222a, side: THREE.DoubleSide })
+      );
+      doorFrame.position.set(0, 2.0, 0);
+      bulkhead.add(doorFrame);
+
+      const doorGlass = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.42, 0.92),
+        new THREE.MeshBasicMaterial({ color: 0x3b4859, side: THREE.DoubleSide })
+      );
+      doorGlass.position.set(0, 2.08, 0.003);
+      bulkhead.add(doorGlass);
+
+      // Yellow Safety Decal in center of door glass (Image 2)
+      const yellowDecal = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.09, 0.28),
+        new THREE.MeshBasicMaterial({ color: 0xf2c935, side: THREE.DoubleSide })
+      );
+      yellowDecal.position.set(0, 2.1, 0.006);
+      bulkhead.add(yellowDecal);
+
+      // Left & Right PIDS LCD Monitors (Image 2)
+      const bezelGeo = new THREE.PlaneGeometry(0.62, 0.42);
+      const bezelMat = new THREE.MeshBasicMaterial({ color: 0xc8c4ba, side: THREE.DoubleSide });
+      for (const side of [-1, 1]) {
+        const bezel = new THREE.Mesh(bezelGeo, bezelMat);
+        bezel.position.set(side * 0.88, 2.28, 0);
+        bulkhead.add(bezel);
+
+        const screenColor = side === -1 ? 0x1254a1 : 0x5c8a66;
+        const screen = new THREE.Mesh(
+          new THREE.PlaneGeometry(0.52, 0.31),
+          new THREE.MeshBasicMaterial({ color: screenColor, side: THREE.DoubleSide })
+        );
+        screen.position.set(side * 0.88, 2.28, 0.003);
+        bulkhead.add(screen);
+      }
+
+      // Top Overhead Digital LED Running Text Display ("Surabaya Pasar Turi (SBI) 7")
+      const ledBoard = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.42, 0.16),
+        new THREE.MeshBasicMaterial({ color: 0x14161c, side: THREE.DoubleSide })
+      );
+      ledBoard.position.set(0, 2.63, 0.003);
+      bulkhead.add(ledBoard);
+
+      const ledAccent = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.95, 0.05),
+        new THREE.MeshBasicMaterial({ color: 0x35e06c, side: THREE.DoubleSide })
+      );
+      ledAccent.position.set(0, 2.63, 0.006);
+      bulkhead.add(ledAccent);
+
+      rootGroup.add(bulkhead);
+    }
   }
 }
 

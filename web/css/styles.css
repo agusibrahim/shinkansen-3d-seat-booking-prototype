@@ -898,10 +898,12 @@ html, body {
 
 .subheadline-label-set .sub-title {
   color: var(--comp-primary-text);
+  white-space: nowrap;
 }
 .subheadline-label-set .sub-subtitle {
   color: var(--comp-secondary-text);
   min-height: 17px;
+  white-space: nowrap;
 }
 
 /* Train image in SeatClassSelectionViewController header */

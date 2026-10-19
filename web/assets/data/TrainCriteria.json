@@ -1,1720 +1,1814 @@
 {
-  "fromStationName" : "Tokyo",
-  "id" : 0,
-  "trainSchedules" : [
+  "fromStationName": "Gambir",
+  "id": 0,
+  "trainSchedules": [
     {
-      "toTime" : "1970-01-01T06:38:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T06:38:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 0,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T06:12:00+09:00",
-      "trainNumber" : "Yamabiko 121"
+      "id": 0,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T06:12:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T06:38:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T06:38:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 1,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T06:12:00+09:00",
-      "trainNumber" : "Tsubasa 121"
+      "id": 1,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T06:12:00+09:00",
+      "trainNumber": "Sembrani 62"
     },
     {
-      "toTime" : "1970-01-01T06:42:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T06:42:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 2,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T06:16:00+09:00",
-      "trainNumber" : "Kagayaki 501"
+      "id": 2,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T06:16:00+09:00",
+      "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime" : "1970-01-01T06:54:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T06:54:00+09:00",
+      "trainImageName": "e6-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 3,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T06:28:00+09:00",
-      "trainNumber" : "Hakutaka 551"
+      "id": 3,
+      "trainName": "Stainless Steel",
+      "fromTime": "1970-01-01T06:28:00+09:00",
+      "trainNumber": "Gumarang 70"
     },
     {
-      "toTime" : "1970-01-01T06:58:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T06:58:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 4,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T06:32:00+09:00",
-      "trainNumber" : "Hayabusa 1"
+      "id": 4,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T06:32:00+09:00",
+      "trainNumber": "Sembrani 64"
     },
     {
-      "toTime" : "1970-01-01T06:58:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T06:58:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 5,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T06:32:00+09:00",
-      "trainNumber" : "Komachi 1"
+      "id": 5,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T06:32:00+09:00",
+      "trainNumber": "Jayabaya 108"
     },
     {
-      "toTime" : "1970-01-01T07:02:00+09:00",
-      "trainImageName" : "e4-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T07:02:00+09:00",
+      "trainImageName": "e4-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 6,
-      "trainName" : "E4 Series",
-      "fromTime" : "1970-01-01T06:36:00+09:00",
-      "trainNumber" : "Tanigawa 401"
+      "id": 6,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T06:36:00+09:00",
+      "trainNumber": "Argo Bromo 6"
     },
     {
-      "toTime" : "1970-01-01T07:18:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T07:18:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 7,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T06:52:00+09:00",
-      "trainNumber" : "Asama 601"
+      "id": 7,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T06:52:00+09:00",
+      "trainNumber": "Kertajaya 218"
     },
     {
-      "toTime" : "1970-01-01T07:34:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T07:34:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 8,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T07:08:00+09:00",
-      "trainNumber" : "Yamabiko 123"
+      "id": 8,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T07:08:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T07:34:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T07:34:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 9,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T07:08:00+09:00",
-      "trainNumber" : "Tsubasa 123"
+      "id": 9,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T07:08:00+09:00",
+      "trainNumber": "Sembrani 62"
     },
     {
-      "toTime" : "1970-01-01T07:50:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T07:50:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 10,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T07:24:00+09:00",
-      "trainNumber" : "Asama 603"
+      "id": 10,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T07:24:00+09:00",
+      "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime" : "1970-01-01T07:58:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T07:58:00+09:00",
+      "trainImageName": "e6-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 11,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T07:32:00+09:00",
-      "trainNumber" : "Yamabiko 125"
+      "id": 11,
+      "trainName": "Stainless Steel",
+      "fromTime": "1970-01-01T07:32:00+09:00",
+      "trainNumber": "Gumarang 70"
     },
     {
-      "toTime" : "1970-01-01T08:02:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:02:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 12,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T07:36:00+09:00",
-      "trainNumber" : "Hayabusa 3"
+      "id": 12,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T07:36:00+09:00",
+      "trainNumber": "Sembrani 64"
     },
     {
-      "toTime" : "1970-01-01T08:02:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:02:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 13,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T07:36:00+09:00",
-      "trainNumber" : "Komachi 3"
+      "id": 13,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T07:36:00+09:00",
+      "trainNumber": "Jayabaya 108"
     },
     {
-      "toTime" : "1970-01-01T08:14:00+09:00",
-      "trainImageName" : "e4-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:14:00+09:00",
+      "trainImageName": "e4-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 14,
-      "trainName" : "E4 Series",
-      "fromTime" : "1970-01-01T07:48:00+09:00",
-      "trainNumber" : "Max Toki 305"
+      "id": 14,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T07:48:00+09:00",
+      "trainNumber": "Argo Bromo 6"
     },
     {
-      "toTime" : "1970-01-01T08:18:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:18:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 15,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T07:52:00+09:00",
-      "trainNumber" : "Hakutaka 553"
+      "id": 15,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T07:52:00+09:00",
+      "trainNumber": "Kertajaya 218"
     },
     {
-      "toTime" : "1970-01-01T08:26:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:26:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 16,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T08:00:00+09:00",
-      "trainNumber" : "Yamabiko 175"
+      "id": 16,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T08:00:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T08:26:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:26:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 17,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T08:00:00+09:00",
-      "trainNumber" : "Tsubasa 175"
+      "id": 17,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:00:00+09:00",
+      "trainNumber": "Sembrani 62"
     },
     {
-      "toTime" : "1970-01-01T08:34:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:34:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 18,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T08:08:00+09:00",
-      "trainNumber" : "Yamabiko 127"
+      "id": 18,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T08:08:00+09:00",
+      "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime" : "1970-01-01T08:34:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:34:00+09:00",
+      "trainImageName": "e6-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 19,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T08:08:00+09:00",
-      "trainNumber" : "Tsubasa 127"
+      "id": 19,
+      "trainName": "Stainless Steel",
+      "fromTime": "1970-01-01T08:08:00+09:00",
+      "trainNumber": "Gumarang 70"
     },
     {
-      "toTime" : "1970-01-01T08:38:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:38:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 20,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T08:12:00+09:00",
-      "trainNumber" : "Kagayaki 512"
+      "id": 20,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:12:00+09:00",
+      "trainNumber": "Sembrani 64"
     },
     {
-      "toTime" : "1970-01-01T08:44:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:44:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 21,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T08:20:00+09:00",
-      "trainNumber" : "Hayabusa 5"
+      "id": 21,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:20:00+09:00",
+      "trainNumber": "Jayabaya 108"
     },
     {
-      "toTime" : "1970-01-01T08:58:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T08:58:00+09:00",
+      "trainImageName": "e4-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 22,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T08:32:00+09:00",
-      "trainNumber" : "Asama 655"
+      "id": 22,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T08:32:00+09:00",
+      "trainNumber": "Argo Bromo 6"
     },
     {
-      "toTime" : "1970-01-01T09:02:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:02:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 23,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T08:36:00+09:00",
-      "trainNumber" : "Kagayaki 505"
+      "id": 23,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:36:00+09:00",
+      "trainNumber": "Kertajaya 218"
     },
     {
-      "toTime" : "1970-01-01T09:06:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:06:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 24,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T08:40:00+09:00",
-      "trainNumber" : "Hayabusa 7"
+      "id": 24,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T08:40:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T09:06:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:06:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 25,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T08:40:00+09:00",
-      "trainNumber" : "Komachi 7"
+      "id": 25,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:40:00+09:00",
+      "trainNumber": "Sembrani 62"
     },
     {
-      "toTime" : "1970-01-01T09:09:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:09:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 26,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T08:44:00+09:00",
-      "trainNumber" : "Hakutaka 555"
+      "id": 26,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T08:44:00+09:00",
+      "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime" : "1970-01-01T09:22:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:22:00+09:00",
+      "trainImageName": "e6-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 27,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T08:56:00+09:00",
-      "trainNumber" : "Yamabiko 129"
+      "id": 27,
+      "trainName": "Stainless Steel",
+      "fromTime": "1970-01-01T08:56:00+09:00",
+      "trainNumber": "Gumarang 70"
     },
     {
-      "toTime" : "1970-01-01T09:22:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:22:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 28,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T08:56:00+09:00",
-      "trainNumber" : "Tsubasa 129"
+      "id": 28,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T08:56:00+09:00",
+      "trainNumber": "Sembrani 64"
     },
     {
-      "toTime" : "1970-01-01T09:33:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:33:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
-
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 29,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T09:08:00+09:00",
-      "trainNumber" : "Hayabusa 9"
+      "id": 29,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T09:08:00+09:00",
+      "trainNumber": "Jayabaya 108"
     },
     {
-      "toTime" : "1970-01-01T09:33:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:33:00+09:00",
+      "trainImageName": "e4-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 30,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T09:08:00+09:00",
-      "trainNumber" : "Komachi 9"
+      "id": 30,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T09:08:00+09:00",
+      "trainNumber": "Argo Bromo 6"
     },
     {
-      "toTime" : "1970-01-01T09:46:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:46:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 31,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T09:20:00+09:00",
-      "trainNumber" : "Kagayaki 507"
+      "id": 31,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T09:20:00+09:00",
+      "trainNumber": "Kertajaya 218"
     },
     {
-      "toTime" : "1970-01-01T09:48:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:48:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 32,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T09:24:00+09:00",
-      "trainNumber" : "Yamabiko 131"
+      "id": 32,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T09:24:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T09:48:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T09:48:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 33,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T09:24:00+09:00",
-      "trainNumber" : "Tsubasa 131"
+      "id": 33,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T09:24:00+09:00",
+      "trainNumber": "Sembrani 62"
     },
     {
-      "toTime" : "1970-01-01T10:10:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:10:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 34,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T09:44:00+09:00",
-      "trainNumber" : "Asama 607"
+      "id": 34,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T09:44:00+09:00",
+      "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime" : "1970-01-01T10:00:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:00:00+09:00",
+      "trainImageName": "e6-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 35,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T09:48:00+09:00",
-      "trainNumber" : "Yamabiko 177"
+      "id": 35,
+      "trainName": "Stainless Steel",
+      "fromTime": "1970-01-01T09:48:00+09:00",
+      "trainNumber": "Gumarang 70"
     },
     {
-      "toTime" : "1970-01-01T10:00:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:00:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 36,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T09:48:00+09:00",
-      "trainNumber" : "Tsubasa 177"
+      "id": 36,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T09:48:00+09:00",
+      "trainNumber": "Sembrani 64"
     },
     {
-      "toTime" : "1970-01-01T10:18:00+09:00",
-      "trainImageName" : "e4-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:18:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 37,
-      "trainName" : "E4 Series",
-      "fromTime" : "1970-01-01T09:52:00+09:00",
-      "trainNumber" : "Max Toki 361"
+      "id": 37,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T09:52:00+09:00",
+      "trainNumber": "Jayabaya 108"
     },
     {
-      "toTime" : "1970-01-01T10:34:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:34:00+09:00",
+      "trainImageName": "e4-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 38,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T10:08:00+09:00",
-      "trainNumber" : "Kagayaki 523"
+      "id": 38,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T10:08:00+09:00",
+      "trainNumber": "Argo Bromo 6"
     },
     {
-      "toTime" : "1970-01-01T10:26:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:26:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 39,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T10:14:00+09:00",
-      "trainNumber" : "Yamabiko 133"
+      "id": 39,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:14:00+09:00",
+      "trainNumber": "Kertajaya 218"
     },
     {
-      "toTime" : "1970-01-01T10:26:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:26:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 40,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T10:14:00+09:00",
-      "trainNumber" : "Tsubasa 133"
+      "id": 40,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T10:14:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T10:30:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:30:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 41,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T10:04:00+09:00",
-      "trainNumber" : "Hayabusa 13"
+      "id": 41,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:04:00+09:00",
+      "trainNumber": "Sembrani 62"
     },
     {
-      "toTime" : "1970-01-01T10:30:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:30:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 42,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T10:04:00+09:00",
-      "trainNumber" : "Komachi 13"
+      "id": 42,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T10:04:00+09:00",
+      "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime" : "1970-01-01T10:38:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:38:00+09:00",
+      "trainImageName": "e6-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 43,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T10:12:00+09:00",
-      "trainNumber" : "Yamabiko 207"
+      "id": 43,
+      "trainName": "Stainless Steel",
+      "fromTime": "1970-01-01T10:12:00+09:00",
+      "trainNumber": "Gumarang 70"
     },
     {
-      "toTime" : "1970-01-01T10:46:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:46:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 44,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T10:20:00+09:00",
-      "trainNumber" : "Hayabusa 15"
+      "id": 44,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:20:00+09:00",
+      "trainNumber": "Sembrani 64"
     },
     {
-      "toTime" : "1970-01-01T10:46:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:46:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 45,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T10:20:00+09:00",
-      "trainNumber" : "Komachi 15"
+      "id": 45,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:20:00+09:00",
+      "trainNumber": "Jayabaya 108"
     },
     {
-      "toTime" : "1970-01-01T10:48:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:48:00+09:00",
+      "trainImageName": "e4-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 46,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T10:24:00+09:00",
-      "trainNumber" : "Kagayaki 509"
+      "id": 46,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T10:24:00+09:00",
+      "trainNumber": "Argo Bromo 6"
     },
     {
-      "toTime" : "1970-01-01T10:54:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T10:54:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 47,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T10:28:00+09:00",
-      "trainNumber" : "Yamabiko 161"
+      "id": 47,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:28:00+09:00",
+      "trainNumber": "Kertajaya 218"
     },
     {
-      "toTime" : "1970-01-01T11:10:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:10:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 48,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T10:44:00+09:00",
-      "trainNumber" : "Hayabusa 17"
+      "id": 48,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T10:44:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T11:10:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:10:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 49,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T10:44:00+09:00",
-      "trainNumber" : "Komachi 17"
+      "id": 49,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T10:44:00+09:00",
+      "trainNumber": "Sembrani 62"
     },
     {
-      "toTime" : "1970-01-01T11:14:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:14:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 50,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T10:48:00+09:00",
-      "trainNumber" : "Kagayaki 525"
+      "id": 50,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T10:48:00+09:00",
+      "trainNumber": "Argo Bromo 4"
     },
     {
-      "toTime" : "1970-01-01T11:26:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:26:00+09:00",
+      "trainImageName": "e6-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 51,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T11:00:00+09:00",
-      "trainNumber" : "Yamabiko 135"
+      "id": 51,
+      "trainName": "Stainless Steel",
+      "fromTime": "1970-01-01T11:00:00+09:00",
+      "trainNumber": "Gumarang 70"
     },
     {
-      "toTime" : "1970-01-01T11:26:00+09:00",
-      "trainImageName" : "e3-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:26:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 52,
-      "trainName" : "E3 Series",
-      "fromTime" : "1970-01-01T11:00:00+09:00",
-      "trainNumber" : "Tsubasa 135"
+      "id": 52,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T11:00:00+09:00",
+      "trainNumber": "Sembrani 64"
     },
     {
-      "toTime" : "1970-01-01T11:46:00+09:00",
-      "trainImageName" : "e5-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:46:00+09:00",
+      "trainImageName": "e2-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 53,
-      "trainName" : "E5 Series",
-      "fromTime" : "1970-01-01T11:20:00+09:00",
-      "trainNumber" : "Hayabusa 19"
+      "id": 53,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T11:20:00+09:00",
+      "trainNumber": "Jayabaya 108"
     },
     {
-      "toTime" : "1970-01-01T11:46:00+09:00",
-      "trainImageName" : "e6-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:46:00+09:00",
+      "trainImageName": "e4-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 54,
-      "trainName" : "E6 Series",
-      "fromTime" : "1970-01-01T11:20:00+09:00",
-      "trainNumber" : "Komachi 19"
+      "id": 54,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T11:20:00+09:00",
+      "trainNumber": "Argo Bromo 6"
     },
     {
-      "toTime" : "1970-01-01T11:50:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:50:00+09:00",
+      "trainImageName": "e3-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
-        },
-        {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 55,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T11:24:00+09:00",
-      "trainNumber" : "Hakutaka 561"
+      "id": 55,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T11:24:00+09:00",
+      "trainNumber": "Kertajaya 218"
     },
     {
-      "toTime" : "1970-01-01T11:54:00+09:00",
-      "trainImageName" : "e2-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:54:00+09:00",
+      "trainImageName": "e7-series",
+      "seatClasses": [
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
+        },
+        {
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 56,
-      "trainName" : "E2 Series",
-      "fromTime" : "1970-01-01T11:28:00+09:00",
-      "trainNumber" : "Yamabiko 163"
+      "id": 56,
+      "trainName": "Next Gen Stainless",
+      "fromTime": "1970-01-01T11:28:00+09:00",
+      "trainNumber": "Argo Bromo 2"
     },
     {
-      "toTime" : "1970-01-01T11:58:00+09:00",
-      "trainImageName" : "e7-series",
-      "seatClasses" : [
+      "toTime": "1970-01-01T11:58:00+09:00",
+      "trainImageName": "e5-series",
+      "seatClasses": [
         {
-          "id" : 0,
-          "seatClass" : "granClass",
-          "isAvailable" : true,
-          "name" : "Gran Class",
-          "description" : "A first class travel with an experience of luxury.",
-          "price" : 11000
+          "id": 0,
+          "seatClass": "granClass",
+          "isAvailable": true,
+          "name": "Luxury",
+          "description": "Kursi sleeper elektrik 170\u00b0 dengan partisi privasi, hiburan VOD, & layanan makan.",
+          "price": 1350000
         },
         {
-          "id" : 1,
-          "seatClass" : "green",
-          "isAvailable" : true,
-          "name" : "Green",
-          "description" : "A larger seat, a footrest, more space between the seats.",
-          "price" : 7000
+          "id": 1,
+          "seatClass": "green",
+          "isAvailable": true,
+          "name": "Eksekutif",
+          "description": "Kursi kulit maroon ergonomis 2+2 dengan winged headrest, footrest, & armrest kayu.",
+          "price": 650000
         },
         {
-          "id" : 2,
-          "seatClass" : "ordinary",
-          "isAvailable" : true,
-          "name" : "Ordinary",
-          "description" : "seat arranged in 3+2 abreast configuration.",
-          "price" : 4000
+          "id": 2,
+          "seatClass": "ordinary",
+          "isAvailable": true,
+          "name": "Eksekutif (H)",
+          "description": "Konfigurasi kursi 2+2 captain seat ergonomis di rangkaian Next Gen Stainless Steel.",
+          "price": 580000
         }
       ],
-      "id" : 57,
-      "trainName" : "E7 Series",
-      "fromTime" : "1970-01-01T11:32:00+09:00",
-      "trainNumber" : "Asama 637"
+      "id": 57,
+      "trainName": "Stainless New Gen",
+      "fromTime": "1970-01-01T11:32:00+09:00",
+      "trainNumber": "Sembrani 62"
     }
   ],
-  "date" : "1970-01-01T00:00:00+09:00",
-  "toStationJPName" : "大宮",
-  "toStationName" : "Ōmiya",
-  "fromStationJPName" : "東京"
+  "date": "1970-01-01T00:00:00+09:00",
+  "toStationJPName": "SBI",
+  "toStationName": "Surabaya Ps. Turi",
+  "fromStationJPName": "GMR"
 }

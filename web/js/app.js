@@ -25,14 +25,14 @@ const ARROW_PATHS = {
 // ============================================================================
 // Formatters (Formatter.swift & Date.swift)
 // ============================================================================
-const yenFormatter = new Intl.NumberFormat('ja-JP', {
+const idrFormatter = new Intl.NumberFormat('id-ID', {
   style: 'currency',
-  currency: 'JPY',
+  currency: 'IDR',
   maximumFractionDigits: 0
 });
 
 export function formatYen(amount) {
-  return yenFormatter.format(amount).replace('￥', '¥');
+  return idrFormatter.format(amount);
 }
 
 const fullDateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -108,8 +108,8 @@ class ShinkansenPrototypeApp {
     this.headerInformation = {
       dayOfWeek: '',
       date: '',
-      fromStation: 'Tokyo',
-      toStation: 'Ōmiya',
+      fromStation: 'Gambir',
+      toStation: 'Surabaya',
       fromTime: null,
       toTime: null,
       trainNumber: null,
@@ -395,8 +395,8 @@ class ShinkansenPrototypeApp {
     this.headerInformation = {
       dayOfWeek: formatWeekday(selectedDate),
       date: formatFullDate(selectedDate),
-      fromStation: 'Tokyo',
-      toStation: 'Ōmiya',
+      fromStation: 'Gambir',
+      toStation: 'Surabaya',
       fromTime: null,
       toTime: null,
       trainNumber: null,
