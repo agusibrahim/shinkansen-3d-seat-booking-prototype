@@ -1,9 +1,14 @@
 import * as THREE from './vendor/three.module.min.js';
 
 // ============================================================================
-// Procedural High-Res Textures for Authentic Indonesian KAI Seats & Cabin
+// 100% Pure Indonesian KAI 3D Geometry, Studio-Lit Shader & Texture Engine
+// Zero Shinkansen meshes, zero Shinkansen .scn buffers, zero Shinkansen textures
 // ============================================================================
 const texCache = new Map();
+
+const whitePixel = new Uint8Array([255, 255, 255, 255]);
+const defaultWhiteTex = new THREE.DataTexture(whitePixel, 1, 1, THREE.RGBAFormat);
+defaultWhiteTex.needsUpdate = true;
 
 function makeCanvasTex(key, width, height, drawFn) {
   if (texCache.has(key)) return texCache.get(key);
@@ -21,159 +26,313 @@ function makeCanvasTex(key, width, height, drawFn) {
   return tex;
 }
 
-export function getKAILeatherTexture(variant = 'maroon', state = 'normal') {
-  const key = `leather:${variant}:${state}`;
+// Studio 3-Point Lit + AO + Specular Shader (No external lights needed!)
+const KAI_VERT = `
+  varying vec2 vUv;
+  varying vec3 vWorldNormal;
+  varying vec3 vViewPosition;
+  varying vec3 vLocalPos;
+
+  void main() {
+    vUv = uv;
+    vLocalPos = position;
+    vec4 worldPos = modelMatrix * vec4(position, 1.0);
+    vWorldNormal = normalize(mat3(modelMatrix) * normal);
+    vec4 mvPos = viewMatrix * worldPos;
+    vViewPosition = -mvPos.xyz;
+    gl_Position = projectionMatrix * mvPos;
+  }
+`;
+
+const KAI_FRAG = `
+  uniform vec3 uColor;
+  uniform sampler2D uMap;
+  uniform bool uHasMap;
+  uniform float uRoughness;
+  uniform float uMetalness;
+  uniform float uOpacity;
+
+  varying vec2 vUv;
+  varying vec3 vWorldNormal;
+  varying vec3 vViewPosition;
+  varying vec3 vLocalPos;
+
+  void main() {
+    vec4 texSample = uHasMap ? texture2D(uMap, vUv) : vec4(1.0);
+    vec3 base = uColor * texSample.rgb;
+    float alpha = uOpacity * texSample.a;
+    if (alpha <= 0.01) discard;
+
+    vec3 N = normalize(vWorldNormal);
+    vec3 V = normalize(vViewPosition);
+
+    // 3-point studio lighting in world space
+    vec3 L1 = normalize(vec3(-0.45, 0.82, 0.55));
+    vec3 L2 = normalize(vec3(0.65, 0.45, 0.35));
+    vec3 L3 = normalize(vec3(0.0, 0.65, -0.75));
+
+    float diff1 = max(dot(N, L1), 0.0);
+    float diff2 = max(dot(N, L2), 0.0);
+    float diff3 = max(dot(N, L3), 0.0);
+
+    // Hemisphere ambient (warm ceiling + cool floor bounce)
+    float hemi = 0.5 + 0.5 * N.y;
+    vec3 ambient = mix(vec3(0.55, 0.56, 0.60), vec3(0.96, 0.95, 0.94), hemi) * 0.66;
+
+    vec3 diffuseLight = ambient + diff1 * vec3(0.52) + diff2 * vec3(0.24) + diff3 * vec3(0.18);
+
+    // Specular highlight (Blinn-Phong)
+    vec3 H1 = normalize(L1 + V);
+    float shininess = mix(14.0, 96.0, 1.0 - uRoughness);
+    float specPower = pow(max(dot(N, H1), 0.0), shininess);
+    float specStrength = mix(0.08, 0.55, uMetalness) * (1.0 - uRoughness * 0.65);
+    vec3 specColor = mix(vec3(1.0), base + vec3(0.25), uMetalness) * specPower * specStrength;
+
+    // Subtle vertical self-AO
+    float ao = clamp(0.84 + 0.22 * clamp(vLocalPos.y * 1.5, 0.0, 1.0), 0.78, 1.06);
+
+    vec3 finalRgb = clamp(base * diffuseLight * ao + specColor, 0.0, 1.0);
+    gl_FragColor = vec4(finalRgb, alpha);
+  }
+`;
+
+export function createKAIMaterial({
+  color = 0xffffff,
+  map = null,
+  roughness = 0.55,
+  metalness = 0.05,
+  opacity = 1.0,
+  transparent = false,
+  doubleSided = false
+} = {}) {
+  const c = new THREE.Color();
+  if (typeof color === 'number') {
+    c.setRGB(
+      ((color >> 16) & 255) / 255,
+      ((color >> 8) & 255) / 255,
+      (color & 255) / 255,
+      THREE.LinearSRGBColorSpace
+    );
+  } else if (Array.isArray(color)) {
+    c.setRGB(color[0], color[1], color[2], THREE.LinearSRGBColorSpace);
+  }
+  return new THREE.ShaderMaterial({
+    vertexShader: KAI_VERT,
+    fragmentShader: KAI_FRAG,
+    uniforms: {
+      uColor: { value: new THREE.Vector3(c.r, c.g, c.b) },
+      uMap: { value: map || defaultWhiteTex },
+      uHasMap: { value: Boolean(map) },
+      uRoughness: { value: roughness },
+      uMetalness: { value: metalness },
+      uOpacity: { value: opacity }
+    },
+    transparent: transparent || opacity < 0.999,
+    depthWrite: !(transparent || opacity < 0.999),
+    side: doubleSided ? THREE.DoubleSide : THREE.FrontSide
+  });
+}
+
+// ============================================================================
+// High-Res Procedural Upholstery, Wood, Curtain & PIDS Textures
+// ============================================================================
+export function getKAILeatherTexture(variant = 'maroon', state = 'normal', part = 'center') {
+  const key = `kai-upholstery:${variant}:${state}:${part}`;
   return makeCanvasTex(key, 512, 512, (ctx, w, h) => {
     const palettes = {
       maroon: {
-        normal: ['#7D3747', '#632836', '#511E2A'],
-        highlighted: ['#592330', '#441923', '#331119'],
-        selected: ['#1E9E52', '#137A3D', '#0D592B'],
-        disabled: ['#AEB2BA', '#969AA3', '#7E828B']
+        normal: ['#7E3647', '#662837', '#4D1B27', '#914658'],
+        highlighted: ['#5C2230', '#451823', '#300E16', '#6E2D3D'],
+        selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
+        disabled: ['#B0B4BC', '#989CA5', '#7E828B', '#C0C4CC']
       },
       blue: {
-        normal: ['#485F8E', '#364A73', '#283859'],
-        highlighted: ['#33456B', '#253452', '#1B263D'],
-        selected: ['#1E9E52', '#137A3D', '#0D592B'],
-        disabled: ['#AEB2BA', '#969AA3', '#7E828B']
+        normal: ['#4A6294', '#384C76', '#273759', '#5B74A8'],
+        highlighted: ['#354870', '#263554', '#1A253D', '#435884'],
+        selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
+        disabled: ['#B0B4BC', '#989CA5', '#7E828B', '#C0C4CC']
       },
       premium: {
-        normal: ['#A69384', '#8E7B6C', '#736255'],
-        highlighted: ['#857467', '#6E5F53', '#574A40'],
-        selected: ['#1E9E52', '#137A3D', '#0D592B'],
-        disabled: ['#B5B8BF', '#9DA0A8', '#858890']
+        normal: ['#AA9787', '#8F7D6E', '#6E5E51', '#B8A697'],
+        highlighted: ['#8A796B', '#716255', '#54483E', '#99887A'],
+        selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
+        disabled: ['#B6B9C0', '#9EA1A9', '#848790', '#C4C7CE']
       },
       eko23: {
-        normal: ['#BEB298', '#A69A80', '#8C8169'],
-        highlighted: ['#9E937B', '#877D67', '#706754'],
-        selected: ['#1E9E52', '#137A3D', '#0D592B'],
-        disabled: ['#B8BBC2', '#A0A3AA', '#888B92']
+        normal: ['#C2B69C', '#AA9E84', '#8C816A', '#CEC2A9'],
+        highlighted: ['#A39880', '#8B816B', '#706754', '#B2A78F'],
+        selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
+        disabled: ['#B8BBC2', '#A0A3AA', '#888B92', '#C6C9D0']
       }
     };
 
     const pal = (palettes[variant] || palettes.maroon)[state] || palettes.maroon.normal;
+    const baseColor = part === 'bolster' ? pal[1] : pal[0];
 
-    // Base vertical gradient
     const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, pal[0]);
-    grad.addColorStop(0.65, pal[0]);
+    grad.addColorStop(0, part === 'bolster' ? pal[0] : pal[3]);
+    grad.addColorStop(0.25, baseColor);
+    grad.addColorStop(0.85, baseColor);
     grad.addColorStop(1, pal[1]);
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    // Soft side shading
-    const sideGrad = ctx.createLinearGradient(0, 0, w, 0);
-    sideGrad.addColorStop(0, 'rgba(0,0,0,0.18)');
-    sideGrad.addColorStop(0.15, 'rgba(0,0,0,0)');
-    sideGrad.addColorStop(0.85, 'rgba(0,0,0,0)');
-    sideGrad.addColorStop(1, 'rgba(0,0,0,0.18)');
-    ctx.fillStyle = sideGrad;
+    // Soft pillowed cushion edge vignette
+    const sideVignette = ctx.createLinearGradient(0, 0, w, 0);
+    sideVignette.addColorStop(0, 'rgba(0,0,0,0.22)');
+    sideVignette.addColorStop(0.12, 'rgba(0,0,0,0.03)');
+    sideVignette.addColorStop(0.5, 'rgba(255,255,255,0.04)');
+    sideVignette.addColorStop(0.88, 'rgba(0,0,0,0.03)');
+    sideVignette.addColorStop(1, 'rgba(0,0,0,0.22)');
+    ctx.fillStyle = sideVignette;
     ctx.fillRect(0, 0, w, h);
 
-    // Subtle leather grain speckles
-    ctx.fillStyle = 'rgba(255,255,255,0.025)';
-    for (let i = 0; i < 1800; i++) {
-      const rx = (i * 97) % w;
-      const ry = (i * 53) % h;
+    // Fine leather pore micro-texture
+    for (let i = 0; i < 3200; i++) {
+      const rx = (i * 131 + (i % 7) * 19) % w;
+      const ry = (i * 73 + (i % 13) * 11) % h;
+      ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.03)';
       ctx.fillRect(rx, ry, 2, 2);
     }
 
-    if (variant === 'maroon' || variant === 'blue') {
-      // Subtle batik/geometric diamond motif on upper headrest of Blue New Gen seat
-      if (variant === 'blue' && state === 'normal') {
-        ctx.strokeStyle = 'rgba(30, 42, 70, 0.22)';
-        ctx.lineWidth = 1.5;
-        for (let y = 40; y < 210; y += 36) {
-          for (let x = 60; x < w - 60; x += 36) {
-            ctx.beginPath();
-            ctx.moveTo(x, y - 10);
-            ctx.lineTo(x + 10, y);
-            ctx.lineTo(x, y + 10);
-            ctx.lineTo(x - 10, y);
-            ctx.closePath();
-            ctx.stroke();
+    if (part === 'center') {
+      if (variant === 'maroon' || variant === 'blue') {
+        // Subtle batik floral diamond motif on upper backrest of Blue Ekonomi New Gen (matching reference photo!)
+        if (variant === 'blue' && state === 'normal') {
+          ctx.strokeStyle = 'rgba(28, 40, 68, 0.26)';
+          ctx.lineWidth = 1.6;
+          for (let y = 38; y < 190; y += 34) {
+            for (let x = 44; x < w - 44; x += 34) {
+              ctx.beginPath();
+              ctx.moveTo(x, y - 11);
+              ctx.lineTo(x + 11, y);
+              ctx.lineTo(x, y + 11);
+              ctx.lineTo(x - 11, y);
+              ctx.closePath();
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.arc(x, y, 3, 0, Math.PI * 2);
+              ctx.stroke();
+            }
           }
         }
-      }
 
-      // Horizontal stitched rib groups in lumbar region (2 sets of 4 ribs, matching Image 1 & 2!)
-      ctx.strokeStyle = pal[2];
-      ctx.lineWidth = 3.5;
-      const ribYGroups = [230, 244, 258, 272, 330, 344, 358, 372];
-      for (const ry of ribYGroups) {
+        // Headrest lower seam
+        ctx.strokeStyle = pal[2];
+        ctx.lineWidth = 4.5;
         ctx.beginPath();
-        ctx.moveTo(24, ry);
-        ctx.lineTo(w - 24, ry);
+        ctx.moveTo(14, 195);
+        ctx.lineTo(w - 14, 195);
         ctx.stroke();
-        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-        ctx.lineWidth = 1.5;
+
+        // 2 sets of 4 horizontal ribbed grooves on lumbar & cushion (exact match to Maroon & Blue photos!)
+        const ribYList = [228, 243, 258, 273, 326, 341, 356, 371];
+        for (const ry of ribYList) {
+          ctx.strokeStyle = pal[2];
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(18, ry);
+          ctx.lineTo(w - 18, ry);
+          ctx.stroke();
+
+          ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(18, ry + 3);
+          ctx.lineTo(w - 18, ry + 3);
+          ctx.stroke();
+        }
+      } else if (variant === 'premium') {
+        // Ekonomi Premium: Vertical center seam on upper headrest + 3 horizontal lumbar cushion seams
+        ctx.strokeStyle = pal[2];
+        ctx.lineWidth = 5;
         ctx.beginPath();
-        ctx.moveTo(24, ry + 2.5);
-        ctx.lineTo(w - 24, ry + 2.5);
+        ctx.moveTo(w / 2, 14);
+        ctx.lineTo(w / 2, 210);
         ctx.stroke();
+
+        for (const ry of [210, 286, 362, 438]) {
+          ctx.strokeStyle = pal[2];
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(14, ry);
+          ctx.lineTo(w - 14, ry);
+          ctx.stroke();
+
+          ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(14, ry + 4);
+          ctx.lineTo(w - 14, ry + 4);
+          ctx.stroke();
+        }
+      } else if (variant === 'eko23') {
+        // Ekonomi 2-3: Smooth bench vinyl with subtle horizontal crease at 28% from top
         ctx.strokeStyle = pal[2];
         ctx.lineWidth = 3.5;
-      }
-
-      // Horizontal divider seam below headrest
-      ctx.strokeStyle = pal[2];
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(16, 195);
-      ctx.lineTo(w - 16, 195);
-      ctx.stroke();
-    } else if (variant === 'premium') {
-      // Ekonomi Premium: Vertical center seam in upper headrest + 3 horizontal lumbar seams
-      ctx.strokeStyle = pal[2];
-      ctx.lineWidth = 4.5;
-      // Vertical top seam
-      ctx.beginPath();
-      ctx.moveTo(w / 2, 18);
-      ctx.lineTo(w / 2, 215);
-      ctx.stroke();
-
-      // Horizontal lumbar panel seams
-      for (const ry of [215, 290, 365, 435]) {
         ctx.beginPath();
-        ctx.moveTo(20, ry);
-        ctx.lineTo(w - 20, ry);
+        ctx.moveTo(8, 145);
+        ctx.lineTo(w - 8, 145);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(8, 149);
+        ctx.lineTo(w - 8, 149);
         ctx.stroke();
       }
-    } else if (variant === 'eko23') {
-      // Ekonomi 2-3: Clean smooth vinyl bench with subtle lower lumbar crease
-      ctx.strokeStyle = pal[2];
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(10, 360);
-      ctx.lineTo(w - 10, 360);
-      ctx.stroke();
     }
   });
 }
 
 export function getKAIWoodTexture(variant = 'teak') {
-  const key = `wood:${variant}`;
+  const key = `kai-wood:${variant}`;
   return makeCanvasTex(key, 256, 256, (ctx, w, h) => {
-    ctx.fillStyle = variant === 'teak' ? '#9C6839' : '#7D5636';
+    const grad = ctx.createLinearGradient(0, 0, w, h);
+    if (variant === 'teak') {
+      grad.addColorStop(0, '#A8703E');
+      grad.addColorStop(0.5, '#966132');
+      grad.addColorStop(1, '#7E4F26');
+    } else {
+      grad.addColorStop(0, '#8C6240');
+      grad.addColorStop(0.5, '#785234');
+      grad.addColorStop(1, '#634228');
+    }
+    ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = variant === 'teak' ? 'rgba(95, 55, 22, 0.35)' : 'rgba(65, 38, 18, 0.35)';
+
+    ctx.strokeStyle = 'rgba(45, 22, 8, 0.25)';
     ctx.lineWidth = 2;
-    for (let i = 0; i < 40; i++) {
-      const y = (i * 7) % h;
+    for (let i = 0; i < 48; i++) {
+      const y = (i * 6) % h;
       ctx.beginPath();
       ctx.moveTo(0, y);
-      ctx.bezierCurveTo(w * 0.3, y + 4, w * 0.7, y - 4, w, y + 2);
+      ctx.bezierCurveTo(w * 0.33, y + 3, w * 0.66, y - 3, w, y + 1);
       ctx.stroke();
     }
   });
 }
 
+export function getPleatedCurtainTexture() {
+  return makeCanvasTex('kai-blue-curtain', 256, 256, (ctx, w, h) => {
+    for (let x = 0; x < w; x++) {
+      const wave = Math.sin((x / w) * Math.PI * 14);
+      const r = Math.round(24 + wave * 10);
+      const g = Math.round(66 + wave * 18);
+      const b = Math.round(182 + wave * 28);
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillRect(x, 0, 1, h);
+    }
+  });
+}
+
 export function getSoftShadowTexture() {
-  return makeCanvasTex('soft-shadow', 256, 256, (ctx, w, h) => {
+  return makeCanvasTex('kai-soft-shadow', 256, 256, (ctx, w, h) => {
     ctx.clearRect(0, 0, w, h);
-    const grad = ctx.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, w * 0.46);
-    grad.addColorStop(0, 'rgba(0, 0, 0, 0.32)');
-    grad.addColorStop(0.6, 'rgba(0, 0, 0, 0.12)');
+    const grad = ctx.createRadialGradient(w / 2, h / 2, 8, w / 2, h / 2, w * 0.46);
+    grad.addColorStop(0, 'rgba(0, 0, 0, 0.34)');
+    grad.addColorStop(0.55, 'rgba(0, 0, 0, 0.14)');
     grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
@@ -181,12 +340,18 @@ export function getSoftShadowTexture() {
 }
 
 // ============================================================================
-// Helper: Rounded Box Geometry Builder
+// Sculpted Geometry Helpers (Cached for Instantaneous <15ms Scene Creation!)
 // ============================================================================
-function createRoundedBox(width, height, depth, radius = 0.02) {
+const roundedBoxCache = new Map();
+
+function createRoundedBox(width, height, depth, radius = 0.022) {
+  const key = `${width.toFixed(4)}:${height.toFixed(4)}:${depth.toFixed(4)}:${radius.toFixed(4)}`;
+  if (roundedBoxCache.has(key)) return roundedBoxCache.get(key);
+
+  const r = Math.min(radius, width * 0.45, height * 0.45, depth * 0.45);
   const shape = new THREE.Shape();
-  const hw = width / 2 - radius;
-  const hh = height / 2 - radius;
+  const hw = width / 2 - r;
+  const hh = height / 2 - r;
   shape.moveTo(-hw, -height / 2);
   shape.lineTo(hw, -height / 2);
   shape.quadraticCurveTo(width / 2, -height / 2, width / 2, -hh);
@@ -197,17 +362,16 @@ function createRoundedBox(width, height, depth, radius = 0.02) {
   shape.lineTo(-width / 2, -hh);
   shape.quadraticCurveTo(-width / 2, -height / 2, -hw, -height / 2);
 
-  const extrudeSettings = {
-    depth: Math.max(depth - radius * 2, 0.01),
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth: Math.max(depth - r * 2, 0.008),
     bevelEnabled: true,
     bevelSegments: 3,
     steps: 1,
-    bevelSize: radius,
-    bevelThickness: radius
-  };
-  const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    bevelSize: r,
+    bevelThickness: r
+  });
   geo.center();
-  // Normalize UVs to 0..1 on XY face
+
   const pos = geo.attributes.position;
   const uv = geo.attributes.uv;
   for (let i = 0; i < pos.count; i++) {
@@ -216,29 +380,23 @@ function createRoundedBox(width, height, depth, radius = 0.02) {
     uv.setXY(i, Math.max(0, Math.min(1, u)), Math.max(0, Math.min(1, v)));
   }
   geo.computeVertexNormals();
+  roundedBoxCache.set(key, geo);
   return geo;
 }
 
-// ============================================================================
-// Unavailable Red Indicator Badge (Floating ⊘ when seat is disabled/occupied)
-// ============================================================================
-function createUnavailableIndicatorMesh() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 128;
-  canvas.height = 128;
-  const ctx = canvas.getContext('2d');
-  ctx.strokeStyle = '#CB3A64';
-  ctx.lineWidth = 14;
-  ctx.beginPath();
-  ctx.arc(64, 64, 46, 0, Math.PI * 2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(32, 96);
-  ctx.lineTo(96, 32);
-  ctx.stroke();
-
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.colorSpace = THREE.LinearSRGBColorSpace;
+function createUnavailableBadge() {
+  const tex = makeCanvasTex('kai-unavail-badge', 128, 128, (ctx) => {
+    ctx.clearRect(0, 0, 128, 128);
+    ctx.strokeStyle = '#CB3A64';
+    ctx.lineWidth = 14;
+    ctx.beginPath();
+    ctx.arc(64, 64, 46, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(32, 96);
+    ctx.lineTo(96, 32);
+    ctx.stroke();
+  });
   const mat = new THREE.MeshBasicMaterial({
     map: tex,
     transparent: true,
@@ -246,36 +404,35 @@ function createUnavailableIndicatorMesh() {
     depthWrite: false,
     side: THREE.DoubleSide
   });
-  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.28, 0.28), mat);
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.27, 0.27), mat);
   mesh.rotation.x = -Math.PI / 3;
-  mesh.position.set(0, 0.68, 0.08);
+  mesh.position.set(0, 0.69, 0.08);
   return { mesh, mat };
 }
 
 // ============================================================================
-// 1 & 2. KAI Next Gen Seat Builder (Maroon Eksekutif & Navy Blue Ekonomi New Gen)
+// 1 & 2. KAI Next Gen Seat (Eksekutif Maroon 2-2 & Ekonomi New Gen Biru 2-2)
 // ============================================================================
 export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShadowPlane = false) {
   const root = new THREE.Group();
-  const leatherMats = [];
+  const centerMats = [];
   const bolsterMats = [];
   const stateNodes = [];
 
-  const makeLeatherMat = (isBolster = false) => {
-    const tex = getKAILeatherTexture(variant, 'normal');
-    const mat = new THREE.MeshBasicMaterial({ map: tex });
-    if (isBolster) {
-      mat.color.setRGB(0.86, 0.86, 0.86);
-      bolsterMats.push(mat);
-    } else {
-      leatherMats.push(mat);
-    }
+  const makeMat = (part = 'center') => {
+    const tex = getKAILeatherTexture(variant, 'normal', part);
+    const mat = createKAIMaterial({
+      map: tex,
+      roughness: 0.48,
+      metalness: 0.06
+    });
+    if (part === 'bolster') bolsterMats.push(mat);
+    else centerMats.push(mat);
     return mat;
   };
 
-  // Optional floor shadow plane for Confirmation / Design System preview
   if (withShadowPlane) {
-    const shMesh = new THREE.Mesh(
+    const sh = new THREE.Mesh(
       new THREE.PlaneGeometry(1.75, 1.75),
       new THREE.MeshBasicMaterial({
         map: getSoftShadowTexture(),
@@ -283,87 +440,79 @@ export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShad
         depthWrite: false
       })
     );
-    shMesh.rotation.x = -Math.PI / 2;
-    shMesh.position.set(0, 0.002, 0);
-    root.add(shMesh);
+    sh.rotation.x = -Math.PI / 2;
+    sh.position.set(0, 0.002, 0);
+    root.add(sh);
   }
 
-  // 1. Dark Twin Pedestal Base & Footrest
-  const baseMat = new THREE.MeshBasicMaterial({ color: 0x23262e });
-  const pedLeg = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.2, 0.34), baseMat);
-  pedLeg.position.set(0, 0.1, -0.05);
-  root.add(pedLeg);
+  // Pedestal Base & Footrest
+  const darkBaseMat = createKAIMaterial({ color: 0x22252d, roughness: 0.6, metalness: 0.25 });
+  const ped = new THREE.Mesh(createRoundedBox(0.36, 0.2, 0.34, 0.015), darkBaseMat);
+  ped.position.set(0, 0.1, -0.05);
+  root.add(ped);
 
-  const footrestGroup = new THREE.Group();
-  footrestGroup.position.set(0, 0.11, 0.2);
-  const footBar = new THREE.Mesh(
-    new THREE.BoxGeometry(0.38, 0.035, 0.16),
-    makeLeatherMat(true)
-  );
-  footrestGroup.add(footBar);
-  root.add(footrestGroup);
+  const footRest = new THREE.Mesh(createRoundedBox(0.36, 0.036, 0.16, 0.01), makeMat('bolster'));
+  footRest.position.set(0, 0.11, 0.2);
+  root.add(footRest);
 
-  // 2. Contoured Seat Cushion (Center Ribbed Pad + Left & Right Thigh Bolsters)
-  const seatCushionGroup = new THREE.Group();
-  seatCushionGroup.position.set(0, 0.25, 0.02);
+  // Contoured Seat Cushion (Center Ribbed Pad + Raised Side Thigh Bolsters)
+  const cushionGroup = new THREE.Group();
+  cushionGroup.position.set(0, 0.245, 0.03);
 
   const centerCushion = new THREE.Mesh(
-    createRoundedBox(0.35, 0.46, 0.11, 0.03),
-    makeLeatherMat(false)
+    createRoundedBox(0.34, 0.46, 0.115, 0.032),
+    makeMat('center')
   );
   centerCushion.rotation.x = Math.PI / 2;
-  seatCushionGroup.add(centerCushion);
+  cushionGroup.add(centerCushion);
 
-  const thighBolsterGeo = createRoundedBox(0.095, 0.48, 0.13, 0.03);
+  const thighBolsterGeo = createRoundedBox(0.095, 0.48, 0.132, 0.034);
   for (const side of [-1, 1]) {
-    const tb = new THREE.Mesh(thighBolsterGeo, makeLeatherMat(true));
+    const tb = new THREE.Mesh(thighBolsterGeo, makeMat('bolster'));
     tb.rotation.x = Math.PI / 2;
-    tb.position.set(side * 0.195, 0.015, 0);
-    seatCushionGroup.add(tb);
+    tb.position.set(side * 0.19, 0.014, 0);
+    cushionGroup.add(tb);
   }
-  root.add(seatCushionGroup);
+  root.add(cushionGroup);
 
-  // 3. Sculpted 3-Column Backrest + Organic Winged Headrest Ears ("Telinga" Sandaran)
+  // Sculpted 3-Column Ergonomic Backrest + Organic Winged Headrest Ears ("Telinga" Sandaran)
   const backrestGroup = new THREE.Group();
-  const baseBackPos = new THREE.Vector3(0, 0.3, -0.17);
+  const baseBackPos = new THREE.Vector3(0, 0.295, -0.165);
   const normalQuat = new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.15, 0, 0, 'ZYX'));
   const reclineQuat = new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.42, 0, 0, 'ZYX'));
   backrestGroup.position.copy(baseBackPos);
   backrestGroup.quaternion.copy(normalQuat);
 
-  // Center spine column (continuous lumbar + headrest, NO Shinkansen square pillow!)
   const centerSpine = new THREE.Mesh(
-    createRoundedBox(0.32, 0.78, 0.1, 0.035),
-    makeLeatherMat(false)
+    createRoundedBox(0.31, 0.77, 0.105, 0.036),
+    makeMat('center')
   );
   centerSpine.position.set(0, 0.39, 0);
   backrestGroup.add(centerSpine);
 
-  // Left & right vertical backrest side bolsters
-  const sideBolsterGeo = createRoundedBox(0.095, 0.76, 0.12, 0.035);
+  const backBolsterGeo = createRoundedBox(0.095, 0.75, 0.125, 0.036);
   for (const side of [-1, 1]) {
-    const sb = new THREE.Mesh(sideBolsterGeo, makeLeatherMat(true));
-    sb.position.set(side * 0.185, 0.39, 0.015);
-    sb.rotation.y = -side * 0.12;
-    backrestGroup.add(sb);
+    const bb = new THREE.Mesh(backBolsterGeo, makeMat('bolster'));
+    bb.position.set(side * 0.18, 0.385, 0.018);
+    bb.rotation.y = -side * 0.14;
+    backrestGroup.add(bb);
   }
 
-  // Organic Winged Headrest Ears ("Telinga" Sandaran Kepala) curving forward at top left & right
-  const earGeo = createRoundedBox(0.095, 0.27, 0.16, 0.04);
+  // Forward-Curving Winged Headrest Ears ("Telinga" Sandaran Kepala)
+  const earGeo = createRoundedBox(0.095, 0.27, 0.165, 0.042);
   for (const side of [-1, 1]) {
-    const ear = new THREE.Mesh(earGeo, makeLeatherMat(true));
-    ear.position.set(side * 0.215, 0.64, 0.065);
-    ear.rotation.set(0.06, -side * 0.48, side * 0.08);
+    const ear = new THREE.Mesh(earGeo, makeMat('bolster'));
+    ear.position.set(side * 0.205, 0.635, 0.068);
+    ear.rotation.set(0.06, -side * 0.5, side * 0.09);
     backrestGroup.add(ear);
   }
 
-  // Top curved headrest crown cap
-  const crownCap = new THREE.Mesh(
-    createRoundedBox(0.44, 0.09, 0.11, 0.035),
-    makeLeatherMat(true)
+  const topCrown = new THREE.Mesh(
+    createRoundedBox(0.42, 0.085, 0.11, 0.035),
+    makeMat('bolster')
   );
-  crownCap.position.set(0, 0.77, 0.01);
-  backrestGroup.add(crownCap);
+  topCrown.position.set(0, 0.765, 0.01);
+  backrestGroup.add(topCrown);
 
   root.add(backrestGroup);
 
@@ -388,79 +537,87 @@ export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShad
     }
   });
 
-  // 4. Sleek Outer/Aisle Side Panel + Curved Wooden Armrest Rail + Recline Button
-  const woodTex = getKAIWoodTexture(variant === 'maroon' ? 'teak' : 'walnut');
-  const woodMat = new THREE.MeshBasicMaterial({ map: woodTex });
-  const shellColor = variant === 'maroon' ? 0x9aa3b2 : 0xcdd2dc;
-  const shellRecessColor = variant === 'maroon' ? 0x828b99 : 0xb8bec9;
-  const shellMat = new THREE.MeshBasicMaterial({ color: shellColor });
-  const recessMat = new THREE.MeshBasicMaterial({ color: shellRecessColor });
-  const chromeMat = new THREE.MeshBasicMaterial({ color: 0xdce2ec });
+  // Side Armrest Shell + Curved Wooden Top/Front Trim Rail + Silver Recline Button
+  const woodMat = createKAIMaterial({
+    map: getKAIWoodTexture(variant === 'maroon' ? 'teak' : 'walnut'),
+    roughness: 0.38,
+    metalness: 0.08
+  });
+  const shellMat = createKAIMaterial({
+    color: variant === 'maroon' ? 0x9aa3b2 : 0xd0d5df,
+    roughness: 0.45,
+    metalness: 0.15
+  });
+  const recessMat = createKAIMaterial({
+    color: variant === 'maroon' ? 0x828b9a : 0xbac0cc,
+    roughness: 0.5,
+    metalness: 0.12
+  });
+  const chromeMat = createKAIMaterial({
+    color: 0xe4eaf2,
+    roughness: 0.2,
+    metalness: 0.8
+  });
 
-  // Place full wooden-trimmed side panel on the outer/aisle side of the seat
-  const outerSide = isPairA ? 1 : -1;
-  const panelX = outerSide * 0.265;
+  const buildSidePanel = (sideSign) => {
+    const g = new THREE.Group();
+    const px = sideSign * 0.258;
+    const shell = new THREE.Mesh(createRoundedBox(0.052, 0.35, 0.51, 0.022), shellMat);
+    shell.position.set(px, 0.31, -0.01);
+    g.add(shell);
 
-  const sideShell = new THREE.Mesh(createRoundedBox(0.055, 0.36, 0.52, 0.02), shellMat);
-  sideShell.position.set(panelX, 0.31, -0.01);
-  root.add(sideShell);
+    const recess = new THREE.Mesh(createRoundedBox(0.056, 0.21, 0.35, 0.016), recessMat);
+    recess.position.set(px + sideSign * 0.002, 0.3, -0.01);
+    g.add(recess);
 
-  const sideRecess = new THREE.Mesh(createRoundedBox(0.06, 0.22, 0.36, 0.015), recessMat);
-  sideRecess.position.set(panelX + outerSide * 0.003, 0.3, -0.01);
-  root.add(sideRecess);
+    const woodTop = new THREE.Mesh(createRoundedBox(0.065, 0.044, 0.51, 0.016), woodMat);
+    woodTop.position.set(px, 0.492, -0.005);
+    g.add(woodTop);
 
-  // Top horizontal wooden armrest cap
-  const woodTop = new THREE.Mesh(createRoundedBox(0.068, 0.045, 0.52, 0.015), woodMat);
-  woodTop.position.set(panelX, 0.495, -0.005);
-  root.add(woodTop);
+    const woodFront = new THREE.Mesh(createRoundedBox(0.065, 0.27, 0.054, 0.016), woodMat);
+    woodFront.position.set(px, 0.365, 0.232);
+    g.add(woodFront);
 
-  // Front vertical curved wooden nose trim
-  const woodFront = new THREE.Mesh(createRoundedBox(0.068, 0.28, 0.055, 0.015), woodMat);
-  woodFront.position.set(panelX, 0.37, 0.235);
-  root.add(woodFront);
+    const btn = new THREE.Mesh(createRoundedBox(0.028, 0.042, 0.016, 0.004), chromeMat);
+    btn.position.set(px, 0.34, 0.26);
+    g.add(btn);
 
-  // Silver recline button on front wooden trim (visible in both Maroon & Blue photos!)
-  const btnMesh = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.042, 0.015), chromeMat);
-  btnMesh.position.set(panelX, 0.34, 0.265);
-  root.add(btnMesh);
+    return g;
+  };
 
-  // 5. Slim Contoured Center Divider Armrest (between Seat A & Seat B)
-  if (isPairA || withShadowPlane) {
-    const divX = withShadowPlane ? -0.265 : -0.295;
-    if (withShadowPlane) {
-      // On standalone 3D preview, put matching wooden armrest on both left & right sides!
-      const sideShellL = sideShell.clone();
-      sideShellL.position.x = -panelX;
-      const woodTopL = woodTop.clone();
-      woodTopL.position.x = -panelX;
-      const woodFrontL = woodFront.clone();
-      woodFrontL.position.x = -panelX;
-      root.add(sideShellL, woodTopL, woodFrontL);
-    } else {
-      const divColor = variant === 'maroon' ? 0xb8cbe0 : 0xe2e7f0;
+  if (withShadowPlane) {
+    root.add(buildSidePanel(1));
+    root.add(buildSidePanel(-1));
+  } else {
+    const outerSide = isPairA ? 1 : -1;
+    root.add(buildSidePanel(outerSide));
+    if (isPairA) {
+      const divMat = createKAIMaterial({
+        color: variant === 'maroon' ? 0xb8cbe0 : 0xe4e9f2,
+        roughness: 0.4,
+        metalness: 0.15
+      });
       const divPaddle = new THREE.Mesh(
         createRoundedBox(0.036, 0.24, 0.26, 0.014),
-        new THREE.MeshBasicMaterial({ color: divColor })
+        divMat
       );
-      divPaddle.position.set(divX, 0.52, -0.08);
+      divPaddle.position.set(-0.295, 0.51, -0.08);
       divPaddle.rotation.x = -0.2;
       root.add(divPaddle);
     }
   }
 
-  // 6. Unavailable Indicator
-  const unavail = createUnavailableIndicatorMesh();
+  const unavail = createUnavailableBadge();
   root.add(unavail.mesh);
 
   const applyCustomState = (state) => {
-    const tex = getKAILeatherTexture(variant, state);
-    leatherMats.forEach((m) => {
-      m.map = tex;
-      m.needsUpdate = true;
+    const cTex = getKAILeatherTexture(variant, state, 'center');
+    const bTex = getKAILeatherTexture(variant, state, 'bolster');
+    centerMats.forEach((m) => {
+      m.uniforms.uMap.value = cTex;
     });
     bolsterMats.forEach((m) => {
-      m.map = tex;
-      m.needsUpdate = true;
+      m.uniforms.uMap.value = bTex;
     });
     unavail.mat.opacity = state === 'disabled' ? 1 : 0;
   };
@@ -469,28 +626,28 @@ export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShad
 }
 
 // ============================================================================
-// 3. KAI Ekonomi Premium Seat Builder (Taupe/Tan 2-2 + Open Curved Chrome Armrests)
+// 3. KAI Ekonomi Premium Seat (Taupe/Tan 2-2 + Open Curved Chrome Armrests)
 // ============================================================================
 export function buildKAIEkonomiPremiumSeat(isPairA = true, withShadowPlane = false) {
   const root = new THREE.Group();
-  const leatherMats = [];
+  const centerMats = [];
   const bolsterMats = [];
   const stateNodes = [];
 
-  const makeLeatherMat = (isBolster = false) => {
-    const tex = getKAILeatherTexture('premium', 'normal');
-    const mat = new THREE.MeshBasicMaterial({ map: tex });
-    if (isBolster) {
-      mat.color.setRGB(0.9, 0.9, 0.9);
-      bolsterMats.push(mat);
-    } else {
-      leatherMats.push(mat);
-    }
+  const makeMat = (part = 'center') => {
+    const tex = getKAILeatherTexture('premium', 'normal', part);
+    const mat = createKAIMaterial({
+      map: tex,
+      roughness: 0.5,
+      metalness: 0.05
+    });
+    if (part === 'bolster') bolsterMats.push(mat);
+    else centerMats.push(mat);
     return mat;
   };
 
   if (withShadowPlane) {
-    const shMesh = new THREE.Mesh(
+    const sh = new THREE.Mesh(
       new THREE.PlaneGeometry(1.75, 1.75),
       new THREE.MeshBasicMaterial({
         map: getSoftShadowTexture(),
@@ -498,38 +655,39 @@ export function buildKAIEkonomiPremiumSeat(isPairA = true, withShadowPlane = fal
         depthWrite: false
       })
     );
-    shMesh.rotation.x = -Math.PI / 2;
-    shMesh.position.set(0, 0.002, 0);
-    root.add(shMesh);
+    sh.rotation.x = -Math.PI / 2;
+    sh.position.set(0, 0.002, 0);
+    root.add(sh);
   }
 
-  // 1. Brushed Steel Underframe Pedestal
-  const steelMat = new THREE.MeshBasicMaterial({ color: 0xb8c0ca });
-  const darkMetalMat = new THREE.MeshBasicMaterial({ color: 0x2b2e35 });
-  const baseFrame = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.18, 0.34), darkMetalMat);
+  const chromeMat = createKAIMaterial({ color: 0xcfd6e0, roughness: 0.22, metalness: 0.78 });
+  const darkMetalMat = createKAIMaterial({ color: 0x262930, roughness: 0.55, metalness: 0.3 });
+  const espressoMat = createKAIMaterial({ color: 0x33251f, roughness: 0.42, metalness: 0.08 });
+
+  const baseFrame = new THREE.Mesh(createRoundedBox(0.4, 0.18, 0.34, 0.015), darkMetalMat);
   baseFrame.position.set(0, 0.09, -0.04);
   root.add(baseFrame);
 
-  // 2. Plump Taupe/Tan Seat Cushion
+  // Plump Taupe/Tan Seat Cushion
   const cushionGroup = new THREE.Group();
   cushionGroup.position.set(0, 0.24, 0.03);
   const centerPad = new THREE.Mesh(
-    createRoundedBox(0.36, 0.47, 0.12, 0.032),
-    makeLeatherMat(false)
+    createRoundedBox(0.35, 0.47, 0.12, 0.032),
+    makeMat('center')
   );
   centerPad.rotation.x = Math.PI / 2;
   cushionGroup.add(centerPad);
 
-  const sideBolsterGeo = createRoundedBox(0.09, 0.48, 0.135, 0.032);
+  const sideBolsterGeo = createRoundedBox(0.09, 0.48, 0.135, 0.034);
   for (const side of [-1, 1]) {
-    const sb = new THREE.Mesh(sideBolsterGeo, makeLeatherMat(true));
+    const sb = new THREE.Mesh(sideBolsterGeo, makeMat('bolster'));
     sb.rotation.x = Math.PI / 2;
-    sb.position.set(side * 0.195, 0.01, 0);
+    sb.position.set(side * 0.19, 0.012, 0);
     cushionGroup.add(sb);
   }
   root.add(cushionGroup);
 
-  // 3. Tall Flat-Top Contoured Backrest (NO side wings, vertical top seam + horizontal lumbar panels!)
+  // High Flat-Top Contoured Backrest (Vertical Top Seam + 3 Lumbar Cushions, NO side ears!)
   const backrestGroup = new THREE.Group();
   const baseBackPos = new THREE.Vector3(0, 0.29, -0.17);
   const normalQuat = new THREE.Quaternion().setFromEuler(new THREE.Euler(-0.14, 0, 0, 'ZYX'));
@@ -538,16 +696,16 @@ export function buildKAIEkonomiPremiumSeat(isPairA = true, withShadowPlane = fal
   backrestGroup.quaternion.copy(normalQuat);
 
   const centerBack = new THREE.Mesh(
-    createRoundedBox(0.35, 0.79, 0.105, 0.035),
-    makeLeatherMat(false)
+    createRoundedBox(0.34, 0.79, 0.105, 0.036),
+    makeMat('center')
   );
   centerBack.position.set(0, 0.4, 0);
   backrestGroup.add(centerBack);
 
-  const backBolsterGeo = createRoundedBox(0.095, 0.79, 0.125, 0.035);
+  const backBolsterGeo = createRoundedBox(0.095, 0.79, 0.125, 0.036);
   for (const side of [-1, 1]) {
-    const bb = new THREE.Mesh(backBolsterGeo, makeLeatherMat(true));
-    bb.position.set(side * 0.195, 0.4, 0.015);
+    const bb = new THREE.Mesh(backBolsterGeo, makeMat('bolster'));
+    bb.position.set(side * 0.19, 0.4, 0.015);
     bb.rotation.y = -side * 0.1;
     backrestGroup.add(bb);
   }
@@ -574,35 +732,30 @@ export function buildKAIEkonomiPremiumSeat(isPairA = true, withShadowPlane = fal
     }
   });
 
-  // 4. Open Curved Armrests on Chrome Metal Support Posts + Round Recline Knob (Image 2!)
-  const armPadMat = new THREE.MeshBasicMaterial({ color: 0x362822 });
+  // Open Curved Armrests on Chrome Metal Support Posts + Round Recline Knob
   const buildOpenArmrest = (xPos) => {
     const g = new THREE.Group();
     g.position.set(xPos, 0, 0);
 
-    // Rear & front chrome support posts (open underneath!)
-    const rearPost = new THREE.Mesh(new THREE.BoxGeometry(0.026, 0.24, 0.045), steelMat);
+    const rearPost = new THREE.Mesh(createRoundedBox(0.026, 0.24, 0.044, 0.006), chromeMat);
     rearPost.position.set(0, 0.34, -0.15);
     g.add(rearPost);
 
-    const frontPost = new THREE.Mesh(new THREE.BoxGeometry(0.026, 0.24, 0.04), steelMat);
+    const frontPost = new THREE.Mesh(createRoundedBox(0.026, 0.24, 0.04, 0.006), chromeMat);
     frontPost.position.set(0, 0.33, 0.19);
     frontPost.rotation.x = 0.22;
     g.add(frontPost);
 
-    // Top dark-espresso curved armrest pad
-    const topPad = new THREE.Mesh(createRoundedBox(0.052, 0.042, 0.44, 0.015), armPadMat);
+    const topPad = new THREE.Mesh(createRoundedBox(0.052, 0.042, 0.44, 0.015), espressoMat);
     topPad.position.set(0, 0.465, 0.02);
     g.add(topPad);
 
-    // Downward-curving front tip of armrest pad
-    const frontTip = new THREE.Mesh(createRoundedBox(0.052, 0.09, 0.05, 0.015), armPadMat);
+    const frontTip = new THREE.Mesh(createRoundedBox(0.052, 0.09, 0.05, 0.015), espressoMat);
     frontTip.position.set(0, 0.43, 0.22);
     frontTip.rotation.x = 0.35;
     g.add(frontTip);
 
-    // Round black recline knob on side of pivot
-    const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.045, 12), darkMetalMat);
+    const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.045, 14), darkMetalMat);
     knob.rotation.z = Math.PI / 2;
     knob.position.set(0, 0.31, 0.16);
     g.add(knob);
@@ -611,27 +764,26 @@ export function buildKAIEkonomiPremiumSeat(isPairA = true, withShadowPlane = fal
   };
 
   if (withShadowPlane) {
-    root.add(buildOpenArmrest(0.265));
-    root.add(buildOpenArmrest(-0.265));
+    root.add(buildOpenArmrest(0.26));
+    root.add(buildOpenArmrest(-0.26));
   } else if (isPairA) {
-    root.add(buildOpenArmrest(0.265));
+    root.add(buildOpenArmrest(0.26));
     root.add(buildOpenArmrest(-0.295));
   } else {
-    root.add(buildOpenArmrest(-0.265));
+    root.add(buildOpenArmrest(-0.26));
   }
 
-  const unavail = createUnavailableIndicatorMesh();
+  const unavail = createUnavailableBadge();
   root.add(unavail.mesh);
 
   const applyCustomState = (state) => {
-    const tex = getKAILeatherTexture('premium', state);
-    leatherMats.forEach((m) => {
-      m.map = tex;
-      m.needsUpdate = true;
+    const cTex = getKAILeatherTexture('premium', state, 'center');
+    const bTex = getKAILeatherTexture('premium', state, 'bolster');
+    centerMats.forEach((m) => {
+      m.uniforms.uMap.value = cTex;
     });
     bolsterMats.forEach((m) => {
-      m.map = tex;
-      m.needsUpdate = true;
+      m.uniforms.uMap.value = bTex;
     });
     unavail.mat.opacity = state === 'disabled' ? 1 : 0;
   };
@@ -640,23 +792,25 @@ export function buildKAIEkonomiPremiumSeat(isPairA = true, withShadowPlane = fal
 }
 
 // ============================================================================
-// 4. KAI Ekonomi 2-3 Bench Seat Builder (Upright 90° Cream Vinyl Bench + Tubular Pipe Frame)
+// 4. KAI Ekonomi 2-3 Bench Seat (Upright ~90° Cream Bench + Round Tubular Pipe Frame)
 // ============================================================================
 export function buildKAIEkonomi23Seat(seatRole = 'b', withShadowPlane = false) {
-  // seatRole: 'a' (window left of 3-bench), 'b' (middle of 3-bench), 'c' (aisle left of 3-bench),
-  //           'd' (aisle right of 2-bench), 'e' (window right of 2-bench)
   const root = new THREE.Group();
-  const leatherMats = [];
+  const vinylMats = [];
 
   const makeVinylMat = () => {
-    const tex = getKAILeatherTexture('eko23', 'normal');
-    const mat = new THREE.MeshBasicMaterial({ map: tex });
-    leatherMats.push(mat);
+    const tex = getKAILeatherTexture('eko23', 'normal', 'center');
+    const mat = createKAIMaterial({
+      map: tex,
+      roughness: 0.46,
+      metalness: 0.04
+    });
+    vinylMats.push(mat);
     return mat;
   };
 
   if (withShadowPlane) {
-    const shMesh = new THREE.Mesh(
+    const sh = new THREE.Mesh(
       new THREE.PlaneGeometry(1.75, 1.75),
       new THREE.MeshBasicMaterial({
         map: getSoftShadowTexture(),
@@ -664,37 +818,37 @@ export function buildKAIEkonomi23Seat(seatRole = 'b', withShadowPlane = false) {
         depthWrite: false
       })
     );
-    shMesh.rotation.x = -Math.PI / 2;
-    shMesh.position.set(0, 0.002, 0);
-    root.add(shMesh);
+    sh.rotation.x = -Math.PI / 2;
+    sh.position.set(0, 0.002, 0);
+    root.add(sh);
   }
 
-  const pipeMat = new THREE.MeshBasicMaterial({ color: 0xc8d0d8 });
-  const blackArmMat = new THREE.MeshBasicMaterial({ color: 0x24211f });
+  const pipeMat = createKAIMaterial({ color: 0xd0d7e0, roughness: 0.2, metalness: 0.82 });
+  const blackArmMat = createKAIMaterial({ color: 0x24211f, roughness: 0.48, metalness: 0.08 });
   const w = withShadowPlane ? 0.92 : 0.495;
 
-  // 1. Flat Continuous Bench Cushion (Cream/Khaki Vinyl)
+  // Flat Continuous Bench Cushion
   const cushion = new THREE.Mesh(
-    createRoundedBox(w, 0.45, 0.11, 0.025),
+    createRoundedBox(w, 0.45, 0.11, 0.026),
     makeVinylMat()
   );
   cushion.rotation.x = Math.PI / 2;
   cushion.position.set(0, 0.25, 0.04);
   root.add(cushion);
 
-  // 2. Upright (~90°) Flat Bench Backrest (Cream/Khaki Vinyl, NO headrest pillow!)
+  // Upright (~90°) Flat Bench Backrest (Cream/Khaki Vinyl)
   const backrest = new THREE.Mesh(
     createRoundedBox(w, 0.72, 0.09, 0.03),
     makeVinylMat()
   );
   backrest.position.set(0, 0.64, -0.14);
-  backrest.rotation.x = -0.04; // Nearly vertical 90-degree upright bench!
+  backrest.rotation.x = -0.04;
   root.add(backrest);
 
-  // 3. Continuous Round Tubular Stainless-Steel Pipe Frame around Top & Outer Sides (Image 3!)
+  // Continuous Round Tubular Stainless-Steel Pipe Frame around Top & Outer Sides
   const pipeRadius = 0.014;
   const topPipe = new THREE.Mesh(
-    new THREE.CylinderGeometry(pipeRadius, pipeRadius, w + 0.02, 12),
+    new THREE.CylinderGeometry(pipeRadius, pipeRadius, w + 0.02, 16),
     pipeMat
   );
   topPipe.rotation.z = Math.PI / 2;
@@ -708,33 +862,30 @@ export function buildKAIEkonomi23Seat(seatRole = 'b', withShadowPlane = false) {
     const g = new THREE.Group();
     const xEdge = sideSign * (w / 2);
 
-    // Vertical stainless steel pipe along side of backrest down to floor leg
     const vPipe = new THREE.Mesh(
-      new THREE.CylinderGeometry(pipeRadius, pipeRadius, 0.98, 12),
+      new THREE.CylinderGeometry(pipeRadius, pipeRadius, 0.98, 16),
       pipeMat
     );
     vPipe.position.set(xEdge, 0.53, -0.155);
     g.add(vPipe);
 
-    // U-shaped tubular leg under front of bench
     const frontLeg = new THREE.Mesh(
-      new THREE.CylinderGeometry(pipeRadius, pipeRadius, 0.24, 12),
+      new THREE.CylinderGeometry(pipeRadius, pipeRadius, 0.24, 16),
       pipeMat
     );
     frontLeg.position.set(xEdge, 0.12, 0.2);
     g.add(frontLeg);
 
     const bottomRunner = new THREE.Mesh(
-      new THREE.CylinderGeometry(pipeRadius, pipeRadius, 0.36, 12),
+      new THREE.CylinderGeometry(pipeRadius, pipeRadius, 0.36, 16),
       pipeMat
     );
     bottomRunner.rotation.x = Math.PI / 2;
     bottomRunner.position.set(xEdge, 0.02, 0.02);
     g.add(bottomRunner);
 
-    // Open tubular armrest loop + curved black armrest pad
     const armFrontSupport = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.011, 0.011, 0.22, 10),
+      new THREE.CylinderGeometry(0.011, 0.011, 0.22, 14),
       pipeMat
     );
     armFrontSupport.position.set(xEdge, 0.34, 0.18);
@@ -753,14 +904,13 @@ export function buildKAIEkonomi23Seat(seatRole = 'b', withShadowPlane = false) {
   if (hasLeftEnd) root.add(buildPipeEndAndArmrest(-1));
   if (hasRightEnd) root.add(buildPipeEndAndArmrest(1));
 
-  const unavail = createUnavailableIndicatorMesh();
+  const unavail = createUnavailableBadge();
   root.add(unavail.mesh);
 
   const applyCustomState = (state) => {
-    const tex = getKAILeatherTexture('eko23', state);
-    leatherMats.forEach((m) => {
-      m.map = tex;
-      m.needsUpdate = true;
+    const tex = getKAILeatherTexture('eko23', state, 'center');
+    vinylMats.forEach((m) => {
+      m.uniforms.uMap.value = tex;
     });
     unavail.mat.opacity = state === 'disabled' ? 1 : 0;
   };
@@ -769,47 +919,325 @@ export function buildKAIEkonomi23Seat(seatRole = 'b', withShadowPlane = false) {
 }
 
 // ============================================================================
-// 5. KAI Stainless Steel Next Gen Coach End / Power Car (replaces Shinkansen Nose Cone!)
+// 5. Pure KAI 3D Cabin Sections, Panoramic Windows, Overhead Racks & Bulkheads
+// (Replaces 100% of Shinkansen .scn cabin walls, windows, floors & partitions!)
 // ============================================================================
+export function buildKAICabinSection(modelName) {
+  const group = new THREE.Group();
+  const isOrd23 = modelName.startsWith('e7-ordinary-');
+  const isBlue = modelName.startsWith('kai-blue-') || modelName.startsWith('e7-green-');
+  const isPrem = modelName.startsWith('kai-prem-');
+  const bayLen = isOrd23 ? 1.04 : 1.175;
+
+  const floorColors = isOrd23
+    ? { side: 0x7ea06e, aisle: 0x84a674, led: 0xf4f7f2 }
+    : isBlue
+    ? { side: 0x8d949e, aisle: 0x9da4ae, led: 0xfffce0 }
+    : isPrem
+    ? { side: 0x5c5552, aisle: 0x69615d, led: 0xc4f5ae }
+    : { side: 0x626770, aisle: 0x747a84, led: 0xdffbe4 };
+
+  const sideFloorMat = createKAIMaterial({ color: floorColors.side, roughness: 0.7, metalness: 0.05 });
+  const aisleFloorMat = createKAIMaterial({ color: floorColors.aisle, roughness: 0.55, metalness: 0.08 });
+  const wallCreamMat = createKAIMaterial({ color: 0xeae6df, roughness: 0.6, metalness: 0.04 });
+  const rackMat = createKAIMaterial({ color: 0xe0dcd4, roughness: 0.55, metalness: 0.06 });
+  const extSteelMat = createKAIMaterial({ color: 0xc4c8d0, roughness: 0.35, metalness: 0.55 });
+  const winFrameMat = createKAIMaterial({ color: 0x262a32, roughness: 0.5, metalness: 0.25 });
+  const glassMat = new THREE.MeshBasicMaterial({
+    color: 0x242c38,
+    transparent: true,
+    opacity: 0.24,
+    depthWrite: false,
+    side: THREE.DoubleSide
+  });
+
+  // 1. Floor (Under-seat left/right + central aisle + glowing LED aisle strips)
+  const aisleW = isOrd23 ? 0.46 : 0.52;
+  const sideW = (3.08 - aisleW) / 2;
+
+  for (const side of [-1, 1]) {
+    const fSide = new THREE.Mesh(new THREE.BoxGeometry(sideW, 0.06, bayLen), sideFloorMat);
+    fSide.position.set(side * (aisleW / 2 + sideW / 2), 1.3, 0);
+    group.add(fSide);
+  }
+  const fAisle = new THREE.Mesh(new THREE.BoxGeometry(aisleW, 0.06, bayLen), aisleFloorMat);
+  fAisle.position.set(0, 1.3, 0);
+  group.add(fAisle);
+
+  const ledGeo = new THREE.PlaneGeometry(0.028, bayLen);
+  const ledMat = new THREE.MeshBasicMaterial({ color: floorColors.led, side: THREE.DoubleSide });
+  for (const side of [-1, 1]) {
+    const led = new THREE.Mesh(ledGeo, ledMat);
+    led.rotation.x = -Math.PI / 2;
+    led.position.set(side * (aisleW / 2), 1.332, 0);
+    group.add(led);
+  }
+
+  // 2. KAI Cabin Side Walls + Wide Rectangular Panoramic Windows (NOT Shinkansen oval windows!)
+  for (const side of [-1, 1]) {
+    const wallX = side * 1.56;
+    const extX = side * 1.66;
+
+    // Lower wall below window (in Ekonomi 2-3, brushed stainless-steel wainscoting!)
+    const lowerWallMat = isOrd23
+      ? createKAIMaterial({ color: 0xbac2cc, roughness: 0.3, metalness: 0.65 })
+      : wallCreamMat;
+    const lowerWall = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.48, bayLen), lowerWallMat);
+    lowerWall.position.set(wallX, 1.54, 0);
+    group.add(lowerWall);
+
+    // Upper cutaway wall header above window + dark top rail
+    const upperWall = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.22, bayLen), wallCreamMat);
+    upperWall.position.set(wallX, 2.54, 0);
+    group.add(upperWall);
+
+    const topCutawayCap = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.04, bayLen), winFrameMat);
+    topCutawayCap.position.set(wallX, 2.66, 0);
+    group.add(topCutawayCap);
+
+    // Window Pillars (left & right of the wide rectangular KAI panoramic window)
+    const pillarW = 0.14;
+    for (const pz of [-bayLen / 2 + pillarW / 2, bayLen / 2 - pillarW / 2]) {
+      const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.66, pillarW), wallCreamMat);
+      pillar.position.set(wallX, 2.11, pz);
+      group.add(pillar);
+    }
+
+    // Wide Rectangular KAI Panoramic Window Frame + Glass Sill
+    const winLen = bayLen - pillarW * 2;
+    const frameTop = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.045, winLen), winFrameMat);
+    frameTop.position.set(wallX, 2.41, 0);
+    const frameBot = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.05, winLen), winFrameMat);
+    frameBot.position.set(wallX, 1.79, 0);
+    group.add(frameTop, frameBot);
+
+    const glass = new THREE.Mesh(new THREE.PlaneGeometry(winLen, 0.58), glassMat);
+    glass.rotation.y = Math.PI / 2;
+    glass.position.set(wallX, 2.1, 0);
+    group.add(glass);
+
+    // Class-specific window & wall accessories
+    if (isOrd23) {
+      // Bright Royal-Blue Pleated Curtain + White Folding Wall Table (Image 3!)
+      const curtainMat = createKAIMaterial({
+        map: getPleatedCurtainTexture(),
+        roughness: 0.65,
+        metalness: 0.02
+      });
+      const curtain = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.62, winLen * 0.85), curtainMat);
+      curtain.position.set(side * 1.5, 2.12, 0);
+      group.add(curtain);
+
+      const miniTable = new THREE.Mesh(
+        createRoundedBox(0.14, 0.028, 0.32, 0.008),
+        createKAIMaterial({ color: 0xf2f4f7, roughness: 0.4 })
+      );
+      miniTable.position.set(side * 1.46, 1.74, 0);
+      group.add(miniTable);
+    } else if (isPrem) {
+      // Ekonomi Premium: White dual-socket power outlet shelf under window (Image 2!)
+      const socketShelf = new THREE.Mesh(
+        createRoundedBox(0.08, 0.075, 0.24, 0.01),
+        createKAIMaterial({ color: 0xe2e6ee, roughness: 0.4 })
+      );
+      socketShelf.position.set(side * 1.49, 1.75, 0);
+      group.add(socketShelf);
+    }
+
+    // Exterior Corrugated Stainless Steel Coach Shell + Argo Bromo Anggrek Livery Stripe
+    const extWall = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.5, bayLen), extSteelMat);
+    extWall.position.set(extX, 1.35, 0);
+    group.add(extWall);
+
+    const stripeColor = isOrd23 ? 0xf37021 : 0xd82b79;
+    const stripe = new THREE.Mesh(
+      new THREE.PlaneGeometry(bayLen, 0.22),
+      new THREE.MeshBasicMaterial({ color: stripeColor, side: THREE.DoubleSide })
+    );
+    stripe.rotation.y = Math.PI / 2;
+    stripe.position.set(side * 1.695, 1.02, 0);
+    group.add(stripe);
+  }
+
+  return group;
+}
+
+export function buildKAIPartitionBulkhead(modelName) {
+  const group = new THREE.Group();
+  const isOrd23 = modelName.startsWith('e7-ordinary-');
+  const wallMat = createKAIMaterial({ color: 0xe6e2da, roughness: 0.58 });
+  const extSteelMat = createKAIMaterial({ color: 0xc4c8d0, roughness: 0.35, metalness: 0.55 });
+  const darkFrameMat = createKAIMaterial({ color: 0x1e222a, roughness: 0.4, metalness: 0.3 });
+
+  // Outer stainless steel ring
+  const outerBox = new THREE.Mesh(new THREE.BoxGeometry(3.36, 2.15, 0.12), extSteelMat);
+  outerBox.position.set(0, 1.68, 0);
+  group.add(outerBox);
+
+  // Left & Right Interior Bulkhead Walls (leaving center doorway open)
+  for (const side of [-1, 1]) {
+    const wPanel = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.42, 0.14), wallMat);
+    wPanel.position.set(side * 0.94, 2.02, 0);
+    group.add(wPanel);
+  }
+  const topHeader = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.32, 0.14), wallMat);
+  topHeader.position.set(0, 2.57, 0);
+  group.add(topHeader);
+
+  // Automatic Sliding Door Frame + Glass + Yellow Safety Decal
+  const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(0.68, 1.36, 0.15), darkFrameMat);
+  doorFrame.position.set(0, 1.99, 0);
+  group.add(doorFrame);
+
+  const doorGlass = new THREE.Mesh(
+    new THREE.BoxGeometry(0.44, 0.92, 0.16),
+    new THREE.MeshBasicMaterial({ color: 0x384657 })
+  );
+  doorGlass.position.set(0, 2.06, 0);
+  group.add(doorGlass);
+
+  const yellowDecal = new THREE.Mesh(
+    new THREE.BoxGeometry(0.09, 0.28, 0.165),
+    new THREE.MeshBasicMaterial({ color: 0xf2c935 })
+  );
+  yellowDecal.position.set(0, 2.08, 0);
+  group.add(yellowDecal);
+
+  // Left & Right PIDS LCD Monitors + Top Digital LED Running Text Board
+  if (!isOrd23) {
+    const bezelMat = createKAIMaterial({ color: 0xc8c4ba, roughness: 0.45 });
+    for (const side of [-1, 1]) {
+      const bezel = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.4, 0.155), bezelMat);
+      bezel.position.set(side * 0.88, 2.26, 0);
+      group.add(bezel);
+
+      const scrColor = side === -1 ? 0x1254a1 : 0x5c8a66;
+      const scr = new THREE.Mesh(
+        new THREE.BoxGeometry(0.5, 0.3, 0.162),
+        new THREE.MeshBasicMaterial({ color: scrColor })
+      );
+      scr.position.set(side * 0.88, 2.26, 0);
+      group.add(scr);
+    }
+  }
+
+  const ledBoard = new THREE.Mesh(
+    new THREE.BoxGeometry(1.38, 0.15, 0.16),
+    new THREE.MeshBasicMaterial({ color: 0x14161c })
+  );
+  ledBoard.position.set(0, 2.62, 0);
+  group.add(ledBoard);
+
+  const ledTextLine = new THREE.Mesh(
+    new THREE.BoxGeometry(0.92, 0.045, 0.166),
+    new THREE.MeshBasicMaterial({ color: isOrd23 ? 0xff453a : 0x35e06c })
+  );
+  ledTextLine.position.set(0, 2.62, 0);
+  group.add(ledTextLine);
+
+  return group;
+}
+
+export function buildKAIVestibuleOrGangway(modelName) {
+  const group = new THREE.Group();
+  const extSteelMat = createKAIMaterial({ color: 0xc4c8d0, roughness: 0.35, metalness: 0.55 });
+  const floorMat = createKAIMaterial({ color: 0x5d626b, roughness: 0.65 });
+  const darkRubberMat = createKAIMaterial({ color: 0x262930, roughness: 0.75 });
+  const yellowTactileMat = createKAIMaterial({ color: 0xe5c138, roughness: 0.5 });
+
+  if (modelName === 'e7-gangway') {
+    // KAI Rubber Accordion Diaphragm Gangway (Bordes Sambungan Antargerbong)
+    const gangwayBox = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.1, 1.35), darkRubberMat);
+    gangwayBox.position.set(0, 1.65, 0);
+    group.add(gangwayBox);
+    const bridgeFloor = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 1.35), floorMat);
+    bridgeFloor.position.set(0, 1.3, 0);
+    group.add(bridgeFloor);
+    return group;
+  }
+
+  const len = modelName.includes('multipurpose') ? 1.8 : 1.15;
+  const fMesh = new THREE.Mesh(new THREE.BoxGeometry(3.12, 0.06, len), floorMat);
+  fMesh.position.set(0, 1.3, 0);
+  group.add(fMesh);
+
+  if (modelName.includes('entrance')) {
+    for (const side of [-1, 1]) {
+      const matPlate = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.065, 0.8), yellowTactileMat);
+      matPlate.position.set(side * 1.22, 1.305, 0);
+      group.add(matPlate);
+    }
+  }
+
+  for (const side of [-1, 1]) {
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.45, len), extSteelMat);
+    wall.position.set(side * 1.61, 1.98, 0);
+    group.add(wall);
+  }
+
+  return group;
+}
+
+export function buildKAIMainFloorShadow() {
+  const group = new THREE.Group();
+  const shTex = makeCanvasTex('kai-train-strip-shadow', 256, 64, (ctx, w, h) => {
+    const grad = ctx.createLinearGradient(0, 0, w, 0);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(0.28, 'rgba(0,0,0,0.06)');
+    grad.addColorStop(0.38, 'rgba(0,0,0,0.28)');
+    grad.addColorStop(0.5, 'rgba(0,0,0,0.35)');
+    grad.addColorStop(0.62, 'rgba(0,0,0,0.28)');
+    grad.addColorStop(0.72, 'rgba(0,0,0,0.06)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+  });
+  const mat = new THREE.MeshBasicMaterial({
+    map: shTex,
+    transparent: true,
+    depthWrite: false
+  });
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(7.2, 225), mat);
+  plane.rotation.x = -Math.PI / 2;
+  plane.position.set(0, 0.01, -100);
+  group.add(plane);
+  return group;
+}
+
 export function buildKAICoachEndChassis() {
   const group = new THREE.Group();
+  const bodyMat = createKAIMaterial({ color: 0xc4c8cf, roughness: 0.35, metalness: 0.6 });
+  const roofMat = createKAIMaterial({ color: 0xb4b8c0, roughness: 0.45, metalness: 0.45 });
+  const darkBandMat = createKAIMaterial({ color: 0x23262e, roughness: 0.5 });
+  const magentaMat = new THREE.MeshBasicMaterial({ color: 0xd82b79, side: THREE.DoubleSide });
+  const bogieMat = createKAIMaterial({ color: 0x2c3038, roughness: 0.6, metalness: 0.3 });
 
-  // Corrugated Stainless Steel Coach Body (box-shaped KAI coach, NOT bullet nose!)
-  const bodyMat = new THREE.MeshBasicMaterial({ color: 0xc4c8cf });
-  const roofMat = new THREE.MeshBasicMaterial({ color: 0xb4b8c0 });
-  const darkBandMat = new THREE.MeshBasicMaterial({ color: 0x23262e });
-  const magentaMat = new THREE.MeshBasicMaterial({ color: 0xd82b79 });
-  const bogieMat = new THREE.MeshBasicMaterial({ color: 0x2c3038 });
-
-  const bodyBox = new THREE.Mesh(new THREE.BoxGeometry(3.4, 2.25, 8.2), bodyMat);
-  bodyBox.position.set(0, 1.55, -3.5);
+  const bodyBox = new THREE.Mesh(new THREE.BoxGeometry(3.36, 1.5, 8.2), bodyMat);
+  bodyBox.position.set(0, 1.38, -3.5);
   group.add(bodyBox);
 
-  // Curved stainless steel roof + 3 Rooftop AC Units (matching Image 1!)
   const roofBox = new THREE.Mesh(createRoundedBox(3.32, 0.36, 8.2, 0.12), roofMat);
-  roofBox.position.set(0, 2.75, -3.5);
+  roofBox.position.set(0, 2.3, -3.5);
   group.add(roofBox);
 
   for (const acZ of [-1.2, -3.5, -5.8]) {
-    const acPod = new THREE.Mesh(createRoundedBox(1.85, 0.26, 1.45, 0.05), bodyMat);
-    acPod.position.set(0, 2.98, acZ);
+    const acPod = new THREE.Mesh(createRoundedBox(1.85, 0.24, 1.45, 0.05), bodyMat);
+    acPod.position.set(0, 2.55, acZ);
     group.add(acPod);
   }
 
-  // Dark window band & Argo Bromo Anggrek Magenta Livery Stripe on both sides
   for (const side of [-1, 1]) {
-    const winBand = new THREE.Mesh(new THREE.PlaneGeometry(7.8, 0.68), darkBandMat);
+    const winBand = new THREE.Mesh(new THREE.PlaneGeometry(7.8, 0.52), darkBandMat);
     winBand.rotation.y = side * (Math.PI / 2);
-    winBand.position.set(side * 1.705, 1.85, -3.5);
+    winBand.position.set(side * 1.685, 1.62, -3.5);
     group.add(winBand);
 
-    const magStripe = new THREE.Mesh(new THREE.PlaneGeometry(7.8, 0.24), magentaMat);
+    const magStripe = new THREE.Mesh(new THREE.PlaneGeometry(7.8, 0.22), magentaMat);
     magStripe.rotation.y = side * (Math.PI / 2);
-    magStripe.position.set(side * 1.705, 1.05, -3.5);
+    magStripe.position.set(side * 1.685, 1.02, -3.5);
     group.add(magStripe);
   }
 
-  // Bogies underneath
   for (const bz of [-1.5, -5.5]) {
     const bogie = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.42, 1.8), bogieMat);
     bogie.position.set(0, 0.28, bz);

@@ -3,6 +3,10 @@ import {
   buildKAINextGenSeat,
   buildKAIEkonomiPremiumSeat,
   buildKAIEkonomi23Seat,
+  buildKAICabinSection,
+  buildKAIPartitionBulkhead,
+  buildKAIVestibuleOrGangway,
+  buildKAIMainFloorShadow,
   buildKAICoachEndChassis
 } from './kai-models.js';
 
@@ -279,28 +283,49 @@ export class NodeFactory {
 
   async load() {
     if (this.isLoaded) return;
-    const [metaRes, binRes] = await Promise.all([
-      fetch('assets/scn/models.json'),
-      fetch('assets/scn/models.bin')
-    ]);
-    this.modelsMeta = await metaRes.json();
-    this.binaryBuffer = await binRes.arrayBuffer();
-
-    // Preload all textures referenced across all 3D models
-    const texPaths = new Set();
-    const collectTex = (node) => {
-      if (node.geometry?.allMaterials) {
-        for (const m of node.geometry.allMaterials) {
-          if (m.diffuse?.type === 'texture') texPaths.add(m.diffuse.path);
-          if (m.multiply?.type === 'texture') texPaths.add(m.multiply.path);
-          if (m.transparent?.type === 'texture') texPaths.add(m.transparent.path);
-        }
+    // 100% Pure Procedural KAI 3D Models — Zero Shinkansen .scn binary or texture files loaded!
+    this.modelsMeta = {
+      '_kai_maroon_seat_complete': {
+        rootNode: { name: 'kai-eksekutif-next-gen-maroon' },
+        boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
+      },
+      '_kai_blue_seat_complete': {
+        rootNode: { name: 'kai-ekonomi-new-gen-biru' },
+        boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
+      },
+      '_kai_prem_seat_complete': {
+        rootNode: { name: 'kai-ekonomi-premium-tan' },
+        boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
+      },
+      '_e7_ordinary_seat_complete': {
+        rootNode: { name: 'kai-ekonomi-2-3-bench' },
+        boundingSphere: { center: [0, 0.55, 0], radius: 1.55 }
+      },
+      'kai-maroon-section': {
+        rootNode: { name: 'kai-eksekutif-cabin-section' },
+        boundingSphere: { center: [0, 1.8, 0], radius: 2.5 }
+      },
+      'kai-blue-section': {
+        rootNode: { name: 'kai-ekonomi-new-gen-cabin-section' },
+        boundingSphere: { center: [0, 1.8, 0], radius: 2.5 }
+      },
+      'kai-prem-section': {
+        rootNode: { name: 'kai-ekonomi-premium-cabin-section' },
+        boundingSphere: { center: [0, 1.8, 0], radius: 2.5 }
+      },
+      'e7-ordinary-seat-section': {
+        rootNode: { name: 'kai-ekonomi-2-3-cabin-section' },
+        boundingSphere: { center: [0, 1.8, 0], radius: 2.5 }
+      },
+      'kai-maroon-partition-a': {
+        rootNode: { name: 'kai-pids-bulkhead-partition' },
+        boundingSphere: { center: [0, 1.9, 0], radius: 2.2 }
+      },
+      'e7-train-head-chasis': {
+        rootNode: { name: 'kai-stainless-steel-coach-body' },
+        boundingSphere: { center: [0, 1.5, -3.5], radius: 5.5 }
       }
-      if (node.children) node.children.forEach(collectTex);
     };
-    Object.values(this.modelsMeta).forEach((m) => collectTex(m.rootNode));
-    texPaths.forEach((p) => getTexture(p));
-
     this.isLoaded = true;
     const cbs = this.callbacks.splice(0);
     cbs.forEach((cb) => cb());
@@ -546,15 +571,56 @@ export class NodeFactory {
       );
     }
 
-    const meta = this.modelsMeta?.[modelName];
-    if (!meta) return null;
-    const collector = { geoNodes: [], stateNodes: [] };
-    const rootGroup = new THREE.Group();
-    rootGroup.name = modelName;
-    const childObj = this.buildThreeNode(meta.rootNode, modelName, '0', collector);
-    rootGroup.add(childObj);
-    this.attachKAICustom3DDetails(modelName, rootGroup, collector);
-    return new SCNModelInstance(modelName, rootGroup, collector, meta);
+    if (modelName === 'e7-main-shadow') {
+      const shGroup = buildKAIMainFloorShadow();
+      return new SCNModelInstance(
+        modelName,
+        shGroup,
+        { geoNodes: [], stateNodes: [] },
+        { rootNode: { name: modelName } }
+      );
+    }
+
+    if (modelName === 'e7-train-head-inside' || modelName.includes('-separator')) {
+      return null;
+    }
+
+    if (modelName.includes('-partition-')) {
+      const partGroup = buildKAIPartitionBulkhead(modelName);
+      return new SCNModelInstance(
+        modelName,
+        partGroup,
+        { geoNodes: [], stateNodes: [] },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+    }
+
+    if (
+      modelName === 'e7-gangway' ||
+      modelName.includes('entrance') ||
+      modelName.includes('alley') ||
+      modelName.includes('multipurpose')
+    ) {
+      const vestGroup = buildKAIVestibuleOrGangway(modelName);
+      return new SCNModelInstance(
+        modelName,
+        vestGroup,
+        { geoNodes: [], stateNodes: [] },
+        { rootNode: { name: modelName } }
+      );
+    }
+
+    if (modelName.includes('-section')) {
+      const secGroup = buildKAICabinSection(modelName);
+      return new SCNModelInstance(
+        modelName,
+        secGroup,
+        { geoNodes: [], stateNodes: [] },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+    }
+
+    return null;
   }
 
   attachKAICustom3DDetails(modelName, rootGroup, collector) {
