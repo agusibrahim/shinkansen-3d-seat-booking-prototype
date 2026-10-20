@@ -21,8 +21,8 @@ for rev in eks_maroon_entity["reservableEntities"]:
 for st in eks_maroon_entity["transformedModelEntities"]:
     st["modelEntity"] = st["modelEntity"].replace("e7-green-seat-", "kai-maroon-")
 
-# Helper to build a 2+2 car from orig_ordinary Car 1..6
-def build_2x2_car(car_label_orig, new_car_label, seat_class_key, class_display_name, seat_prefix, section_prefix, z_range):
+# Helper to build a 2+2 car from orig_ordinary Car 1..6 with STRICT non-overlapping Z bounds
+def build_2x2_car(car_label_orig, new_car_label, seat_class_key, class_display_name, seat_prefix, section_prefix, z_view_range, z_static_bounds):
     reservables = []
     for rev in copy.deepcopy(orig_ordinary["reservableEntities"]):
         if rev["carNumber"] != car_label_orig:
@@ -46,11 +46,11 @@ def build_2x2_car(car_label_orig, new_car_label, seat_class_key, class_display_n
             rev["transformedModelEntity"]["modelEntity"] = f"{seat_prefix}-seat-b"
         reservables.append(rev)
 
-    z_min, z_max = -z_range[1] - 6, -z_range[0] + 6
+    z_min, z_max = z_static_bounds
     statics = []
     for st in copy.deepcopy(orig_ordinary["transformedModelEntities"]):
         sz = st["position"]["z"]
-        if not (z_min <= sz <= z_max):
+        if not (z_min <= sz < z_max):
             continue
         me = st["modelEntity"]
         if me in ("e7-ordinary-leg-a-to-c", "e7-ordinary-leg-d-to-e"):
@@ -61,9 +61,9 @@ def build_2x2_car(car_label_orig, new_car_label, seat_class_key, class_display_n
             st["modelEntity"] = f"{section_prefix}-section-ending-a"
         elif me == "e7-ordinary-seat-section-ending-b":
             st["modelEntity"] = f"{section_prefix}-section-ending-b"
-        elif me == "e7-ordinary-seat-partition-a":
+        elif me in ("e7-ordinary-seat-partition-a", "e7-green-seat-partition-a"):
             st["modelEntity"] = f"{section_prefix}-partition-a"
-        elif me == "e7-ordinary-seat-partition-b":
+        elif me in ("e7-ordinary-seat-partition-b", "e7-green-seat-partition-b"):
             st["modelEntity"] = f"{section_prefix}-partition-b"
         statics.append(st)
 
@@ -72,13 +72,13 @@ def build_2x2_car(car_label_orig, new_car_label, seat_class_key, class_display_n
         "seatClass": seat_class_key,
         "name": class_display_name,
         "carNumber": new_car_label,
-        "viewableRange": [{"x": 0, "y": 0, "z": z_range[0]}, {"x": 0, "y": 0, "z": z_range[1]}],
+        "viewableRange": [{"x": 0, "y": 0, "z": z_view_range[0]}, {"x": 0, "y": 0, "z": z_view_range[1]}],
         "reservableEntities": reservables,
         "transformedModelEntities": statics
     }
 
-# Helper to build a 3+2 car from orig_ordinary
-def build_3x2_car(car_labels_orig, new_car_label, seat_class_key, class_display_name, seat_prefix, section_prefix, z_range):
+# Helper to build a 3+2 car from orig_ordinary with STRICT non-overlapping Z bounds
+def build_3x2_car(car_labels_orig, new_car_label, seat_class_key, class_display_name, seat_prefix, section_prefix, z_view_range, z_static_bounds):
     reservables = []
     for rev in copy.deepcopy(orig_ordinary["reservableEntities"]):
         if rev["carNumber"] not in car_labels_orig:
@@ -88,11 +88,11 @@ def build_3x2_car(car_labels_orig, new_car_label, seat_class_key, class_display_
             rev["transformedModelEntity"]["modelEntity"] = rev["transformedModelEntity"]["modelEntity"].replace("e7-ordinary-seat-", f"{seat_prefix}-seat-")
         reservables.append(rev)
 
-    z_min, z_max = -z_range[1] - 6, -z_range[0] + 6
+    z_min, z_max = z_static_bounds
     statics = []
     for st in copy.deepcopy(orig_ordinary["transformedModelEntities"]):
         sz = st["position"]["z"]
-        if not (z_min <= sz <= z_max):
+        if not (z_min <= sz < z_max):
             continue
         me = st["modelEntity"]
         if me in ("e7-ordinary-leg-a-to-c", "e7-ordinary-leg-d-to-e"):
@@ -104,9 +104,9 @@ def build_3x2_car(car_labels_orig, new_car_label, seat_class_key, class_display_
                 st["modelEntity"] = f"{section_prefix}-section-ending-a"
             elif me == "e7-ordinary-seat-section-ending-b":
                 st["modelEntity"] = f"{section_prefix}-section-ending-b"
-            elif me == "e7-ordinary-seat-partition-a":
+            elif me in ("e7-ordinary-seat-partition-a", "e7-green-seat-partition-a"):
                 st["modelEntity"] = f"{section_prefix}-partition-a"
-            elif me == "e7-ordinary-seat-partition-b":
+            elif me in ("e7-ordinary-seat-partition-b", "e7-green-seat-partition-b"):
                 st["modelEntity"] = f"{section_prefix}-partition-b"
         statics.append(st)
 
@@ -115,23 +115,24 @@ def build_3x2_car(car_labels_orig, new_car_label, seat_class_key, class_display_
         "seatClass": seat_class_key,
         "name": class_display_name,
         "carNumber": new_car_label,
-        "viewableRange": [{"x": 0, "y": 0, "z": z_range[0]}, {"x": 0, "y": 0, "z": z_range[1]}],
+        "viewableRange": [{"x": 0, "y": 0, "z": z_view_range[0]}, {"x": 0, "y": 0, "z": z_view_range[1]}],
         "reservableEntities": reservables,
         "transformedModelEntities": statics
     }
 
-# 2. Eksekutif New Image Dual-Tone (Tosca-Krem 2-2) in Car 6 (z: 122..143)
+# 2. Eksekutif New Image Dual-Tone (Tosca-Krem 2-2) in Car 6 (seats z: -147.91..-128.29, gangways: -150.50..-125.69)
 eks_dualtone_entity = build_2x2_car(
     car_label_orig="Car 6",
     new_car_label="Eks NI 1",
     seat_class_key="eksekutifDualTone",
     class_display_name="Eksekutif (Dual-Tone)",
     seat_prefix="kai-eks-dualtone",
-    section_prefix="kai-maroon",
-    z_range=(122, 143)
+    section_prefix="kai-eks-dualtone",
+    z_view_range=(123, 143),
+    z_static_bounds=(-150.5, -125.6)
 )
 
-# 3. Ekonomi New Gen (Biru Full 2-2) in Car 5 (z: 97..118)
+# 3. Ekonomi New Gen (Biru Full 2-2) in Car 5 (seats z: -117.93..-106.57, gangways: -125.69..-100.81)
 eko_blue_entity = build_2x2_car(
     car_label_orig="Car 5",
     new_car_label="Eko NG 1",
@@ -139,10 +140,11 @@ eko_blue_entity = build_2x2_car(
     class_display_name="Ekonomi New Gen (Biru)",
     seat_prefix="kai-blue",
     section_prefix="kai-blue",
-    z_range=(97, 118)
+    z_view_range=(101, 113),
+    z_static_bounds=(-125.6, -100.8)
 )
 
-# 4. Ekonomi New Gen Dual-Tone (Biru-Tan 2-2) in Car 4 (z: 72..92)
+# 4. Ekonomi New Gen Dual-Tone (Biru-Tan 2-2) in Car 4 (seats z: -96.13..-78.57, gangways: -100.81..-75.97)
 eko_blue_dualtone_entity = build_2x2_car(
     car_label_orig="Car 4",
     new_car_label="Eko NG 2",
@@ -150,10 +152,11 @@ eko_blue_dualtone_entity = build_2x2_car(
     class_display_name="Eko New Gen (Dual-Tone)",
     seat_prefix="kai-blue-dualtone",
     section_prefix="kai-blue",
-    z_range=(72, 92)
+    z_view_range=(73, 91),
+    z_static_bounds=(-100.8, -75.9)
 )
 
-# 5. Ekonomi Premium (Taupe/Tan 2-2) in Car 3 (z: 47..67)
+# 5. Ekonomi Premium (Taupe/Tan 2-2) in Car 3 (seats z: -70.62..-54.09, gangways: -75.97..-50.87)
 eko_prem_entity = build_2x2_car(
     car_label_orig="Car 3",
     new_car_label="Prem 1",
@@ -161,10 +164,11 @@ eko_prem_entity = build_2x2_car(
     class_display_name="Ekonomi Premium",
     seat_prefix="kai-prem",
     section_prefix="kai-prem",
-    z_range=(47, 67)
+    z_view_range=(49, 65),
+    z_static_bounds=(-75.9, -50.8)
 )
 
-# 6. Ekonomi 2-3 Modifikasi (Tosca Scalloped 3-2) in Car 2 (z: 22..42)
+# 6. Ekonomi 2-3 Modifikasi (Tosca Scalloped 3-2) in Car 2 (seats z: -48.28..-28.65, gangways: -50.87..-26.05)
 eko_tosca_entity = build_3x2_car(
     car_labels_orig=["Car 2"],
     new_car_label="Eko Mod 1",
@@ -172,10 +176,11 @@ eko_tosca_entity = build_3x2_car(
     class_display_name="Ekonomi Modif (2-3)",
     seat_prefix="kai-tosca",
     section_prefix="kai-tosca",
-    z_range=(22, 42)
+    z_view_range=(23, 43),
+    z_static_bounds=(-50.8, -26.0)
 )
 
-# 7. Ekonomi 2-3 Reguler (Krem Tegak 90° 3-2) in Car 1 (z: -2..17)
+# 7. Ekonomi 2-3 Reguler (Krem Tegak 90° 3-2) in Car 1 (seats z: -20.70..-11.40, gangways: -26.05..0.0)
 eko_23_entity = build_3x2_car(
     car_labels_orig=["Car 1"],
     new_car_label="Eko 1",
@@ -183,7 +188,8 @@ eko_23_entity = build_3x2_car(
     class_display_name="Ekonomi Reguler (2-3)",
     seat_prefix="e7-ordinary",
     section_prefix="e7-ordinary",
-    z_range=(-2, 17)
+    z_view_range=(5, 16),
+    z_static_bounds=(-26.0, 0.0)
 )
 
 new_seat_map = {

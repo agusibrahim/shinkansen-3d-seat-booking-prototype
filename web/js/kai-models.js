@@ -1220,7 +1220,21 @@ export function buildKAICabinSection(modelName) {
   const isTosca23 = modelName.startsWith('kai-tosca-');
   const isBlue = modelName.startsWith('kai-blue-') || modelName.startsWith('e7-green-');
   const isPrem = modelName.startsWith('kai-prem-');
-  const bayLen = isOrd23 || isTosca23 ? 1.04 : 1.175;
+  const isCar7 = modelName.startsWith('kai-maroon-');
+
+  // Exact row pitch in SeatMap.json: Car 7 is 1.17206m, Cars 1..6 are 1.03289m!
+  const basePitch = isCar7 ? 1.17206 : 1.03289;
+  let zStart = -basePitch / 2;
+  let zEnd = basePitch / 2;
+  if (modelName.endsWith('-ending-a')) {
+    zEnd = isCar7 ? 1.318 : 0.79;
+  } else if (modelName.endsWith('-ending-b')) {
+    zStart = isCar7 ? -0.746 : -0.79;
+  }
+
+  // 2mm clearance between adjacent bays prevents coplanar face Z-fighting
+  const spanLen = zEnd - zStart - 0.002;
+  const centerZ = (zStart + zEnd) / 2;
 
   const floorColors = isOrd23
     ? { side: 0x7ea06e, aisle: 0x84a674, led: 0xf4f7f2 }
@@ -1247,111 +1261,108 @@ export function buildKAICabinSection(modelName) {
     side: THREE.DoubleSide
   });
 
-  // 1. Floor (Under-seat left/right + central aisle + glowing LED aisle strips)
+  // 1. Floor (Under-seat left/right + central aisle + continuous 3D LED aisle strips)
   const aisleW = isOrd23 || isTosca23 ? 0.46 : 0.52;
   const sideW = (3.08 - aisleW) / 2;
 
   for (const side of [-1, 1]) {
-    const fSide = new THREE.Mesh(new THREE.BoxGeometry(sideW, 0.06, bayLen), sideFloorMat);
-    fSide.position.set(side * (aisleW / 2 + sideW / 2), 1.3, 0);
+    const fSide = new THREE.Mesh(new THREE.BoxGeometry(sideW - 0.002, 0.06, spanLen), sideFloorMat);
+    fSide.position.set(side * (aisleW / 2 + sideW / 2), 1.3, centerZ);
     group.add(fSide);
   }
-  const fAisle = new THREE.Mesh(new THREE.BoxGeometry(aisleW, 0.06, bayLen), aisleFloorMat);
-  fAisle.position.set(0, 1.3, 0);
+  const fAisle = new THREE.Mesh(new THREE.BoxGeometry(aisleW - 0.002, 0.06, spanLen), aisleFloorMat);
+  fAisle.position.set(0, 1.3, centerZ);
   group.add(fAisle);
 
-  const ledGeo = new THREE.PlaneGeometry(0.028, bayLen);
-  const ledMat = new THREE.MeshBasicMaterial({ color: floorColors.led, side: THREE.DoubleSide });
+  // Continuous 3D LED aisle box sitting cleanly at y = 1.335 (above floor top y = 1.330, zero Z-fighting!)
+  const ledGeo = new THREE.BoxGeometry(0.028, 0.008, zEnd - zStart);
+  const ledMat = new THREE.MeshBasicMaterial({ color: floorColors.led });
   for (const side of [-1, 1]) {
     const led = new THREE.Mesh(ledGeo, ledMat);
-    led.rotation.x = -Math.PI / 2;
-    led.position.set(side * (aisleW / 2), 1.332, 0);
+    led.position.set(side * (aisleW / 2), 1.335, centerZ);
     group.add(led);
   }
 
-  // 2. KAI Cabin Side Walls + Wide Rectangular Panoramic Windows (NOT Shinkansen oval windows!)
+  // 2. KAI Cabin Side Walls + Wide Rectangular Panoramic Windows (Strictly non-overlapping Y coordinates!)
   for (const side of [-1, 1]) {
     const wallX = side * 1.56;
     const extX = side * 1.66;
 
-    // Lower wall below window (in Ekonomi 2-3, brushed stainless-steel wainscoting!)
     const lowerWallMat = isOrd23
       ? createKAIMaterial({ color: 0xbac2cc, roughness: 0.3, metalness: 0.65 })
       : wallCreamMat;
-    const lowerWall = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.48, bayLen), lowerWallMat);
-    lowerWall.position.set(wallX, 1.54, 0);
+    const lowerWall = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.46, spanLen), lowerWallMat);
+    lowerWall.position.set(wallX, 1.53, centerZ);
     group.add(lowerWall);
 
-    // Upper cutaway wall header above window + dark top rail
-    const upperWall = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.22, bayLen), wallCreamMat);
-    upperWall.position.set(wallX, 2.54, 0);
+    const frameBot = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.04, spanLen), winFrameMat);
+    frameBot.position.set(wallX, 1.785, centerZ);
+    group.add(frameBot);
+
+    const frameTop = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.04, spanLen), winFrameMat);
+    frameTop.position.set(wallX, 2.415, centerZ);
+    group.add(frameTop);
+
+    const upperWall = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.19, spanLen), wallCreamMat);
+    upperWall.position.set(wallX, 2.535, centerZ);
     group.add(upperWall);
 
-    const topCutawayCap = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.04, bayLen), winFrameMat);
-    topCutawayCap.position.set(wallX, 2.66, 0);
+    const topCutawayCap = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.04, spanLen), winFrameMat);
+    topCutawayCap.position.set(wallX, 2.655, centerZ);
     group.add(topCutawayCap);
 
-    // Window Pillars (left & right of the wide rectangular KAI panoramic window)
+    // Window Pillars (strictly between frameBot y=1.805 and frameTop y=2.395 -> height 0.58, centerY 2.10!)
     const pillarW = 0.14;
-    for (const pz of [-bayLen / 2 + pillarW / 2, bayLen / 2 - pillarW / 2]) {
-      const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.66, pillarW), wallCreamMat);
-      pillar.position.set(wallX, 2.11, pz);
+    for (const pz of [-basePitch / 2 + pillarW / 2 + 0.002, basePitch / 2 - pillarW / 2 - 0.002]) {
+      const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.105, 0.58, pillarW), wallCreamMat);
+      pillar.position.set(wallX, 2.1, pz);
       group.add(pillar);
     }
 
-    // Wide Rectangular KAI Panoramic Window Frame + Glass Sill
-    const winLen = bayLen - pillarW * 2;
-    const frameTop = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.045, winLen), winFrameMat);
-    frameTop.position.set(wallX, 2.41, 0);
-    const frameBot = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.05, winLen), winFrameMat);
-    frameBot.position.set(wallX, 1.79, 0);
-    group.add(frameTop, frameBot);
-
-    const glass = new THREE.Mesh(new THREE.PlaneGeometry(winLen, 0.58), glassMat);
+    const winLen = Math.max(basePitch - pillarW * 2 - 0.01, 0.4);
+    const glass = new THREE.Mesh(new THREE.PlaneGeometry(winLen, 0.56), glassMat);
     glass.rotation.y = Math.PI / 2;
     glass.position.set(wallX, 2.1, 0);
     group.add(glass);
 
     // Class-specific window & wall accessories
     if (isOrd23) {
-      // Bright Royal-Blue Pleated Curtain + White Folding Wall Table (Image 3!)
       const curtainMat = createKAIMaterial({
         map: getPleatedCurtainTexture(),
         roughness: 0.65,
         metalness: 0.02
       });
-      const curtain = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.62, winLen * 0.85), curtainMat);
-      curtain.position.set(side * 1.5, 2.12, 0);
+      const curtain = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.56, winLen * 0.85), curtainMat);
+      curtain.position.set(side * 1.5, 2.1, 0);
       group.add(curtain);
 
       const miniTable = new THREE.Mesh(
         createRoundedBox(0.14, 0.028, 0.32, 0.008),
         createKAIMaterial({ color: 0xf2f4f7, roughness: 0.4 })
       );
-      miniTable.position.set(side * 1.46, 1.74, 0);
+      miniTable.position.set(side * 1.46, 1.72, 0);
       group.add(miniTable);
     } else if (isPrem) {
-      // Ekonomi Premium: White dual-socket power outlet shelf under window (Image 2!)
       const socketShelf = new THREE.Mesh(
         createRoundedBox(0.08, 0.075, 0.24, 0.01),
         createKAIMaterial({ color: 0xe2e6ee, roughness: 0.4 })
       );
-      socketShelf.position.set(side * 1.49, 1.75, 0);
+      socketShelf.position.set(side * 1.49, 1.72, 0);
       group.add(socketShelf);
     }
 
     // Exterior Corrugated Stainless Steel Coach Shell + Argo Bromo Anggrek Livery Stripe
-    const extWall = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.5, bayLen), extSteelMat);
-    extWall.position.set(extX, 1.35, 0);
+    const extWall = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.48, spanLen), extSteelMat);
+    extWall.position.set(extX, 1.35, centerZ);
     group.add(extWall);
 
     const stripeColor = isOrd23 ? 0xf37021 : 0xd82b79;
     const stripe = new THREE.Mesh(
-      new THREE.PlaneGeometry(bayLen, 0.22),
+      new THREE.PlaneGeometry(spanLen, 0.22),
       new THREE.MeshBasicMaterial({ color: stripeColor, side: THREE.DoubleSide })
     );
     stripe.rotation.y = Math.PI / 2;
-    stripe.position.set(side * 1.695, 1.02, 0);
+    stripe.position.set(side * 1.695, 1.02, centerZ);
     group.add(stripe);
   }
 
@@ -1362,73 +1373,64 @@ export function buildKAIPartitionBulkhead(modelName) {
   const group = new THREE.Group();
   const isOrd23 = modelName.startsWith('e7-ordinary-');
   const wallMat = createKAIMaterial({ color: 0xe6e2da, roughness: 0.58 });
-  const extSteelMat = createKAIMaterial({ color: 0xc4c8d0, roughness: 0.35, metalness: 0.55 });
   const darkFrameMat = createKAIMaterial({ color: 0x1e222a, roughness: 0.4, metalness: 0.3 });
 
-  // Outer stainless steel ring
-  const outerBox = new THREE.Mesh(new THREE.BoxGeometry(3.36, 2.15, 0.12), extSteelMat);
-  outerBox.position.set(0, 1.68, 0);
-  group.add(outerBox);
-
-  // Left & Right Interior Bulkhead Walls (leaving center doorway open)
+  // Left & Right Interior Bulkhead Walls (strictly non-overlapping with center doorFrame)
   for (const side of [-1, 1]) {
-    const wPanel = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.42, 0.14), wallMat);
-    wPanel.position.set(side * 0.94, 2.02, 0);
+    const wPanel = new THREE.Mesh(new THREE.BoxGeometry(1.24, 1.35, 0.1), wallMat);
+    wPanel.position.set(side * 0.97, 2.005, 0);
     group.add(wPanel);
   }
-  const topHeader = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.32, 0.14), wallMat);
-  topHeader.position.set(0, 2.57, 0);
-  group.add(topHeader);
 
-  // Automatic Sliding Door Frame + Glass + Yellow Safety Decal
-  const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(0.68, 1.36, 0.15), darkFrameMat);
-  doorFrame.position.set(0, 1.99, 0);
+  // Automatic Sliding Door Frame + Glass + Yellow Safety Decal (with generous Z separation!)
+  const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.35, 0.12), darkFrameMat);
+  doorFrame.position.set(0, 2.005, 0);
   group.add(doorFrame);
 
   const doorGlass = new THREE.Mesh(
-    new THREE.BoxGeometry(0.44, 0.92, 0.16),
+    new THREE.BoxGeometry(0.44, 0.92, 0.15),
     new THREE.MeshBasicMaterial({ color: 0x384657 })
   );
-  doorGlass.position.set(0, 2.06, 0);
+  doorGlass.position.set(0, 2.04, 0);
   group.add(doorGlass);
 
   const yellowDecal = new THREE.Mesh(
-    new THREE.BoxGeometry(0.09, 0.28, 0.165),
+    new THREE.BoxGeometry(0.09, 0.28, 0.18),
     new THREE.MeshBasicMaterial({ color: 0xf2c935 })
   );
-  yellowDecal.position.set(0, 2.08, 0);
+  yellowDecal.position.set(0, 2.06, 0);
   group.add(yellowDecal);
 
   // Left & Right PIDS LCD Monitors + Top Digital LED Running Text Board
   if (!isOrd23) {
     const bezelMat = createKAIMaterial({ color: 0xc8c4ba, roughness: 0.45 });
     for (const side of [-1, 1]) {
-      const bezel = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.4, 0.155), bezelMat);
-      bezel.position.set(side * 0.88, 2.26, 0);
+      const bezel = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.4, 0.13), bezelMat);
+      bezel.position.set(side * 0.88, 2.24, 0);
       group.add(bezel);
 
       const scrColor = side === -1 ? 0x1254a1 : 0x5c8a66;
       const scr = new THREE.Mesh(
-        new THREE.BoxGeometry(0.5, 0.3, 0.162),
+        new THREE.BoxGeometry(0.5, 0.3, 0.16),
         new THREE.MeshBasicMaterial({ color: scrColor })
       );
-      scr.position.set(side * 0.88, 2.26, 0);
+      scr.position.set(side * 0.88, 2.24, 0);
       group.add(scr);
     }
   }
 
   const ledBoard = new THREE.Mesh(
-    new THREE.BoxGeometry(1.38, 0.15, 0.16),
+    new THREE.BoxGeometry(1.38, 0.14, 0.15),
     new THREE.MeshBasicMaterial({ color: 0x14161c })
   );
-  ledBoard.position.set(0, 2.62, 0);
+  ledBoard.position.set(0, 2.6, 0);
   group.add(ledBoard);
 
   const ledTextLine = new THREE.Mesh(
-    new THREE.BoxGeometry(0.92, 0.045, 0.166),
+    new THREE.BoxGeometry(0.92, 0.045, 0.18),
     new THREE.MeshBasicMaterial({ color: isOrd23 ? 0xff453a : 0x35e06c })
   );
-  ledTextLine.position.set(0, 2.62, 0);
+  ledTextLine.position.set(0, 2.6, 0);
   group.add(ledTextLine);
 
   return group;
@@ -1442,32 +1444,31 @@ export function buildKAIVestibuleOrGangway(modelName) {
   const yellowTactileMat = createKAIMaterial({ color: 0xe5c138, roughness: 0.5 });
 
   if (modelName === 'e7-gangway') {
-    // KAI Rubber Accordion Diaphragm Gangway (Bordes Sambungan Antargerbong)
-    const gangwayBox = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.1, 1.35), darkRubberMat);
-    gangwayBox.position.set(0, 1.65, 0);
+    const gangwayBox = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.35, 1.25), darkRubberMat);
+    gangwayBox.position.set(0, 1.98, 0);
     group.add(gangwayBox);
-    const bridgeFloor = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 1.35), floorMat);
-    bridgeFloor.position.set(0, 1.3, 0);
+    const bridgeFloor = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.055, 1.25), floorMat);
+    bridgeFloor.position.set(0, 1.298, 0);
     group.add(bridgeFloor);
     return group;
   }
 
-  const len = modelName.includes('multipurpose') ? 1.8 : 1.15;
-  const fMesh = new THREE.Mesh(new THREE.BoxGeometry(3.12, 0.06, len), floorMat);
-  fMesh.position.set(0, 1.3, 0);
+  const len = modelName.includes('multipurpose') ? 1.55 : 0.75;
+  const fMesh = new THREE.Mesh(new THREE.BoxGeometry(3.08, 0.056, len), floorMat);
+  fMesh.position.set(0, 1.298, 0);
   group.add(fMesh);
 
   if (modelName.includes('entrance')) {
     for (const side of [-1, 1]) {
-      const matPlate = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.065, 0.8), yellowTactileMat);
-      matPlate.position.set(side * 1.22, 1.305, 0);
+      const matPlate = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.01, 0.65), yellowTactileMat);
+      matPlate.position.set(side * 1.22, 1.332, 0);
       group.add(matPlate);
     }
   }
 
   for (const side of [-1, 1]) {
-    const wall = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.45, len), extSteelMat);
-    wall.position.set(side * 1.61, 1.98, 0);
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.36, len), extSteelMat);
+    wall.position.set(side * 1.61, 1.99, 0);
     group.add(wall);
   }
 
