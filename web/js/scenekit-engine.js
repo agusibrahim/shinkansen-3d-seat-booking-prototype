@@ -1,4 +1,10 @@
 import * as THREE from './vendor/three.module.min.js';
+import {
+  buildKAINextGenSeat,
+  buildKAIEkonomiPremiumSeat,
+  buildKAIEkonomi23Seat,
+  buildKAICoachEndChassis
+} from './kai-models.js';
 
 // Shared Texture Cache (with SceneKit top-left UV convention: flipY = false)
 const textureCache = new Map();
@@ -443,6 +449,103 @@ export class NodeFactory {
   }
 
   createInstance(modelName) {
+    // 1. Custom Authentic Indonesian KAI 3D Seat & Coach Models (No Shinkansen shapes!)
+    if (
+      modelName === 'kai-maroon-seat-a' ||
+      modelName === 'kai-maroon-seat-b' ||
+      modelName === '_kai_maroon_seat_complete'
+    ) {
+      const built = buildKAINextGenSeat(
+        'maroon',
+        modelName.endsWith('-a'),
+        modelName.endsWith('_complete')
+      );
+      const inst = new SCNModelInstance(
+        modelName,
+        built.root,
+        { geoNodes: [], stateNodes: built.stateNodes },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+      inst.customStateHandler = built.applyCustomState;
+      return inst;
+    }
+
+    if (
+      modelName === 'kai-blue-seat-a' ||
+      modelName === 'kai-blue-seat-b' ||
+      modelName === 'e7-green-seat-a' ||
+      modelName === 'e7-green-seat-b' ||
+      modelName === '_kai_blue_seat_complete' ||
+      modelName === '_e7_green_seat_complete'
+    ) {
+      const built = buildKAINextGenSeat(
+        'blue',
+        modelName.endsWith('-a'),
+        modelName.endsWith('_complete')
+      );
+      const inst = new SCNModelInstance(
+        modelName,
+        built.root,
+        { geoNodes: [], stateNodes: built.stateNodes },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+      inst.customStateHandler = built.applyCustomState;
+      return inst;
+    }
+
+    if (
+      modelName === 'kai-prem-seat-a' ||
+      modelName === 'kai-prem-seat-b' ||
+      modelName === '_kai_prem_seat_complete'
+    ) {
+      const built = buildKAIEkonomiPremiumSeat(
+        modelName.endsWith('-a'),
+        modelName.endsWith('_complete')
+      );
+      const inst = new SCNModelInstance(
+        modelName,
+        built.root,
+        { geoNodes: [], stateNodes: built.stateNodes },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+      inst.customStateHandler = built.applyCustomState;
+      return inst;
+    }
+
+    if (
+      modelName === 'e7-ordinary-seat-a' ||
+      modelName === 'e7-ordinary-seat-b' ||
+      modelName === 'e7-ordinary-seat-c' ||
+      modelName === 'e7-ordinary-seat-d' ||
+      modelName === 'e7-ordinary-seat-e' ||
+      modelName === '_e7_ordinary_seat_complete'
+    ) {
+      const role = modelName.endsWith('_complete') ? 'a' : modelName.slice(-1);
+      const built = buildKAIEkonomi23Seat(role, modelName.endsWith('_complete'));
+      const inst = new SCNModelInstance(
+        modelName,
+        built.root,
+        { geoNodes: [], stateNodes: built.stateNodes },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+      inst.customStateHandler = built.applyCustomState;
+      return inst;
+    }
+
+    if (modelName === 'e7-ordinary-leg-a-to-c' || modelName === 'e7-ordinary-leg-d-to-e') {
+      return null;
+    }
+
+    if (modelName === 'e7-train-head-chasis') {
+      const coachGroup = buildKAICoachEndChassis();
+      return new SCNModelInstance(
+        modelName,
+        coachGroup,
+        { geoNodes: [], stateNodes: [] },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+    }
+
     const meta = this.modelsMeta?.[modelName];
     if (!meta) return null;
     const collector = { geoNodes: [], stateNodes: [] };
@@ -907,6 +1010,10 @@ export class SCNModelInstance {
 
   applyState(state, animated = false) {
     const dur = animated ? 0.35 / 4 : 0;
+
+    if (this.customStateHandler) {
+      this.customStateHandler(state);
+    }
 
     // 1. Update materials (StaticNode.updateMaterial & InteractiveNode.updateMaterial)
     for (const gNode of this.geoNodes) {
