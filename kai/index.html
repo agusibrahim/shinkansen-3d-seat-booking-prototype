@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Shinkansen 3D Seat Booking Prototype</title>
+  <link rel="icon" type="image/png" href="assets/images/app-icon/Icon-60@3x.png" />
+  <link rel="apple-touch-icon" href="assets/images/app-icon/Icon-60@3x.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="app-root">
+
+    <!-- ==================================================================
+         1. PrototypeInitialViewController (Welcome Screen)
+         ================================================================== -->
+    <section id="initial-view" class="screen-layer">
+      <div class="initial-scroll-area">
+        <div class="initial-text-stack">
+          <h1 class="initial-headline text-large-title">Welcome to 3D Seat Booking Prototype!</h1>
+          <div class="initial-body text-body">
+            <p>Thank you for your interest in this prototype!</p>
+            <p>This prototype shows the potential usage of 3D visualization capability in interactive booking products.</p>
+            <p>As this is a prototype, the information showing is mock data which statically stores in the app. That means the information doesn't obtain from or send back to the server, and many functionalities don't fully work. (Particularly, the route picker and date picker in the first view.)</p>
+            <p>To start the prototype, please tap on "Start this Prototype" button, and to exit the prototype in the middle of the flow, shake your device and the exiting prompt will show up.</p>
+            <p>This prototype is an open-source project, so feel free to visit the project's GitHub repository to learn more or contribute. "GitHub Repository" button down there will direct you to the repository's site.</p>
+            <p>If you have any further question or feedback, please contact me by sending feedback via TestFlight feedback or direct message via Twitter @virakri.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="initial-cta-stack">
+        <!-- InitialViewColorThemeSegmentedControl -->
+        <div class="initial-theme-container">
+          <div class="initial-theme-segmented" id="initial-theme-segmented">
+            <!-- Light Mode Item -->
+            <div class="initial-theme-item selected" data-theme-mode="light">
+              <div class="initial-theme-icon-box light-box">
+                <svg viewBox="0 0 40 64" width="40" height="64" fill="currentColor" aria-hidden="true">
+                  <path d="M 6 9 L 19.136719 9 L 19.136719 13 L 6 13 Z"/>
+                  <path d="M 7 49 L 33 49 C 33.550781 49 34 49.449219 34 50 L 34 57 C 34 57.550781 33.550781 58 33 58 L 7 58 C 6.449219 58 6 57.550781 6 57 L 6 50 C 6 49.449219 6.449219 49 7 49 Z"/>
+                  <path d="M 6 20 L 27.636719 20 L 27.636719 22 L 6 22 Z"/>
+                  <path d="M 6 32 L 27.636719 32 L 27.636719 34 L 6 34 Z"/>
+                  <path d="M 6 26 L 24.546875 26 L 24.546875 28 L 6 28 Z"/>
+                </svg>
+              </div>
+              <span class="initial-theme-label text-caption1">Light Mode</span>
+              <div class="initial-theme-check" data-check-icon></div>
+            </div>
+
+            <!-- Dark Mode Item -->
+            <div class="initial-theme-item" data-theme-mode="dark">
+              <div class="initial-theme-icon-box dark-box">
+                <svg viewBox="0 0 40 64" width="40" height="64" fill="currentColor" aria-hidden="true">
+                  <path d="M 6 9 L 19.136719 9 L 19.136719 13 L 6 13 Z"/>
+                  <path d="M 7 49 L 33 49 C 33.550781 49 34 49.449219 34 50 L 34 57 C 34 57.550781 33.550781 58 33 58 L 7 58 C 6.449219 58 6 57.550781 6 57 L 6 50 C 6 49.449219 6.449219 49 7 49 Z"/>
+                  <path d="M 6 20 L 27.636719 20 L 27.636719 22 L 6 22 Z"/>
+                  <path d="M 6 32 L 27.636719 32 L 27.636719 34 L 6 34 Z"/>
+                  <path d="M 6 26 L 24.546875 26 L 24.546875 28 L 6 28 Z"/>
+                </svg>
+              </div>
+              <span class="initial-theme-label text-caption1">Dark Mode</span>
+              <div class="initial-theme-check" data-check-icon></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="initial-text-buttons">
+          <button type="button" id="btn-github" class="btn btn-initial-text text-button">GitHub Repository</button>
+          <button type="button" id="btn-design-system" class="btn btn-initial-text text-button">Explore Design System</button>
+        </div>
+
+        <button type="button" id="btn-start-prototype" class="btn btn-initial-contained text-button">Start the Prototype</button>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         2. NavigationController + Booking Flow Screens
+         ================================================================== -->
+    <section id="booking-nav-view" class="screen-layer hidden">
+      <!-- Top Error Message Banner (BookingViewController.showErrorMessage) -->
+      <div id="error-banner">
+        <div id="error-banner-text" class="text-caption1"></div>
+      </div>
+
+      <!-- InteractivePopOverlayView -->
+      <div id="interactive-pop-overlay">
+        <div class="pop-bg-fade" id="pop-bg-fade"></div>
+        <div class="pop-blob" id="pop-blob"></div>
+        <div class="pop-label text-button" id="pop-label">←  Previous</div>
+      </div>
+
+      <!-- Screen 2A: BookingCriteriaViewController -->
+      <div id="screen-criteria" class="booking-screen">
+        <div class="criteria-scroll-container">
+          <div class="criteria-main-stack">
+            <div class="criteria-header-stack" id="criteria-header-stack">
+              <h1 class="criteria-headline text-large-title">Reserve 
+KAI Train 
+Tickets</h1>
+              <img class="jr-logo-icon" src="assets/images/icons/logo_kai.png" alt="KAI" style="width:68px;height:auto;object-fit:contain;" />
+            </div>
+
+            <div class="criteria-input-stack">
+              <!-- Horizontal Station Stack -->
+              <div class="criteria-station-row" id="criteria-station-row">
+                <div class="criteria-station-col headline-with-container">
+                  <p class="section-footnote text-footnote">From</p>
+                  <div class="card-control station-card-control interactive" id="from-station-card">
+                    <div class="card-content">
+                      <div class="station-jp-label text-title1">GMR</div>
+                      <div class="station-en-label text-caption1-alt">Gambir</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="criteria-arrow-col">
+                  <!-- Icon Arrow Right (from Icon Arrow Right.imageset/icon_arrow_right.pdf) -->
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M 17.585938 13 L 13.292969 17.292969 C 12.902344 17.683594 12.902344 18.316406 13.292969 18.707031 C 13.683594 19.097656 14.316406 19.097656 14.707031 18.707031 L 20.707031 12.707031 C 21.097656 12.316406 21.097656 11.683594 20.707031 11.292969 L 14.707031 5.292969 C 14.316406 4.902344 13.683594 4.902344 13.292969 5.292969 C 12.902344 5.683594 12.902344 6.316406 13.292969 6.707031 L 17.585938 11 L 4 11 C 3.449219 11 3 11.449219 3 12 C 3 12.550781 3.449219 13 4 13 Z"/>
+                  </svg>
+                </div>
+
+                <div class="criteria-station-col headline-with-container">
+                  <p class="section-footnote text-footnote">Destination</p>
+                  <div class="card-control station-card-control interactive" id="to-station-card">
+                    <div class="card-content">
+                      <div class="station-jp-label text-title1">SBI</div>
+                      <div class="station-en-label text-caption1-alt">Surabaya Ps. Turi</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Date SegmentedControl -->
+              <div class="headline-with-container" id="criteria-date-group">
+                <p class="section-footnote text-footnote">Date</p>
+                <div class="segmented-control" id="date-segmented-control"></div>
+              </div>
+
+              <!-- Time SegmentedControl -->
+              <div class="headline-with-container" id="criteria-time-group">
+                <p class="section-footnote text-footnote">Time</p>
+                <div class="segmented-control" id="time-segmented-control"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-cta-wrapper" id="criteria-cta-wrap">
+          <button type="button" id="btn-search-tickets" class="btn btn-contained text-button">Search for Tickets</button>
+        </div>
+      </div>
+
+      <!-- Screen 2B: TrainSelectionViewController -->
+      <div id="screen-train-selection" class="booking-screen hidden">
+        <div class="booking-top-container">
+          <div class="top-nav-bar">
+            <button type="button" class="back-button-control" data-back-btn aria-label="Back">
+              <div class="shape-view">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path class="back-arrow-path" d="M 4 12 L 20 12 M 10 6 L 4 12 L 10 18"/>
+                </svg>
+              </div>
+            </button>
+            <div class="top-date-label text-headline" data-header-date></div>
+          </div>
+
+          <div class="header-route-info" data-header-route>
+            <div class="station-pair-view" data-station-pair>
+              <div class="headline-label-set align-left">
+                <div class="text-large-title" data-from-station>Tokyo</div>
+                <div class="text-subheadline hidden" data-from-time></div>
+              </div>
+              <div class="station-to-label text-subheadline">to</div>
+              <div class="headline-label-set align-right">
+                <div class="text-large-title" data-to-station>Ōmiya</div>
+                <div class="text-subheadline hidden" data-to-time></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="booking-table-view" id="train-schedule-list"></div>
+      </div>
+
+      <!-- Screen 2C: SeatClassSelectionViewController -->
+      <div id="screen-seat-class" class="booking-screen hidden">
+        <div class="booking-top-container">
+          <div class="top-nav-bar">
+            <button type="button" class="back-button-control" data-back-btn aria-label="Back">
+              <div class="shape-view">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path class="back-arrow-path" d="M 4 12 L 20 12 M 10 6 L 4 12 L 10 18"/>
+                </svg>
+              </div>
+            </button>
+            <div class="top-date-label text-headline" data-header-date></div>
+          </div>
+
+          <div class="header-route-info" data-header-route>
+            <div class="station-pair-view" data-station-pair>
+              <div class="headline-label-set align-left">
+                <div class="text-large-title" data-from-station>Tokyo</div>
+                <div class="text-subheadline" data-from-time></div>
+              </div>
+              <div class="station-to-label text-subheadline">to</div>
+              <div class="headline-label-set align-right">
+                <div class="text-large-title" data-to-station>Ōmiya</div>
+                <div class="text-subheadline" data-to-time></div>
+              </div>
+            </div>
+
+            <div class="description-set-view" data-desc-set>
+              <div class="subheadline-label-set align-left">
+                <div class="sub-title text-headline" data-train-number></div>
+                <div class="sub-subtitle text-caption1" data-train-name></div>
+              </div>
+              <img id="seat-class-header-train-img" class="header-train-image" src="" alt="" />
+            </div>
+          </div>
+        </div>
+
+        <div class="booking-table-view" id="seat-class-list"></div>
+      </div>
+
+      <!-- Screen 2D: SeatMapSelectionViewController -->
+      <div id="screen-seat-map" class="booking-screen hidden">
+        <div class="booking-top-container">
+          <div class="top-nav-bar">
+            <button type="button" class="back-button-control" data-back-btn aria-label="Back">
+              <div class="shape-view">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path class="back-arrow-path" d="M 4 12 L 20 12 M 10 6 L 4 12 L 10 18"/>
+                </svg>
+              </div>
+            </button>
+            <div class="top-date-label text-headline" data-header-date></div>
+          </div>
+
+          <div class="header-route-info" data-header-route>
+            <div class="station-pair-view" data-station-pair>
+              <div class="headline-label-set align-left">
+                <div class="text-large-title" data-from-station>Tokyo</div>
+                <div class="text-subheadline" data-from-time></div>
+              </div>
+              <div class="station-to-label text-subheadline">to</div>
+              <div class="headline-label-set align-right">
+                <div class="text-large-title" data-to-station>Ōmiya</div>
+                <div class="text-subheadline" data-to-time></div>
+              </div>
+            </div>
+
+            <div class="description-set-view" data-desc-set>
+              <div class="subheadline-label-set align-left">
+                <div class="sub-title text-headline" data-train-number></div>
+                <div class="sub-subtitle text-caption1" data-train-name></div>
+              </div>
+              <div class="subheadline-label-set align-center" id="seatmap-car-set">
+                <div class="sub-title text-headline" data-car-number></div>
+                <div class="sub-subtitle text-caption1" data-class-name></div>
+              </div>
+              <div class="subheadline-label-set align-right">
+                <div class="sub-title text-headline" data-price></div>
+                <div class="sub-subtitle text-caption1">&nbsp;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="seatmap-main-content">
+          <div class="seatmap-large-card" id="seatmap-card">
+            <div class="card-content">
+              <div id="seatmap-heads-up-badge" class="heads-up-badge text-caption1"></div>
+              <div id="seatmap-canvas-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="seatmap-cta-overlay">
+          <button type="button" id="btn-seatmap-cta" class="btn btn-contained text-button" disabled>Please Select a Seat</button>
+        </div>
+      </div>
+
+      <!-- Screen 2E: BookingConfirmationViewController -->
+      <div id="screen-confirmation" class="booking-screen hidden">
+        <div class="confirmation-top-bar">
+          <button type="button" class="back-button-control" data-back-btn aria-label="Back">
+            <div class="shape-view">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path class="back-arrow-path" d="M 4 12 L 20 12 M 10 6 L 4 12 L 10 18"/>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <div class="confirmation-card-container">
+          <div class="confirmation-large-card" id="confirmation-card">
+            <div id="summary-canvas-container"></div>
+          </div>
+        </div>
+
+        <div class="confirmation-details-stack">
+          <div class="top-date-label text-headline" data-header-date></div>
+
+          <div class="header-route-info" data-header-route>
+            <div class="station-pair-view" data-station-pair>
+              <div class="headline-label-set align-left">
+                <div class="text-large-title" data-from-station>Tokyo</div>
+                <div class="text-subheadline" data-from-time></div>
+              </div>
+              <div class="station-to-label text-subheadline">to</div>
+              <div class="headline-label-set align-right">
+                <div class="text-large-title" data-to-station>Ōmiya</div>
+                <div class="text-subheadline" data-to-time></div>
+              </div>
+            </div>
+
+            <div class="description-set-view" data-desc-set>
+              <div class="subheadline-label-set align-left">
+                <div class="sub-title text-headline" data-train-number></div>
+                <div class="sub-subtitle text-caption1" data-train-name></div>
+              </div>
+              <div class="subheadline-label-set align-center">
+                <div class="sub-title text-headline" data-car-number></div>
+                <div class="sub-subtitle text-caption1" data-class-name></div>
+              </div>
+              <div class="subheadline-label-set align-center">
+                <div class="sub-title text-headline" data-seat-number></div>
+                <div class="sub-subtitle text-caption1">&nbsp;</div>
+              </div>
+              <div class="subheadline-label-set align-right">
+                <div class="sub-title text-headline" data-price></div>
+                <div class="sub-subtitle text-caption1">&nbsp;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-cta-wrapper">
+          <button type="button" id="btn-purchase-ticket" class="btn btn-contained text-button">Purchase this Ticket</button>
+        </div>
+      </div>
+
+      <!-- iOS ActionSheet Alert (NavigationController.displayAlertToDismiss) -->
+      <div id="ios-alert-backdrop">
+        <div class="ios-action-sheet">
+          <div class="ios-sheet-group">
+            <div class="ios-sheet-header">
+              <p class="ios-sheet-title" id="ios-alert-title">You're about to exit the Prototype.</p>
+              <p class="ios-sheet-message" id="ios-alert-message">Are you sure you want to proceed this action?</p>
+            </div>
+            <button type="button" class="ios-sheet-btn destructive" id="btn-alert-exit">Exit</button>
+          </div>
+          <button type="button" class="ios-sheet-btn cancel" id="btn-alert-cancel">Cancel</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         3. DesignSystemViewController (Modal Sheet)
+         ================================================================== -->
+    <aside id="design-system-modal">
+      <button type="button" id="btn-close-ds" class="ds-close-button" aria-label="Close">
+        <!-- symbol-close-button.pdf -->
+        <svg viewBox="0 0 22 22" width="22" height="22" fill="currentColor">
+          <path fill-rule="evenodd" d="M 11 22 C 4.925781 22 0 17.074219 0 11 C 0 4.925781 4.925781 0 11 0 C 17.074219 0 22 4.925781 22 11 C 22 17.074219 17.074219 22 11 22 Z M 11 9.585938 L 7.707031 6.292969 C 7.316406 5.902344 6.683594 5.902344 6.292969 6.292969 C 5.902344 6.683594 5.902344 7.316406 6.292969 7.707031 L 9.585938 11 L 6.292969 14.292969 C 5.902344 14.683594 5.902344 15.316406 6.292969 15.707031 C 6.683594 16.097656 7.316406 16.097656 7.707031 15.707031 L 11 12.414062 L 14.292969 15.707031 C 14.683594 16.097656 15.316406 16.097656 15.707031 15.707031 C 16.097656 15.316406 16.097656 14.683594 15.707031 14.292969 L 12.414062 11 L 15.707031 7.707031 C 16.097656 7.316406 16.097656 6.683594 15.707031 6.292969 C 15.316406 5.902344 14.683594 5.902344 14.292969 6.292969 Z"/>
+        </svg>
+      </button>
+
+      <!-- Tab 0: Components -->
+      <div class="ds-tab-pane" data-ds-pane="0">
+        <h2 class="ds-pane-title">Components</h2>
+        <div class="ds-pane-scroll" id="ds-components-scroll"></div>
+      </div>
+
+      <!-- Tab 1: Colors -->
+      <div class="ds-tab-pane hidden" data-ds-pane="1">
+        <h2 class="ds-pane-title">Colors</h2>
+        <div class="ds-pane-scroll" id="ds-colors-scroll"></div>
+      </div>
+
+      <!-- Tab 2: Text Styles -->
+      <div class="ds-tab-pane hidden" data-ds-pane="2">
+        <h2 class="ds-pane-title">Text Styles</h2>
+        <div class="ds-pane-scroll" id="ds-textstyles-scroll"></div>
+      </div>
+
+      <!-- Tab 3: Layer Styles -->
+      <div class="ds-tab-pane hidden" data-ds-pane="3">
+        <h2 class="ds-pane-title">Layer Styles</h2>
+        <div class="ds-pane-scroll" id="ds-layerstyles-scroll"></div>
+        <div class="ds-accessory-bar">
+          <div class="ios-segmented-control" id="ds-layer-state-seg">
+            <button type="button" class="ios-segment-btn active" data-layer-state="normal">Normal</button>
+            <button type="button" class="ios-segment-btn" data-layer-state="highlighted">Highlighted</button>
+            <button type="button" class="ios-segment-btn" data-layer-state="disabled">Disabled</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: 3D Assets -->
+      <div class="ds-tab-pane hidden" data-ds-pane="4">
+        <h2 class="ds-pane-title">3D Assets</h2>
+        <div class="ds-3d-stage">
+          <div id="ds-3d-canvas-container"></div>
+          <div class="ds-3d-nav-row">
+            <button type="button" class="btn btn-outlined text-outlined-button" id="ds-3d-prev">←</button>
+            <span class="text-caption1" id="ds-3d-node-label"></span>
+            <button type="button" class="btn btn-outlined text-outlined-button" id="ds-3d-next">→</button>
+          </div>
+        </div>
+        <div class="ds-accessory-bar">
+          <div class="ios-segmented-control" id="ds-3d-state-seg">
+            <button type="button" class="ios-segment-btn active" data-3d-state="normal">Normal</button>
+            <button type="button" class="ios-segment-btn" data-3d-state="highlighted">Highlighted</button>
+            <button type="button" class="ios-segment-btn" data-3d-state="selected">Selected</button>
+            <button type="button" class="ios-segment-btn" data-3d-state="disabled">Disabled</button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="ds-tabbar" id="ds-tabbar">
+        <button type="button" class="ds-tab-btn active" data-ds-tab="0">Components</button>
+        <button type="button" class="ds-tab-btn" data-ds-tab="1">Colors</button>
+        <button type="button" class="ds-tab-btn" data-ds-tab="2">Text Styles</button>
+        <button type="button" class="ds-tab-btn" data-ds-tab="3">Layer Styles</button>
+        <button type="button" class="ds-tab-btn" data-ds-tab="4">3D Assets</button>
+      </nav>
+    </aside>
+
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
