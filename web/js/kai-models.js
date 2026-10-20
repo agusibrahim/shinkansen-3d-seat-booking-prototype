@@ -152,11 +152,29 @@ export function getKAILeatherTexture(variant = 'maroon', state = 'normal', part 
         selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
         disabled: ['#B0B4BC', '#989CA5', '#7E828B', '#C0C4CC']
       },
+      blueDualTone: {
+        normal: ['#1F3864', '#16294B', '#0E1C36', '#C49C68'],
+        highlighted: ['#162848', '#101D36', '#0A1324', '#A68252'],
+        selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
+        disabled: ['#B0B4BC', '#989CA5', '#7E828B', '#C0C4CC']
+      },
+      eksekutifDualTone: {
+        normal: ['#CFCBC2', '#0E86B0', '#8E8A80', '#DBD7CE'],
+        highlighted: ['#B2AEA6', '#0A698A', '#706C64', '#C0BCB4'],
+        selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
+        disabled: ['#B8BBC2', '#989CA5', '#82858C', '#C4C7CE']
+      },
       premium: {
         normal: ['#AA9787', '#8F7D6E', '#6E5E51', '#B8A697'],
         highlighted: ['#8A796B', '#716255', '#54483E', '#99887A'],
         selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
         disabled: ['#B6B9C0', '#9EA1A9', '#848790', '#C4C7CE']
+      },
+      ekoTosca: {
+        normal: ['#2CA8C2', '#218DA4', '#166B7D', '#3CB8D2'],
+        highlighted: ['#21869C', '#186E80', '#10505E', '#2CA0B8'],
+        selected: ['#1E9E52', '#147A3D', '#0C5429', '#34B869'],
+        disabled: ['#B4B8C0', '#9CA0A8', '#848890', '#C2C6CE']
       },
       eko23: {
         normal: ['#C2B69C', '#AA9E84', '#8C816A', '#CEC2A9'],
@@ -167,13 +185,28 @@ export function getKAILeatherTexture(variant = 'maroon', state = 'normal', part 
     };
 
     const pal = (palettes[variant] || palettes.maroon)[state] || palettes.maroon.normal;
+    const isDualToneEks = variant === 'eksekutifDualTone';
     const baseColor = part === 'bolster' ? pal[1] : pal[0];
+    const topStopColor =
+      part === 'bolster'
+        ? isDualToneEks
+          ? '#1698C4'
+          : pal[0]
+        : pal[3];
+    const botStopColor =
+      part === 'bolster'
+        ? isDualToneEks
+          ? '#096B8E'
+          : pal[1]
+        : isDualToneEks
+        ? '#B8B4AA'
+        : pal[1];
 
     const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, part === 'bolster' ? pal[0] : pal[3]);
+    grad.addColorStop(0, topStopColor);
     grad.addColorStop(0.25, baseColor);
     grad.addColorStop(0.85, baseColor);
-    grad.addColorStop(1, pal[1]);
+    grad.addColorStop(1, botStopColor);
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
@@ -242,6 +275,79 @@ export function getKAILeatherTexture(variant = 'maroon', state = 'normal', part 
           ctx.lineTo(w - 18, ry + 3);
           ctx.stroke();
         }
+      } else if (variant === 'blueDualTone') {
+        // Ekonomi New Gen Dual-Tone: Warm Tan/Camel upper headrest insert (top 40% of backrest center!)
+        const tanGrad = ctx.createLinearGradient(0, 0, 0, 205);
+        tanGrad.addColorStop(0, pal[3]);
+        tanGrad.addColorStop(1, state === 'normal' ? '#AD8552' : pal[3]);
+        ctx.fillStyle = tanGrad;
+        ctx.fillRect(0, 0, w, 205);
+
+        ctx.strokeStyle = 'rgba(70, 45, 20, 0.38)';
+        ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.moveTo(64, 10);
+        ctx.lineTo(64, 202);
+        ctx.moveTo(w - 64, 10);
+        ctx.lineTo(w - 64, 202);
+        ctx.stroke();
+
+        ctx.strokeStyle = pal[2];
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(8, 205);
+        ctx.lineTo(w - 8, 205);
+        ctx.stroke();
+
+        for (const ry of [285, 365, 445]) {
+          ctx.strokeStyle = pal[2];
+          ctx.lineWidth = 4.5;
+          ctx.beginPath();
+          ctx.moveTo(16, ry);
+          ctx.lineTo(w - 16, ry);
+          ctx.stroke();
+        }
+      } else if (variant === 'eksekutifDualTone') {
+        // Eksekutif Dual-Tone (Cream/Light-Grey 4-segment plush center + Tosca bolsters)
+        for (const ry of [145, 255, 365, 455]) {
+          ctx.strokeStyle = pal[2];
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.moveTo(12, ry);
+          ctx.lineTo(w - 12, ry);
+          ctx.stroke();
+
+          ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(12, ry + 4);
+          ctx.lineTo(w - 12, ry + 4);
+          ctx.stroke();
+        }
+      } else if (variant === 'ekoTosca') {
+        // Ekonomi 2-3 Modifikasi (Tosca Scalloped): 3 center horizontal pads + diagonal V bolster seams!
+        ctx.strokeStyle = pal[2];
+        ctx.lineWidth = 4.5;
+        ctx.beginPath();
+        ctx.moveTo(88, 25);
+        ctx.lineTo(88, h - 25);
+        ctx.moveTo(w - 88, 25);
+        ctx.lineTo(w - 88, h - 25);
+        ctx.stroke();
+
+        for (const ry of [175, 285, 395]) {
+          ctx.beginPath();
+          ctx.moveTo(88, ry);
+          ctx.lineTo(w - 88, ry);
+          ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(10, 220);
+        ctx.lineTo(88, 285);
+        ctx.moveTo(w - 10, 220);
+        ctx.lineTo(w - 88, 285);
+        ctx.stroke();
       } else if (variant === 'premium') {
         // Ekonomi Premium: Vertical center seam on upper headrest + 3 horizontal lumbar cushion seams
         ctx.strokeStyle = pal[2];
@@ -294,6 +400,14 @@ export function getKAIWoodTexture(variant = 'teak') {
       grad.addColorStop(0, '#A8703E');
       grad.addColorStop(0.5, '#966132');
       grad.addColorStop(1, '#7E4F26');
+    } else if (variant === 'mahogany') {
+      grad.addColorStop(0, '#7C422B');
+      grad.addColorStop(0.5, '#64321E');
+      grad.addColorStop(1, '#4E2414');
+    } else if (variant === 'burl') {
+      grad.addColorStop(0, '#4A3020');
+      grad.addColorStop(0.5, '#382216');
+      grad.addColorStop(1, '#26160D');
     } else {
       grad.addColorStop(0, '#8C6240');
       grad.addColorStop(0.5, '#785234');
@@ -302,7 +416,7 @@ export function getKAIWoodTexture(variant = 'teak') {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    ctx.strokeStyle = 'rgba(45, 22, 8, 0.25)';
+    ctx.strokeStyle = 'rgba(30, 14, 5, 0.28)';
     ctx.lineWidth = 2;
     for (let i = 0; i < 48; i++) {
       const y = (i * 6) % h;
@@ -376,7 +490,7 @@ function createRoundedBox(width, height, depth, radius = 0.022) {
   const uv = geo.attributes.uv;
   for (let i = 0; i < pos.count; i++) {
     const u = (pos.getX(i) + width / 2) / width;
-    const v = 1 - (pos.getY(i) + height / 2) / height;
+    const v = (pos.getY(i) + height / 2) / height;
     uv.setXY(i, Math.max(0, Math.min(1, u)), Math.max(0, Math.min(1, v)));
   }
   geo.computeVertexNormals();
@@ -461,7 +575,7 @@ export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShad
 
   const centerCushion = new THREE.Mesh(
     createRoundedBox(0.34, 0.46, 0.115, 0.032),
-    makeMat('center')
+    makeMat(variant === 'blueDualTone' ? 'bolster' : 'center')
   );
   centerCushion.rotation.x = Math.PI / 2;
   cushionGroup.add(centerCushion);
@@ -538,18 +652,38 @@ export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShad
   });
 
   // Side Armrest Shell + Curved Wooden Top/Front Trim Rail + Silver Recline Button
+  const woodVariant =
+    variant === 'maroon'
+      ? 'teak'
+      : variant === 'blueDualTone'
+      ? 'mahogany'
+      : variant === 'eksekutifDualTone'
+      ? 'burl'
+      : 'walnut';
   const woodMat = createKAIMaterial({
-    map: getKAIWoodTexture(variant === 'maroon' ? 'teak' : 'walnut'),
-    roughness: 0.38,
+    map: getKAIWoodTexture(woodVariant),
+    roughness: variant === 'eksekutifDualTone' ? 0.25 : 0.38,
     metalness: 0.08
   });
+  const shellColor =
+    variant === 'maroon'
+      ? 0x9aa3b2
+      : variant === 'eksekutifDualTone'
+      ? 0xdcd9cf
+      : 0xc2c8d2;
+  const recessColor =
+    variant === 'maroon'
+      ? 0x828b9a
+      : variant === 'eksekutifDualTone'
+      ? 0xc8c4ba
+      : 0xacb2bd;
   const shellMat = createKAIMaterial({
-    color: variant === 'maroon' ? 0x9aa3b2 : 0xd0d5df,
+    color: shellColor,
     roughness: 0.45,
     metalness: 0.15
   });
   const recessMat = createKAIMaterial({
-    color: variant === 'maroon' ? 0x828b9a : 0xbac0cc,
+    color: recessColor,
     roughness: 0.5,
     metalness: 0.12
   });
@@ -574,13 +708,25 @@ export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShad
     woodTop.position.set(px, 0.492, -0.005);
     g.add(woodTop);
 
-    const woodFront = new THREE.Mesh(createRoundedBox(0.065, 0.27, 0.054, 0.016), woodMat);
-    woodFront.position.set(px, 0.365, 0.232);
-    g.add(woodFront);
+    if (variant !== 'blueDualTone') {
+      const woodFront = new THREE.Mesh(
+        createRoundedBox(0.065, variant === 'eksekutifDualTone' ? 0.11 : 0.27, 0.054, 0.016),
+        woodMat
+      );
+      woodFront.position.set(px, variant === 'eksekutifDualTone' ? 0.445 : 0.365, 0.232);
+      g.add(woodFront);
+    }
 
-    const btn = new THREE.Mesh(createRoundedBox(0.028, 0.042, 0.016, 0.004), chromeMat);
-    btn.position.set(px, 0.34, 0.26);
-    g.add(btn);
+    if (variant === 'eksekutifDualTone') {
+      // Silver recline lever plate embedded on top-front of dark burl-wood armrest (Image 3!)
+      const topLever = new THREE.Mesh(createRoundedBox(0.042, 0.012, 0.065, 0.003), chromeMat);
+      topLever.position.set(px, 0.515, 0.18);
+      g.add(topLever);
+    } else {
+      const btn = new THREE.Mesh(createRoundedBox(0.028, 0.042, 0.016, 0.004), chromeMat);
+      btn.position.set(px, 0.34, 0.26);
+      g.add(btn);
+    }
 
     return g;
   };
@@ -592,18 +738,29 @@ export function buildKAINextGenSeat(variant = 'maroon', isPairA = true, withShad
     const outerSide = isPairA ? 1 : -1;
     root.add(buildSidePanel(outerSide));
     if (isPairA) {
-      const divMat = createKAIMaterial({
-        color: variant === 'maroon' ? 0xb8cbe0 : 0xe4e9f2,
-        roughness: 0.4,
-        metalness: 0.15
-      });
-      const divPaddle = new THREE.Mesh(
-        createRoundedBox(0.036, 0.24, 0.26, 0.014),
-        divMat
-      );
-      divPaddle.position.set(-0.295, 0.51, -0.08);
-      divPaddle.rotation.x = -0.2;
-      root.add(divPaddle);
+      if (variant === 'blueDualTone' || variant === 'eksekutifDualTone') {
+        // Fold-down center wooden-topped armrest between paired seats (Image 1 & Image 3!)
+        const centerArmGroup = new THREE.Group();
+        const armBase = new THREE.Mesh(createRoundedBox(0.044, 0.065, 0.42, 0.014), shellMat);
+        armBase.position.set(-0.295, 0.44, 0.01);
+        const armWoodCap = new THREE.Mesh(createRoundedBox(0.052, 0.032, 0.44, 0.012), woodMat);
+        armWoodCap.position.set(-0.295, 0.482, 0.015);
+        centerArmGroup.add(armBase, armWoodCap);
+        root.add(centerArmGroup);
+      } else {
+        const divMat = createKAIMaterial({
+          color: variant === 'maroon' ? 0xb8cbe0 : 0xe4e9f2,
+          roughness: 0.4,
+          metalness: 0.15
+        });
+        const divPaddle = new THREE.Mesh(
+          createRoundedBox(0.036, 0.24, 0.26, 0.014),
+          divMat
+        );
+        divPaddle.position.set(-0.295, 0.51, -0.08);
+        divPaddle.rotation.x = -0.2;
+        root.add(divPaddle);
+      }
     }
   }
 
@@ -919,18 +1076,156 @@ export function buildKAIEkonomi23Seat(seatRole = 'b', withShadowPlane = false) {
 }
 
 // ============================================================================
+// 4B. KAI Ekonomi 2-3 Modifikasi (Turquoise/Tosca Scalloped 3-2 + Grey Box Base + Chrome Grab Handle)
+// ============================================================================
+export function buildKAIEkonomiTosca23Seat(seatRole = 'b', withShadowPlane = false) {
+  const root = new THREE.Group();
+  const leatherMats = [];
+
+  const makeToscaMat = (part = 'center') => {
+    const tex = getKAILeatherTexture('ekoTosca', 'normal', part);
+    const mat = createKAIMaterial({
+      map: tex,
+      roughness: 0.44,
+      metalness: 0.05
+    });
+    leatherMats.push({ mat, part });
+    return mat;
+  };
+
+  if (withShadowPlane) {
+    const sh = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.75, 1.75),
+      new THREE.MeshBasicMaterial({
+        map: getSoftShadowTexture(),
+        transparent: true,
+        depthWrite: false
+      })
+    );
+    sh.rotation.x = -Math.PI / 2;
+    sh.position.set(0, 0.002, 0);
+    root.add(sh);
+  }
+
+  const greyBoxMat = createKAIMaterial({ color: 0x5c626b, roughness: 0.5, metalness: 0.25 });
+  const blackBracketMat = createKAIMaterial({ color: 0x1d2026, roughness: 0.45, metalness: 0.4 });
+  const chromeMat = createKAIMaterial({ color: 0xdce2ea, roughness: 0.18, metalness: 0.85 });
+
+  const buildSingleScallopedSeat = (xOffset, showLeftBox, showRightBox, showLeftGrab, showRightGrab) => {
+    const g = new THREE.Group();
+    g.position.set(xOffset, 0, 0);
+    const sw = 0.485;
+
+    // 1. Plump Turquoise Seat Cushion
+    const cushion = new THREE.Mesh(
+      createRoundedBox(sw, 0.46, 0.12, 0.03),
+      makeToscaMat('center')
+    );
+    cushion.rotation.x = Math.PI / 2;
+    cushion.position.set(0, 0.25, 0.04);
+    g.add(cushion);
+
+    // 2. Scalloped Arched Backrest (Main body + Rounded Scalloped Crown at Top!)
+    const backMain = new THREE.Mesh(
+      createRoundedBox(sw, 0.64, 0.105, 0.032),
+      makeToscaMat('center')
+    );
+    backMain.position.set(0, 0.58, -0.14);
+    backMain.rotation.x = -0.08;
+    g.add(backMain);
+
+    const scallopedCrown = new THREE.Mesh(
+      createRoundedBox(sw * 0.84, 0.22, 0.102, 0.075),
+      makeToscaMat('bolster')
+    );
+    scallopedCrown.position.set(0, 0.91, -0.165);
+    scallopedCrown.rotation.x = -0.08;
+    g.add(scallopedCrown);
+
+    // 3. Dark-Grey Rectangular Side Box Armrest/Base + Black Pivot Hinge Bracket with 2 Silver Bolts (Image 2!)
+    const addSideBox = (sideSign) => {
+      const bx = sideSign * (sw / 2 + 0.022);
+      const box = new THREE.Mesh(createRoundedBox(0.052, 0.21, 0.49, 0.015), greyBoxMat);
+      box.position.set(bx, 0.21, 0.02);
+      g.add(box);
+
+      const bracket = new THREE.Mesh(createRoundedBox(0.058, 0.14, 0.065, 0.008), blackBracketMat);
+      bracket.position.set(bx, 0.29, -0.15);
+      g.add(bracket);
+
+      for (const by of [0.26, 0.31]) {
+        const bolt = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.066, 10), chromeMat);
+        bolt.rotation.z = Math.PI / 2;
+        bolt.position.set(bx, by, -0.15);
+        g.add(bolt);
+      }
+    };
+
+    if (showLeftBox) addSideBox(-1);
+    if (showRightBox) addSideBox(1);
+
+    // 4. Curved Chrome Corner Grab Handle on Top Aisle Corner of Backrest (Image 2!)
+    const addCornerGrab = (sideSign) => {
+      const torus = new THREE.Mesh(
+        new THREE.TorusGeometry(0.068, 0.011, 12, 20, Math.PI * 1.15),
+        chromeMat
+      );
+      torus.position.set(sideSign * (sw * 0.38), 0.96, -0.165);
+      torus.rotation.z = sideSign === -1 ? Math.PI * 0.35 : -Math.PI * 0.45;
+      g.add(torus);
+    };
+
+    if (showLeftGrab) addCornerGrab(-1);
+    if (showRightGrab) addCornerGrab(1);
+
+    return g;
+  };
+
+  if (withShadowPlane) {
+    // Standalone 3D preview shows a 2-seat Scalloped Tosca unit with side boxes & chrome grab handle
+    root.add(buildSingleScallopedSeat(-0.245, true, false, true, false));
+    root.add(buildSingleScallopedSeat(0.245, false, true, false, true));
+  } else {
+    const hasLeftEnd = seatRole === 'c' || seatRole === 'e';
+    const hasRightEnd = seatRole === 'a' || seatRole === 'd';
+    const hasLeftGrab = seatRole === 'c';
+    const hasRightGrab = seatRole === 'd';
+    root.add(
+      buildSingleScallopedSeat(0, hasLeftEnd, hasRightEnd, hasLeftGrab, hasRightGrab)
+    );
+  }
+
+  const unavail = createUnavailableBadge();
+  root.add(unavail.mesh);
+
+  const applyCustomState = (state) => {
+    const cTex = getKAILeatherTexture('ekoTosca', state, 'center');
+    const bTex = getKAILeatherTexture('ekoTosca', state, 'bolster');
+    leatherMats.forEach(({ mat, part }) => {
+      mat.uniforms.uMap.value = part === 'bolster' ? bTex : cTex;
+    });
+    unavail.mat.opacity = state === 'disabled' ? 1 : 0;
+  };
+
+  return { root, stateNodes: [], applyCustomState };
+}
+
+// ============================================================================
 // 5. Pure KAI 3D Cabin Sections, Panoramic Windows, Overhead Racks & Bulkheads
 // (Replaces 100% of Shinkansen .scn cabin walls, windows, floors & partitions!)
 // ============================================================================
 export function buildKAICabinSection(modelName) {
   const group = new THREE.Group();
   const isOrd23 = modelName.startsWith('e7-ordinary-');
+  const isTosca23 = modelName.startsWith('kai-tosca-');
   const isBlue = modelName.startsWith('kai-blue-') || modelName.startsWith('e7-green-');
   const isPrem = modelName.startsWith('kai-prem-');
-  const bayLen = isOrd23 ? 1.04 : 1.175;
+  const bayLen = isOrd23 || isTosca23 ? 1.04 : 1.175;
 
   const floorColors = isOrd23
     ? { side: 0x7ea06e, aisle: 0x84a674, led: 0xf4f7f2 }
+    : isTosca23
+    ? { side: 0x767b82, aisle: 0x848990, led: 0xe8edf2 }
     : isBlue
     ? { side: 0x8d949e, aisle: 0x9da4ae, led: 0xfffce0 }
     : isPrem
@@ -940,9 +1235,10 @@ export function buildKAICabinSection(modelName) {
   const sideFloorMat = createKAIMaterial({ color: floorColors.side, roughness: 0.7, metalness: 0.05 });
   const aisleFloorMat = createKAIMaterial({ color: floorColors.aisle, roughness: 0.55, metalness: 0.08 });
   const wallCreamMat = createKAIMaterial({ color: 0xeae6df, roughness: 0.6, metalness: 0.04 });
-  const rackMat = createKAIMaterial({ color: 0xe0dcd4, roughness: 0.55, metalness: 0.06 });
   const extSteelMat = createKAIMaterial({ color: 0xc4c8d0, roughness: 0.35, metalness: 0.55 });
-  const winFrameMat = createKAIMaterial({ color: 0x262a32, roughness: 0.5, metalness: 0.25 });
+  const winFrameMat = isTosca23
+    ? createKAIMaterial({ map: getKAIWoodTexture('teak'), roughness: 0.4, metalness: 0.08 })
+    : createKAIMaterial({ color: 0x262a32, roughness: 0.5, metalness: 0.25 });
   const glassMat = new THREE.MeshBasicMaterial({
     color: 0x242c38,
     transparent: true,
@@ -952,7 +1248,7 @@ export function buildKAICabinSection(modelName) {
   });
 
   // 1. Floor (Under-seat left/right + central aisle + glowing LED aisle strips)
-  const aisleW = isOrd23 ? 0.46 : 0.52;
+  const aisleW = isOrd23 || isTosca23 ? 0.46 : 0.52;
   const sideW = (3.08 - aisleW) / 2;
 
   for (const side of [-1, 1]) {

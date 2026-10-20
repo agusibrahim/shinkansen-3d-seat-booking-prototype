@@ -3,6 +3,7 @@ import {
   buildKAINextGenSeat,
   buildKAIEkonomiPremiumSeat,
   buildKAIEkonomi23Seat,
+  buildKAIEkonomiTosca23Seat,
   buildKAICabinSection,
   buildKAIPartitionBulkhead,
   buildKAIVestibuleOrGangway,
@@ -289,16 +290,28 @@ export class NodeFactory {
         rootNode: { name: 'kai-eksekutif-next-gen-maroon' },
         boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
       },
+      '_kai_eks_dualtone_seat_complete': {
+        rootNode: { name: 'kai-eksekutif-new-image-dualtone' },
+        boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
+      },
       '_kai_blue_seat_complete': {
         rootNode: { name: 'kai-ekonomi-new-gen-biru' },
+        boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
+      },
+      '_kai_blue_dualtone_seat_complete': {
+        rootNode: { name: 'kai-ekonomi-new-gen-dualtone-biru-tan' },
         boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
       },
       '_kai_prem_seat_complete': {
         rootNode: { name: 'kai-ekonomi-premium-tan' },
         boundingSphere: { center: [0, 0.55, 0], radius: 1.45 }
       },
+      '_kai_tosca_seat_complete': {
+        rootNode: { name: 'kai-ekonomi-modifikasi-tosca-2-3' },
+        boundingSphere: { center: [0, 0.55, 0], radius: 1.55 }
+      },
       '_e7_ordinary_seat_complete': {
-        rootNode: { name: 'kai-ekonomi-2-3-bench' },
+        rootNode: { name: 'kai-ekonomi-reguler-krem-2-3' },
         boundingSphere: { center: [0, 0.55, 0], radius: 1.55 }
       },
       'kai-maroon-section': {
@@ -311,6 +324,10 @@ export class NodeFactory {
       },
       'kai-prem-section': {
         rootNode: { name: 'kai-ekonomi-premium-cabin-section' },
+        boundingSphere: { center: [0, 1.8, 0], radius: 2.5 }
+      },
+      'kai-tosca-section': {
+        rootNode: { name: 'kai-ekonomi-tosca-cabin-section' },
         boundingSphere: { center: [0, 1.8, 0], radius: 2.5 }
       },
       'e7-ordinary-seat-section': {
@@ -496,6 +513,46 @@ export class NodeFactory {
     }
 
     if (
+      modelName === 'kai-eks-dualtone-seat-a' ||
+      modelName === 'kai-eks-dualtone-seat-b' ||
+      modelName === '_kai_eks_dualtone_seat_complete'
+    ) {
+      const built = buildKAINextGenSeat(
+        'eksekutifDualTone',
+        modelName.endsWith('-a'),
+        modelName.endsWith('_complete')
+      );
+      const inst = new SCNModelInstance(
+        modelName,
+        built.root,
+        { geoNodes: [], stateNodes: built.stateNodes },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+      inst.customStateHandler = built.applyCustomState;
+      return inst;
+    }
+
+    if (
+      modelName === 'kai-blue-dualtone-seat-a' ||
+      modelName === 'kai-blue-dualtone-seat-b' ||
+      modelName === '_kai_blue_dualtone_seat_complete'
+    ) {
+      const built = buildKAINextGenSeat(
+        'blueDualTone',
+        modelName.endsWith('-a'),
+        modelName.endsWith('_complete')
+      );
+      const inst = new SCNModelInstance(
+        modelName,
+        built.root,
+        { geoNodes: [], stateNodes: built.stateNodes },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+      inst.customStateHandler = built.applyCustomState;
+      return inst;
+    }
+
+    if (
       modelName === 'kai-blue-seat-a' ||
       modelName === 'kai-blue-seat-b' ||
       modelName === 'e7-green-seat-a' ||
@@ -527,6 +584,26 @@ export class NodeFactory {
         modelName.endsWith('-a'),
         modelName.endsWith('_complete')
       );
+      const inst = new SCNModelInstance(
+        modelName,
+        built.root,
+        { geoNodes: [], stateNodes: built.stateNodes },
+        this.modelsMeta?.[modelName] || { rootNode: { name: modelName } }
+      );
+      inst.customStateHandler = built.applyCustomState;
+      return inst;
+    }
+
+    if (
+      modelName === 'kai-tosca-seat-a' ||
+      modelName === 'kai-tosca-seat-b' ||
+      modelName === 'kai-tosca-seat-c' ||
+      modelName === 'kai-tosca-seat-d' ||
+      modelName === 'kai-tosca-seat-e' ||
+      modelName === '_kai_tosca_seat_complete'
+    ) {
+      const role = modelName.endsWith('_complete') ? 'a' : modelName.slice(-1);
+      const built = buildKAIEkonomiTosca23Seat(role, modelName.endsWith('_complete'));
       const inst = new SCNModelInstance(
         modelName,
         built.root,
@@ -1800,8 +1877,11 @@ export class SummaryPreviewView {
     }
     const completeMap = {
       granClass: '_kai_maroon_seat_complete',
+      eksekutifDualTone: '_kai_eks_dualtone_seat_complete',
       green: '_kai_blue_seat_complete',
+      ekonomiNewGenDual: '_kai_blue_dualtone_seat_complete',
       ekonomiPremium: '_kai_prem_seat_complete',
+      ekonomiTosca: '_kai_tosca_seat_complete',
       ordinary: '_e7_ordinary_seat_complete'
     };
     const modelName = completeMap[seatClassType] || '_e7_ordinary_seat_complete';

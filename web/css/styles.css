@@ -1009,11 +1009,20 @@ html, body {
 .seat-class-icon.class-granClass {
   color: var(--seat-gran-class);
 }
+.seat-class-icon.class-eksekutifDualTone {
+  color: #0E86B0;
+}
 .seat-class-icon.class-green {
   color: var(--seat-green);
 }
+.seat-class-icon.class-ekonomiNewGenDual {
+  color: #36588F;
+}
 .seat-class-icon.class-ekonomiPremium {
   color: #A67C52;
+}
+.seat-class-icon.class-ekonomiTosca {
+  color: #2CA8C2;
 }
 .seat-class-icon.class-ordinary {
   color: var(--seat-ordinary);
