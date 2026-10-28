@@ -1610,8 +1610,8 @@ export class SeatMapSceneView {
     // 5. Play initial animation (SeatMapSceneView.playInitialAnimation)
     const { lower, upper } = this.contentZPositionLimit;
     this.setCurrentContentZ(lower, false);
-    const duration = (Math.abs(upper) - Math.abs(lower)) / 100 + 0.5;
-    const targetZ = (lower * 2 + upper) / 3;
+    const duration = Math.min((Math.abs(upper) - Math.abs(lower)) / 180 + 0.5, 0.9);
+    const targetZ = lower + Math.min((upper - lower) / 3, 6.5);
     this.animateContentZ(targetZ, duration, TimingFunctions.explodingEaseOut, false);
   }
 

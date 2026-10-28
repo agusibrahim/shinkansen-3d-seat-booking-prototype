@@ -1519,9 +1519,9 @@ export function buildKAIMainFloorShadow() {
     transparent: true,
     depthWrite: false
   });
-  const plane = new THREE.Mesh(new THREE.PlaneGeometry(7.2, 225), mat);
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(7.2, 650), mat);
   plane.rotation.x = -Math.PI / 2;
-  plane.position.set(0, 0.01, -100);
+  plane.position.set(0, 0.01, -280);
   group.add(plane);
   return group;
 }

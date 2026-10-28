@@ -181,7 +181,9 @@ class _RootPrototypeContainerState extends State<RootPrototypeContainer> {
       setState(() => _step = PrototypeStep.seatClassSelection);
       return;
     }
-    final classIdx = int.tryParse(stepCmd.split(':').last) ?? 0;
+    final parts = stepCmd.split(':');
+    final classIdx = int.tryParse(parts.length > 1 ? parts[1] : '0') ?? 0;
+    final coachNum = parts.length > 2 ? (int.tryParse(parts[2]) ?? 1) : 1;
     final sc = sched.seatClasses[classIdx.clamp(0, sched.seatClasses.length - 1)];
     final entity = _seatMap!.seatClassEntities.firstWhere(
       (e) => e.seatClass == sc.seatClass,
@@ -195,7 +197,10 @@ class _RootPrototypeContainerState extends State<RootPrototypeContainer> {
 
     if (stepCmd.startsWith('seatmap:')) {
       final pickSeat = entity.reservableEntities.firstWhere(
-        (r) => r.isAvailable && r.name.startsWith('5'),
+        (r) =>
+            r.isAvailable &&
+            r.carNumber.endsWith(' $coachNum') &&
+            r.name.startsWith('5'),
         orElse: () => entity.reservableEntities.firstWhere((r) => r.isAvailable),
       );
       _selectedReservableEntity = pickSeat;
@@ -204,6 +209,9 @@ class _RootPrototypeContainerState extends State<RootPrototypeContainer> {
           'Seat ${pickSeat.name} in ${pickSeat.carNumber.toLowerCase()} has been selected.';
       _badgeVisible = true;
       setState(() => _step = PrototypeStep.seatMapSelection);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _seatMapKey.currentState?.scrollToSelectedSeat();
+      });
     } else if (stepCmd.startsWith('confirm:')) {
       final pickSeat = entity.reservableEntities.firstWhere(
         (r) => r.isAvailable && r.name.startsWith('6'),

@@ -108,14 +108,19 @@ class SeatMap3DViewState extends State<SeatMap3DView>
   void _initEntityBounds({bool playEntrance = false}) {
     _lowerZ = widget.currentEntity.lowerZ;
     _upperZ = widget.currentEntity.upperZ;
+    double defaultTargetZ = _lowerZ + math.min((_upperZ - _lowerZ) / 3.0, 6.5);
+    if (_selectedSeat != null) {
+      final seatZ = _selectedSeat!.transformedModelEntity.position.z;
+      const centerFloorZ = -4.92;
+      defaultTargetZ = (-seatZ + centerFloorZ).clamp(_lowerZ, _upperZ);
+    }
     if (playEntrance) {
       _currentContentZ = _lowerZ;
-      final targetZ = (_lowerZ * 2 + _upperZ) / 3;
-      final dur = ((_upperZ.abs() - _lowerZ.abs()).abs() / 100.0 + 0.5)
-          .clamp(0.45, 0.9);
-      animateToZ(targetZ, durationSec: dur);
+      final dur = ((defaultTargetZ - _lowerZ).abs() / 120.0 + 0.5)
+          .clamp(0.45, 0.85);
+      animateToZ(defaultTargetZ, durationSec: dur);
     } else {
-      _currentContentZ = (_lowerZ * 2 + _upperZ) / 3;
+      _currentContentZ = defaultTargetZ;
       _syncNativeCamera();
     }
   }
@@ -385,6 +390,7 @@ class SeatMap3DViewState extends State<SeatMap3DView>
                   size: size,
                   painter: _SeatMapLabelsOverlayPainter(
                     seatMap: widget.seatMap,
+                    currentEntity: widget.currentEntity,
                     currentContentZ: _currentContentZ,
                     fromStation: widget.fromStation,
                     toStation: widget.toStation,
@@ -402,6 +408,7 @@ class SeatMap3DViewState extends State<SeatMap3DView>
 
 class _SeatMapLabelsOverlayPainter extends CustomPainter {
   final SeatMapModel seatMap;
+  final SeatClassEntity currentEntity;
   final double currentContentZ;
   final String fromStation;
   final String toStation;
@@ -409,6 +416,7 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
 
   _SeatMapLabelsOverlayPainter({
     required this.seatMap,
+    required this.currentEntity,
     required this.currentContentZ,
     required this.fromStation,
     required this.toStation,
@@ -510,6 +518,68 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
       )..layout();
       dirTp.paint(canvas, Offset(0, -dirTp.height * 0.5));
       canvas.restore();
+    }
+
+    // 3. Draw 3D-projected Coach Number Badges (e.g. "EKS 1", "EKS 2", "EKS 3") at the front/back of each coach
+    final coachZBounds = <String, ({double minZ, double maxZ})>{};
+    for (final rev in currentEntity.reservableEntities) {
+      final cz = rev.transformedModelEntity.position.z;
+      final prev = coachZBounds[rev.carNumber];
+      if (prev == null) {
+        coachZBounds[rev.carNumber] = (minZ: cz, maxZ: cz);
+      } else {
+        coachZBounds[rev.carNumber] = (
+          minZ: math.min(prev.minZ, cz),
+          maxZ: math.max(prev.maxZ, cz),
+        );
+      }
+    }
+
+    for (final entry in coachZBounds.entries) {
+      final carLabel = entry.key.toUpperCase();
+      // Place badge just before the front row and just after the back row of each coach
+      for (final worldZ in [entry.value.maxZ + 1.15, entry.value.minZ - 1.15]) {
+        final wz = worldZ + currentContentZ;
+        if (wz < -21.0 || wz > 1.5) continue;
+        final proj = _projectPoint(
+          vm.Vector3(0.0, 1.35, wz),
+          viewMatrix,
+          f,
+          aspect,
+          halfW,
+          halfH,
+        );
+        if (proj == null) continue;
+        final scale = (8.0 / proj.z).clamp(0.65, 1.25);
+        final tp = TextPainter(
+          text: TextSpan(
+            text: carLabel,
+            style: TextStyle(
+              fontSize: 10.5 * scale,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              letterSpacing: 0.6,
+            ),
+          ),
+          textDirection: TextDirection.ltr,
+        )..layout();
+        final bgRect = RRect.fromRectAndRadius(
+          Rect.fromCenter(
+            center: Offset(proj.x, proj.y),
+            width: tp.width + 14.0 * scale,
+            height: tp.height + 6.0 * scale,
+          ),
+          Radius.circular(6.0 * scale),
+        );
+        canvas.drawRRect(
+          bgRect,
+          Paint()..color = const Color(0xCC1E242E),
+        );
+        tp.paint(
+          canvas,
+          Offset(proj.x - tp.width * 0.5, proj.y - tp.height * 0.5),
+        );
+      }
     }
   }
 
