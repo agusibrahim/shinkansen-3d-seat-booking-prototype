@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - interactive_3d (2.5.0):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - interactive_3d (from `.symlinks/plugins/interactive_3d/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  interactive_3d:
+    :path: ".symlinks/plugins/interactive_3d/ios"
+
+SPEC CHECKSUMS:
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  interactive_3d: 97892784a9f51bf5ca548b292079e08e9bbfb363
+
+PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
+
+COCOAPODS: 1.16.2

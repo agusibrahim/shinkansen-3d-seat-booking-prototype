@@ -1,0 +1,694 @@
+package com.example.interactive_3d.renderer
+
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.Choreographer
+import android.view.Surface
+import com.google.android.filament.*
+import com.google.android.filament.gltfio.*
+import com.example.interactive_3d.Interactive3dCacheManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import java.nio.ByteBuffer
+
+/**
+ * Core Filament renderer for the interactive_3d plugin.
+ *
+ * Owns the Filament [Engine], [Renderer], [Scene], and [View], and
+ * coordinates the sub-managers that handle camera, environment, model
+ * loading, and entity selection. All Filament API calls happen on the
+ * main thread; background work is limited to file I/O.
+ *
+ * Render loop uses [Choreographer] with adaptive frame pacing:
+ * full 60 fps during interaction, 30 fps after a brief idle, and paused
+ * once idle and the latest change has been drawn.
+ */
+class FilamentRenderer(
+    private val context: Context,
+    private var width: Int,
+    private var height: Int
+) {
+
+    private companion object {
+        const val TAG = "FilamentRenderer"
+    }
+
+    // Filament core objects
+    private var engine: Engine? = null
+    private var renderer: Renderer? = null
+    private var scene: Scene? = null
+    private var filamentView: View? = null
+    private var camera: Camera? = null
+    private var cameraEntity: Int = 0
+    private var swapChain: SwapChain? = null
+
+    // GLTF infrastructure
+    private var materialProvider: MaterialProvider? = null
+    private var assetLoader: AssetLoader? = null
+    private var resourceLoader: ResourceLoader? = null
+
+    // Sub-managers
+    internal val cameraController = CameraController()
+    internal val environment = EnvironmentLoader()
+    internal val modelLoader = ModelLoader()
+    internal val selection = SelectionManager()
+    internal val sequenceValidator = SequenceValidator()
+
+    // Notified when a tap is rejected by sequence validation
+    private var onSelectionRejected: ((String) -> Unit)? = null
+
+    // Parts whose taps are ignored before any selection change
+    private var unselectableNames: Set<String> = emptySet()
+
+    // Device-adaptive settings
+    private val deviceTier: DeviceCapability.Tier
+    private val quality: DeviceCapability.QualitySettings
+    private val renderScale: Float
+
+    // Render loop
+    private val choreographer = Choreographer.getInstance()
+    private var isRendering = false
+    private val frameCallback = FrameCallback()
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    // Background I/O (no Filament calls allowed on this scope)
+    private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    init {
+        deviceTier = DeviceCapability.detectTier(context)
+        quality = DeviceCapability.settingsFor(deviceTier)
+        renderScale = DeviceCapability.renderScaleFor(deviceTier)
+        Log.d(TAG, "Device: $deviceTier, MSAA: ${quality.msaaSamples}x, scale: ${renderScale}x")
+
+        initializeEngine()
+    }
+
+    // -------------------------------------------------------------------------
+    // Engine Initialization
+    // -------------------------------------------------------------------------
+
+    private fun initializeEngine() {
+        engine = Engine.create()
+        val eng = engine ?: throw IllegalStateException("Failed to create Filament Engine")
+
+        renderer = eng.createRenderer()
+        scene = eng.createScene()
+        filamentView = eng.createView().also { it.setScene(scene) }
+
+        cameraEntity = EntityManager.get().create()
+        camera = eng.createCamera(cameraEntity)
+        filamentView?.camera = camera
+
+        // Initial camera and exposure
+        camera?.let { cam ->
+            cameraController.applyProjection(cam, width, height)
+            cameraController.applyToCamera(cam)
+            cam.setExposure(16.0f, 1.0f / 125.0f, 50.0f)
+        }
+
+        environment.setupDefaultLighting(eng, scene!!)
+        configureView()
+
+        scene?.skybox = null
+
+        // Post-processing disabled — color output goes straight to the surface.
+        // MSAA still works at hardware level without the post-processing pipeline.
+        filamentView?.isPostProcessingEnabled = true
+        filamentView?.multiSampleAntiAliasingOptions = filamentView!!.multiSampleAntiAliasingOptions.apply {
+            enabled = true
+            sampleCount = 4
+        }
+
+        // Linear tone mapping avoids washed-out colors in the Texture API path
+        filamentView?.colorGrading = ColorGrading.Builder()
+            .toneMapper(ToneMapper.Linear())
+            .build(eng)
+
+        materialProvider = UbershaderProvider(eng)
+        assetLoader = AssetLoader(eng, materialProvider!!, EntityManager.get())
+        resourceLoader = ResourceLoader(eng, true)
+    }
+
+    /**
+     * Configures Filament view options based on the detected device tier.
+     *
+     * Dynamic resolution is always disabled because certain Mali GPUs produce
+     * blurred output when the internal resolution doesn't match the surface.
+     */
+    private fun configureView() {
+        val v = filamentView ?: return
+
+        v.antiAliasing = View.AntiAliasing.NONE
+
+        // Dynamic resolution disabled to prevent GPU-driver blur on certain chipsets
+        v.dynamicResolutionOptions = v.dynamicResolutionOptions.apply {
+            enabled = false
+            quality = View.QualityLevel.HIGH
+        }
+
+        v.multiSampleAntiAliasingOptions = v.multiSampleAntiAliasingOptions.apply {
+            enabled = quality.msaaSamples > 0
+            sampleCount = quality.msaaSamples
+        }
+
+        v.ambientOcclusionOptions = v.ambientOcclusionOptions.apply {
+            enabled = false
+            quality = if (deviceTier == DeviceCapability.Tier.HIGH_END)
+                View.QualityLevel.HIGH else View.QualityLevel.LOW
+        }
+
+        v.bloomOptions = v.bloomOptions.apply {
+            enabled = false
+            quality = if (deviceTier == DeviceCapability.Tier.HIGH_END)
+                View.QualityLevel.HIGH else View.QualityLevel.LOW
+        }
+
+        v.temporalAntiAliasingOptions = v.temporalAntiAliasingOptions.apply { enabled = false }
+        v.dithering = View.Dithering.TEMPORAL
+        v.blendMode = if (environment.useSolidBackground)
+            View.BlendMode.OPAQUE else View.BlendMode.TRANSLUCENT
+
+        v.renderQuality = v.renderQuality.apply {
+            hdrColorBuffer = if (deviceTier == DeviceCapability.Tier.HIGH_END)
+                View.QualityLevel.HIGH else View.QualityLevel.MEDIUM
+        }
+
+        renderer?.let { environment.applyClearColor(it) }
+    }
+
+    // -------------------------------------------------------------------------
+    // SwapChain / Surface
+    // -------------------------------------------------------------------------
+
+    fun createSwapChain(surface: Surface) {
+        val eng = engine ?: return
+        destroySwapChain()
+
+        // In createSwapChain, when solid background is used:
+        swapChain = if (environment.useSolidBackground) {
+            eng.createSwapChain(surface)  // No flags = opaque
+        } else {
+            eng.createSwapChain(surface, SwapChainFlags.CONFIG_TRANSPARENT)
+        }
+        filamentView?.viewport = Viewport(0, 0, width, height)
+        camera?.let {
+            cameraController.applyProjection(it, width, height)
+            cameraController.applyToCamera(it)
+        }
+    }
+
+    fun destroySwapChain() {
+        swapChain?.let { engine?.destroySwapChain(it) }
+        swapChain = null
+    }
+
+    /** Rebinds the swap chain to [surface] at the new size and redraws. */
+    fun resize(surface: Surface, width: Int, height: Int) {
+        if (width <= 0 || height <= 0) return
+        this.width = width
+        this.height = height
+        createSwapChain(surface)
+        requestRender()
+    }
+
+    // -------------------------------------------------------------------------
+    // Render Loop
+    // -------------------------------------------------------------------------
+
+    fun startRenderLoop() {
+        if (isRendering) return
+        isRendering = true
+        choreographer.postFrameCallback(frameCallback)
+    }
+
+    fun stopRenderLoop() {
+        isRendering = false
+        choreographer.removeFrameCallback(frameCallback)
+    }
+
+    /**
+     * Wakes the render loop from idle so that material/scene changes
+     * are drawn to screen. Call after any programmatic visual change
+     * (clear, refresh, visibility toggle, etc.).
+     */
+    private fun requestRender() {
+        cameraController.markInteracting()
+    }
+
+    // -------------------------------------------------------------------------
+    // Model Loading
+    // -------------------------------------------------------------------------
+
+    /** Loads the model and applies initial state. Returns false if it could not be loaded. */
+    fun loadModel(
+        buffer: ByteBuffer,
+        fileName: String,
+        resources: Map<String, ByteArray>,
+        preselectedEntities: List<String>?,
+        selectionColor: List<Double>?,
+        patchColors: List<Map<String, Any>>?,
+        enableCache: Boolean,
+        cacheColor: List<Double>?,
+        clearSelectionsOnHighlight: Boolean = false,
+        selectionSequence: List<Map<String, Any>>? = null,
+        unselectableEntities: List<String>? = null,
+        initialMaterialOverrides: List<Map<String, Any>>? = null,
+        initialEntityTextures: List<Map<String, Any>>? = null,
+        defaultZoom: Float? = null,
+        seatMapInitialZ: Float? = null
+    ): Boolean {
+        val eng = engine ?: return false
+        val scn = scene ?: return false
+        val loader = assetLoader ?: return false
+        val resLoader = resourceLoader ?: return false
+
+        // Clean up previous model
+        selection.cleanup(eng)
+        selection.iblLoaded = environment.iblLoaded
+        modelLoader.cleanupCurrentModel(scn, loader)
+
+        // Configure selection
+        selection.selectionColor = selectionColor.toFloatArrayOrDefault(floatArrayOf(0f, 1f, 0f, 1f))
+        selection.patchColors = patchColors
+        selection.enableCache = enableCache
+        selection.clearSelectionsOnHighlight = clearSelectionsOnHighlight
+
+        unselectableNames = unselectableEntities?.toSet() ?: emptySet()
+
+        // Configure sequence validation (active whenever the list is non-empty)
+        if (selectionSequence != null) {
+            sequenceValidator.configure(selectionSequence)
+        } else {
+            sequenceValidator.reset()
+        }
+
+        if (enableCache) {
+            selection.cacheColor = cacheColor.toFloatArrayOrDefault(floatArrayOf(0.8f, 0.8f, 0.2f, 0.6f))
+            selection.cacheManager = Interactive3dCacheManager(context, fileName, selection.cacheColor)
+        }
+
+        // Load
+        val asset = modelLoader.loadModel(eng, scn, loader, resLoader, buffer, fileName, resources)
+            ?: return false
+
+        // Fit camera to model or initialize SeatMap top-down camera
+        if (seatMapInitialZ != null) {
+            cameraController.enableSeatMapMode(seatMapInitialZ)
+            camera?.let {
+                cameraController.applyProjection(it, width, height)
+                cameraController.applyToCamera(it)
+            }
+        } else {
+            cameraController.disableSeatMapMode()
+            modelLoader.getBoundingBox()?.let { (center, halfExtent) ->
+                cameraController.fitToBoundingBox(center, halfExtent)
+                // Applied here so the first frame with the model is already at the starting zoom.
+                defaultZoom?.let { cameraController.setZoom(it) }
+                camera?.let {
+                    cameraController.applyProjection(it, width, height)
+                    cameraController.applyToCamera(it)
+                }
+            }
+        }
+
+        // Apply overrides first so they sit underneath any selection that follows.
+        if (!initialMaterialOverrides.isNullOrEmpty()) {
+            selection.applyOverridesByName(initialMaterialOverrides, asset, eng)
+        }
+        if (!initialEntityTextures.isNullOrEmpty()) {
+            selection.applyTexturesByName(initialEntityTextures, asset, eng)
+        }
+
+        // Apply preselections and cache highlights
+        selection.applyPreselections(preselectedEntities, asset, eng)
+        if (enableCache) {
+            selection.highlightCachedEntities(asset, eng)
+            selection.notifyCacheChanged()
+        }
+
+        requestRender()
+        return true
+    }
+
+    fun setEntityMaterials(overrides: List<Map<String, Any>>) {
+        val eng = engine ?: return
+        val asset = modelLoader.currentAsset ?: return
+        selection.applyOverridesByName(overrides, asset, eng)
+        requestRender()
+    }
+
+    fun resetEntityMaterials(names: List<String>?) {
+        val eng = engine ?: return
+        val asset = modelLoader.currentAsset ?: return
+        selection.resetOverridesByName(names, asset, eng)
+        requestRender()
+    }
+
+    fun setEntityTextures(textures: List<Map<String, Any>>) {
+        val eng = engine ?: return
+        val asset = modelLoader.currentAsset ?: return
+        selection.applyTexturesByName(textures, asset, eng)
+        requestRender()
+    }
+
+    fun resetEntityTextures(names: List<String>?) {
+        val eng = engine ?: return
+        val asset = modelLoader.currentAsset ?: return
+        selection.resetTexturesByName(names, asset, eng)
+        requestRender()
+    }
+
+    // -------------------------------------------------------------------------
+    // Environment
+    // -------------------------------------------------------------------------
+
+    fun loadEnvironment(iblBuffer: ByteBuffer?, skyboxBuffer: ByteBuffer?) {
+        val eng = engine ?: return
+        val scn = scene ?: return
+
+        if (environment.loadEnvironment(eng, scn, iblBuffer, skyboxBuffer)) {
+            // Enable AO/bloom now that IBL is loaded
+            filamentView?.apply {
+                ambientOcclusionOptions = ambientOcclusionOptions.apply { enabled = this@FilamentRenderer.quality.enableAO }
+                bloomOptions = bloomOptions.apply { enabled = this@FilamentRenderer.quality.enableBloom }
+            }
+
+            selection.clearFallbackEmissive(eng)
+
+            // Selection manager needs to know IBL state for correct reset behavior
+            selection.iblLoaded = true
+        }
+        requestRender()
+    }
+
+    fun setBackgroundColor(color: List<Double>) {
+        val rend = renderer ?: return
+        val scn = scene ?: return
+        environment.setBackgroundColor(color, rend, scn)
+    }
+
+    // -------------------------------------------------------------------------
+    // Gestures
+    // -------------------------------------------------------------------------
+
+    fun onTap(x: Int, y: Int) {
+        cameraController.markInteracting()
+        val v = filamentView ?: return
+        val flippedY = height - y
+
+        v.pick(x, flippedY, mainHandler) { result ->
+            val entity = result.renderable
+            if (entity == 0) return@pick
+
+            val asset = modelLoader.currentAsset ?: return@pick
+            val isModelEntity = asset.entities?.contains(entity) ?: false
+            if (!isModelEntity) return@pick
+
+            val eng = engine ?: return@pick
+
+            val nodeName = asset.getName(entity)
+            if (nodeName != null && nodeName in unselectableNames) return@pick
+            if (cameraController.seatMapMode) {
+                if (nodeName == null || !nodeName.startsWith("seat_")) return@pick
+                // Single-seat selection mode in SeatMap: clear previous selections before selecting new seat
+                if (!selection.selectedEntities.contains(entity) && selection.selectedEntities.isNotEmpty()) {
+                    selection.unselectEntities(null, eng, asset)
+                }
+            }
+
+            // Must run before handleTap mutates the selection.
+            if (nodeName != null) {
+                val selectedNames = selection.selectedEntities
+                    .mapNotNull { asset.getName(it) }
+                    .toSet()
+                if (!sequenceValidator.isTapAllowed(nodeName, selectedNames)) {
+                    onSelectionRejected?.invoke(nodeName)
+                    return@pick
+                }
+            }
+
+            selection.handleTap(entity, asset, eng)
+            // The pick result arrives after a drawn frame, so the highlight needs its own.
+            requestRender()
+        }
+    }
+
+    fun onPan(deltaX: Float, deltaY: Float) {
+        if (cameraController.onPan(deltaX, deltaY)) {
+            camera?.let { cameraController.applyToCamera(it) }
+        }
+    }
+
+    fun onScale(scale: Float) {
+        if (cameraController.onScale(scale)) {
+            // Re-lock render quality during zoom to prevent driver-side blur
+            filamentView?.let { v ->
+                v.dynamicResolutionOptions = v.dynamicResolutionOptions.apply {
+                    enabled = false
+                    quality = View.QualityLevel.HIGH
+                }
+                v.renderQuality = v.renderQuality.apply {
+                    hdrColorBuffer = View.QualityLevel.HIGH
+                }
+            }
+            camera?.let {
+                cameraController.applyProjection(it, width, height)
+                cameraController.applyToCamera(it)
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Public API
+    // -------------------------------------------------------------------------
+
+    fun setCameraZoomLevel(zoom: Float) {
+        cameraController.setZoom(zoom)
+        applyCamera()
+    }
+
+    fun setSeatMapCamera(cameraZ: Float) {
+        cameraController.setSeatMapZ(cameraZ)
+        camera?.let { cameraController.applyToCamera(it) }
+    }
+
+    /** Returns to the framing used right after load, at [zoom]. */
+    fun resetCamera(zoom: Float) {
+        val (center, halfExtent) = modelLoader.getBoundingBox() ?: return
+        cameraController.fitToBoundingBox(center, halfExtent)
+        cameraController.setZoom(zoom)
+        applyCamera()
+    }
+
+    fun zoomBy(delta: Float) {
+        cameraController.zoomBy(delta)
+        applyCamera()
+    }
+
+    private fun applyCamera() {
+        camera?.let {
+            cameraController.applyProjection(it, width, height)
+            cameraController.applyToCamera(it)
+        }
+        requestRender()
+    }
+
+    fun setPartGroupVisibility(group: Map<String, Any>, isVisible: Boolean) {
+        val asset = modelLoader.currentAsset ?: return
+        val scn = scene ?: return
+        @Suppress("UNCHECKED_CAST")
+        val names = (group["names"] as? List<*>)?.filterIsInstance<String>() ?: return
+
+        asset.entities?.forEach { entity ->
+            val name = asset.getName(entity)
+            if (name != null && names.contains(name)) {
+                if (isVisible) scn.addEntity(entity) else scn.removeEntity(entity)
+                selection.entityVisibilities[entity] = isVisible
+            }
+        }
+
+        // Force a render frame so the visibility change is visible immediately
+        cameraController.markInteracting()
+
+        if (!isVisible) {
+            val eng = engine ?: return
+            names.forEach { name ->
+                asset.entities?.find { asset.getName(it) == name }?.let { entity ->
+                    if (selection.selectedEntities.contains(entity)) {
+                        selection.resetColor(entity, eng)
+                        selection.selectedEntities.remove(entity)
+                    }
+                }
+            }
+            selection.onSelectionChanged?.invoke(
+                selection.selectedEntities.mapNotNull { e ->
+                    val n = asset.getName(e)
+                    if (n != null && n != "Unnamed Entity") mapOf("id" to e.toLong(), "name" to n) else null
+                }
+            )
+        }
+    }
+
+    fun unselectEntities(entityIds: List<Long>?) {
+        val eng = engine ?: return
+        selection.unselectEntities(entityIds, eng, modelLoader.currentAsset)
+        requestRender()
+    }
+
+    fun clearCacheAndRestoreSelections() {
+        val eng = engine ?: return
+        val asset = modelLoader.currentAsset ?: return
+        selection.clearCacheAndRestore(asset, eng)
+        requestRender()
+    }
+
+    fun refreshCacheHighlights() {
+        val eng = engine ?: return
+        val asset = modelLoader.currentAsset ?: return
+        selection.refreshAllHighlights(asset, eng, selection.clearSelectionsOnHighlight)
+        selection.notifySelectionChanged(asset)
+        selection.notifyCacheChanged()
+        requestRender()
+    }
+
+    fun removeFromCache(names: List<String>) {
+        val eng = engine ?: return
+        val asset = modelLoader.currentAsset ?: return
+        names.forEach { name ->
+            selection.cacheManager?.removeFromCache(name)
+            asset.entities?.find { asset.getName(it) == name }?.let { entity ->
+                selection.resetColor(entity, eng)
+                selection.selectedEntities.remove(entity)
+            }
+        }
+        selection.onSelectionChanged?.invoke(
+            selection.selectedEntities.mapNotNull { e ->
+                val n = asset.getName(e)
+                if (n != null) mapOf("id" to e.toLong(), "name" to n) else null
+            }
+        )
+        selection.notifyCacheChanged()
+        requestRender()
+    }
+
+    fun setSelectionListener(listener: (List<Map<String, Any>>) -> Unit) {
+        selection.onSelectionChanged = listener
+    }
+
+    fun setCacheSelectionListener(listener: (List<Map<String, Any>>) -> Unit) {
+        selection.onCacheSelectionChanged = listener
+    }
+
+    fun setSelectionRejectedListener(listener: (String) -> Unit) {
+        onSelectionRejected = listener
+    }
+
+    // -------------------------------------------------------------------------
+    // Cleanup
+    // -------------------------------------------------------------------------
+
+    fun cleanup() {
+        stopRenderLoop()
+
+        val eng = engine ?: return
+
+        selection.cleanup(eng)
+        sequenceValidator.reset()
+        cameraController.cancelCallbacks()
+        ioScope.cancel()
+
+        modelLoader.cleanupCurrentModel(scene!!, assetLoader!!)
+        environment.cleanup(eng, scene!!)
+
+        resourceLoader?.destroy()
+        assetLoader?.destroy()
+        materialProvider?.destroyMaterials()
+        materialProvider?.destroy()
+
+        destroySwapChain()
+
+        filamentView?.let { eng.destroyView(it) }
+        scene?.let { eng.destroyScene(it) }
+        renderer?.let { eng.destroyRenderer(it) }
+
+        if (cameraEntity != 0) {
+            eng.destroyCameraComponent(cameraEntity)
+            EntityManager.get().destroy(cameraEntity)
+        }
+
+        eng.destroy()
+
+        engine = null
+        renderer = null
+        scene = null
+        filamentView = null
+        camera = null
+        materialProvider = null
+        assetLoader = null
+        resourceLoader = null
+        cameraEntity = 0
+    }
+
+    // -------------------------------------------------------------------------
+    // Frame Callback
+    // -------------------------------------------------------------------------
+
+    private inner class FrameCallback : Choreographer.FrameCallback {
+        private val startTime = System.nanoTime()
+        private var tick = 0
+
+        override fun doFrame(frameTimeNanos: Long) {
+            if (!isRendering) return
+            choreographer.postFrameCallback(this)
+
+            // Adaptive frame pacing based on user interaction
+            tick++
+            if (!cameraController.isInteracting) {
+                cameraController.idleFrameCount++
+                // Fully idle once the last change is drawn; the 600 cap covers a surface that never draws.
+                val drawn = !cameraController.pendingDraw || cameraController.idleFrameCount > 600
+                if (cameraController.idleFrameCount > 90 && drawn) return
+                if (cameraController.idleFrameCount > 30 && tick % 2 != 0) return // 30 fps
+            }
+
+            val rend = renderer ?: return
+            val sc = swapChain ?: return
+            val v = filamentView ?: return
+
+            // Animate if the model has animations
+            modelLoader.currentAsset?.instance?.animator?.apply {
+                if (animationCount > 0) {
+                    val elapsed = (frameTimeNanos - startTime) / 1_000_000_000.0
+                    applyAnimation(0, elapsed.toFloat())
+                    updateBoneMatrices()
+                }
+            }
+
+            try {
+                if (rend.beginFrame(sc, frameTimeNanos)) {
+                    rend.render(v)
+                    rend.endFrame()
+                    cameraController.pendingDraw = false
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Render error: ${e.message}")
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------------------------
+// Extension
+// -------------------------------------------------------------------------
+
+/**
+ * Converts a nullable List<Double> to a FloatArray, or returns [default].
+ */
+private fun List<Double>?.toFloatArrayOrDefault(default: FloatArray): FloatArray {
+    if (this == null || size != 4) return default
+    return floatArrayOf(get(0).toFloat(), get(1).toFloat(), get(2).toFloat(), get(3).toFloat())
+}

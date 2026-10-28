@@ -1,0 +1,823 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+
+import 'controller.dart';
+import 'method_channel.dart';
+import 'models.dart';
+import 'platform_interface.dart';
+
+/// A widget for rendering and interacting with 3D models.
+///
+/// On Android, renders via Flutter's Texture widget backed by a Filament
+/// SurfaceProducer. On iOS, renders via a native SCNView embedded through
+/// UiKitView.
+///
+/// ```dart
+/// Interactive3d(
+///   modelPath: 'assets/models/tooth.glb',
+///   iblPath: 'assets/models/env_ibl.ktx',
+///   skyboxPath: 'assets/models/env_skybox.ktx',
+///   selectionColor: [0.0, 0.4, 1.0, 1.0],
+///   onSelectionChanged: (entities) => print(entities),
+/// )
+/// ```
+class Interactive3d extends StatefulWidget {
+  /// Path to the 3D model (.glb/.gltf) in the asset bundle.
+  final String? modelPath;
+
+  /// URL to download the 3D model (.glb/.gltf) from the network.
+  final String? modelUrl;
+
+  /// Asset path for the IBL lighting file (.ktx).
+  final String? iblPath;
+
+  /// URL for the IBL lighting file (.ktx).
+  final String? iblUrl;
+
+  /// Asset path for the skybox texture (.ktx).
+  final String? skyboxPath;
+
+  /// URL for the skybox texture (.ktx).
+  final String? skyboxUrl;
+
+  /// Asset path for the iOS HDR/EXR background environment.
+  final String? iOSBackgroundEnvPath;
+
+  /// URL for the iOS HDR/EXR background environment.
+  final String? iOSBackgroundEnvUrl;
+
+  /// Additional resource paths for multi-file .gltf models (textures, .bin).
+  final List<String> resources;
+
+  /// Called when the set of selected entities changes.
+  final void Function(List<EntityData>)? onSelectionChanged;
+
+  /// Entity names to highlight when the model first loads.
+  final List<String>? preselectedEntities;
+
+  /// Part names that ignore taps: no highlight and no selection event.
+  /// Names match those in [onSelectionChanged] on the same platform.
+  /// Read once when the model loads.
+  final List<String>? unselectableEntities;
+
+  /// Default highlight color for selected entities. RGBA 0.0–1.0.
+  final List<double>? selectionColor;
+
+  /// Initial camera zoom level.
+  final double? defaultZoom;
+
+  /// Solid background color (RGBA 0.0–1.0). When set, replaces the skybox.
+  final List<double>? solidBackgroundColor;
+
+  /// Per-entity color overrides for selection highlights.
+  final List<PatchColor>? patchColors;
+
+  /// Controller for programmatic interaction with the 3D view.
+  final Interactive3dController? controller;
+
+  /// Enables persistent selection caching across sessions.
+  final bool enableCache;
+
+  /// Color used for cached entity highlights. RGBA 0.0–1.0.
+  final List<double>? cacheColor;
+
+  /// Called when the cached selection set changes.
+  final void Function(List<String>)? onCacheSelectionChanged;
+
+  /// When true, clears active selections when cache highlights are applied.
+  final bool clearSelectionOnHighlight;
+
+  /// Ordered selection rules that constrain which entities can be tapped next.
+  final List<SequenceConfig>? selectionSequence;
+
+  /// Called with the part name when [selectionSequence] rejects a tap.
+  /// Names match those in [onSelectionChanged] on the same platform.
+  final void Function(String name)? onSelectionRejected;
+
+  /// Background color shown while the model is loading.
+  final Color backgroundColor;
+
+  /// Shown over the view until the model is drawn. Defaults to a spinner.
+  final Widget? loadingWidget;
+
+  /// Shown over the view when the model fails to load. Rebuild the widget
+  /// with a new key to retry.
+  final Widget Function(BuildContext context, Object error)? errorBuilder;
+
+  /// Called once the model is drawn at its starting zoom. Fires even if the
+  /// lighting fails to load.
+  final VoidCallback? onModelLoaded;
+
+  /// Called when the model fails to load. Without it, the error is only logged.
+  final void Function(Object error, StackTrace? stackTrace)? onModelLoadError;
+
+  /// PBR overrides to apply once when the model first loads. Selection wins
+  /// visually; deselect restores the override.
+  final List<MaterialOverride>? initialMaterialOverrides;
+
+  /// Base color textures to apply once when the model first loads.
+  final List<EntityTexture>? initialEntityTextures;
+
+  /// When non-null, initializes the camera in 64-degree FOV SeatMap mode at [seatMapInitialZ].
+  final double? seatMapInitialZ;
+
+  const Interactive3d({
+    super.key,
+    this.modelPath,
+    this.modelUrl,
+    this.iblPath,
+    this.iblUrl,
+    this.skyboxPath,
+    this.skyboxUrl,
+    this.iOSBackgroundEnvPath,
+    this.iOSBackgroundEnvUrl,
+    this.onSelectionChanged,
+    this.resources = const [],
+    this.preselectedEntities,
+    this.unselectableEntities,
+    this.selectionColor,
+    this.defaultZoom,
+    this.solidBackgroundColor,
+    this.patchColors,
+    this.controller,
+    this.enableCache = false,
+    this.cacheColor,
+    this.onCacheSelectionChanged,
+    this.clearSelectionOnHighlight = false,
+    this.selectionSequence,
+    this.onSelectionRejected,
+    this.backgroundColor = Colors.black,
+    this.loadingWidget,
+    this.errorBuilder,
+    this.onModelLoaded,
+    this.onModelLoadError,
+    this.initialMaterialOverrides,
+    this.initialEntityTextures,
+    this.seatMapInitialZ,
+  });
+
+  @override
+  Interactive3dState createState() => Interactive3dState();
+}
+
+enum _LoadPhase { loading, loaded, failed }
+
+/// State for [Interactive3d].
+///
+/// Public methods ([setZoom], [clearCache], etc.) are called by
+/// [Interactive3dController] and route to the correct platform.
+class Interactive3dState extends State<Interactive3d> {
+  // Android (Texture API)
+  Interactive3dPlatform? _platform;
+  int? _textureId;
+  bool _isInitializing = false;
+  double _renderRatio = 1.0;
+
+  // iOS (PlatformView)
+  MethodChannel? _iosMethodChannel;
+  StreamSubscription? _iosEventSubscription;
+
+  // Shared
+  _LoadPhase _loadPhase = _LoadPhase.loading;
+  Object? _loadError;
+  StreamSubscription<List<EntityData>>? _selectionSubscription;
+  StreamSubscription<List<String>>? _cacheSelectionSubscription;
+  StreamSubscription<String>? _selectionRejectedSubscription;
+  Size? _currentSize;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller?.attach(this);
+  }
+
+  @override
+  void didUpdateWidget(Interactive3d oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller?.detach(this);
+      widget.controller?.attach(this);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Build
+  // ---------------------------------------------------------------------------
+
+  @override
+  Widget build(BuildContext context) {
+    if (Platform.isIOS) return _withLoadOverlay(_buildIOSPlatformView());
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = Size(constraints.maxWidth, constraints.maxHeight);
+
+        if (_textureId == null &&
+            !_isInitializing &&
+            _loadPhase == _LoadPhase.loading &&
+            size.width > 0 &&
+            size.height > 0) {
+          final dpr = MediaQuery.of(context).devicePixelRatio;
+          // High-end: near-native quality, Mid: balanced, Low: max performance
+          // The native DeviceCapability tier is detected on init; here we approximate
+          // based on pixel ratio as a proxy (high DPR devices tend to be flagship)
+          _renderRatio = dpr >= 3.0 ? dpr.clamp(1.0, 2.0) : dpr.clamp(1.0, 1.5);
+          _initializeTexture(size);
+        }
+
+        if (_currentSize != size && _textureId != null) {
+          _currentSize = size;
+          _updateTextureSize(size);
+        }
+
+        return _withLoadOverlay(Container(
+          color: widget.backgroundColor,
+          child: _textureId != null ? _buildTextureWidget() : null,
+        ));
+      },
+    );
+  }
+
+  Widget _withLoadOverlay(Widget view) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        view,
+        if (_loadPhase == _LoadPhase.loading)
+          ColoredBox(
+            color: widget.backgroundColor,
+            child: widget.loadingWidget ??
+                const Center(child: CircularProgressIndicator()),
+          ),
+        if (_loadPhase == _LoadPhase.failed && widget.errorBuilder != null)
+          widget.errorBuilder!(context, _loadError!),
+      ],
+    );
+  }
+
+  // The model is already drawn by now, so slow lighting must not hold the
+  // overlay forever; it keeps loading in the background after this.
+  static const _lightingWait = Duration(seconds: 10);
+
+  Future<void> _awaitLighting(Future<void> load) async {
+    final logged = load.catchError(
+      (Object e) => debugPrint('Error loading lighting: $e'),
+    );
+    await logged.timeout(_lightingWait, onTimeout: () {});
+  }
+
+  void _completeLoad() {
+    if (!mounted || _loadPhase != _LoadPhase.loading) return;
+    setState(() => _loadPhase = _LoadPhase.loaded);
+    widget.onModelLoaded?.call();
+  }
+
+  void _failLoad(Object error, StackTrace stackTrace) {
+    if (!mounted || _loadPhase != _LoadPhase.loading) return;
+    setState(() {
+      _loadPhase = _LoadPhase.failed;
+      _loadError = error;
+    });
+    final onError = widget.onModelLoadError;
+    if (onError != null) {
+      onError(error, stackTrace);
+    } else {
+      debugPrint('Error loading model: $error');
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // iOS: PlatformView
+  // ---------------------------------------------------------------------------
+
+  Widget _buildIOSPlatformView() {
+    return UiKitView(
+      viewType: 'interactive_3d',
+      creationParams: {
+        'modelPath': widget.modelPath,
+        'modelUrl': widget.modelUrl,
+        'solidBackgroundColor': widget.solidBackgroundColor,
+      },
+      creationParamsCodec: const StandardMessageCodec(),
+      onPlatformViewCreated: _onIOSPlatformViewCreated,
+    );
+  }
+
+  void _onIOSPlatformViewCreated(int viewId) {
+    _iosMethodChannel = MethodChannel('interactive_3d_$viewId');
+    final eventChannel = EventChannel('interactive_3d_events_$viewId');
+
+    _iosEventSubscription =
+        eventChannel.receiveBroadcastStream().listen((event) {
+      final map = event as Map<dynamic, dynamic>;
+      final String eventType = map['event'];
+
+      if (eventType == 'selectionChanged') {
+        final List<dynamic> selected = map['selectedEntities'];
+        final entities = selected
+            .map((e) =>
+                EntityData(id: e['id'] as int, name: e['name'] as String))
+            .toList();
+        widget.onSelectionChanged?.call(entities);
+      } else if (eventType == 'cacheSelectionChanged') {
+        final List<dynamic> cached = map['cachedEntities'];
+        final names = cached.map<String>((e) => e['name'] as String).toList();
+        widget.onCacheSelectionChanged?.call(names);
+      } else if (eventType == 'selectionRejected') {
+        widget.onSelectionRejected?.call(map['name'] as String);
+      }
+    });
+
+    _loadIOSModelAndEnvironment();
+  }
+
+  Future<void> _loadIOSModelAndEnvironment() async {
+    final channel = _iosMethodChannel;
+    if (channel == null) return;
+
+    try {
+      Uint8List modelBytes;
+      String modelName;
+
+      if (widget.modelPath != null) {
+        final data = await rootBundle.load(widget.modelPath!);
+        modelBytes = data.buffer.asUint8List();
+        modelName = widget.modelPath!.split('/').last;
+      } else if (widget.modelUrl != null) {
+        final response = await http.get(Uri.parse(widget.modelUrl!));
+        if (response.statusCode != 200) {
+          throw Exception('Failed to load model: ${widget.modelUrl}');
+        }
+        modelBytes = response.bodyBytes;
+        modelName = widget.modelUrl!.split('/').last;
+      } else {
+        throw ArgumentError('Must provide either modelPath or modelUrl');
+      }
+      if (!mounted) return;
+
+      final resources = modelName.endsWith('.gltf')
+          ? await _loadGltfResources()
+          : const <String, ByteData>{};
+      if (!mounted) return;
+
+      await channel.invokeMethod('loadModel', {
+        'modelBytes': modelBytes,
+        'name': modelName,
+        'resources': resources.map((path, data) => MapEntry(path,
+            data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes))),
+        'preselectedEntities': widget.preselectedEntities,
+        'selectionColor': widget.selectionColor,
+        'patchColors': widget.patchColors
+            ?.map((p) => {'name': p.name, 'color': p.color})
+            .toList(),
+        'enableCache': widget.enableCache,
+        'cacheColor': widget.cacheColor,
+        'clearSelectionsOnHighlight': widget.clearSelectionOnHighlight,
+        'selectionSequence':
+            widget.selectionSequence?.map((c) => c.toJson()).toList(),
+        'unselectableEntities': widget.unselectableEntities,
+        'backgroundColor': widget.solidBackgroundColor,
+        'initialMaterialOverrides':
+            widget.initialMaterialOverrides?.map((o) => o.toMap()).toList(),
+        'initialEntityTextures':
+            widget.initialEntityTextures?.map((t) => t.toMap()).toList(),
+        'seatMapInitialZ': widget.seatMapInitialZ,
+      });
+      if (!mounted) return;
+
+      if (widget.defaultZoom != null) {
+        await channel
+            .invokeMethod('setZoomLevel', {'zoom': widget.defaultZoom});
+        if (!mounted) return;
+      }
+    } catch (e, stackTrace) {
+      _failLoad(e, stackTrace);
+      return;
+    }
+
+    await _awaitLighting(_loadIOSBackground(channel));
+    _completeLoad();
+  }
+
+  Future<void> _loadIOSBackground(MethodChannel channel) async {
+    Uint8List? bgBytes;
+    if (widget.iOSBackgroundEnvPath != null) {
+      bgBytes = (await rootBundle.load(widget.iOSBackgroundEnvPath!))
+          .buffer
+          .asUint8List();
+    } else if (widget.iOSBackgroundEnvUrl != null) {
+      final response = await http.get(Uri.parse(widget.iOSBackgroundEnvUrl!));
+      if (response.statusCode == 200) bgBytes = response.bodyBytes;
+    }
+    if (bgBytes != null && mounted) {
+      await channel
+          .invokeMethod('loadHdrBackground', {'backgroundBytes': bgBytes});
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Android: Texture API
+  // ---------------------------------------------------------------------------
+
+  Widget _buildTextureWidget() {
+    if (widget.seatMapInitialZ != null) {
+      return Texture(textureId: _textureId!);
+    }
+    return GestureDetector(
+      onTapUp: _handleTapUp,
+      onScaleStart: _handleScaleStart,
+      onScaleUpdate: _handleScaleUpdate,
+      child: Texture(textureId: _textureId!),
+    );
+  }
+
+  Future<void> _initializeTexture(Size size) async {
+    if (_isInitializing) return;
+    _isInitializing = true;
+
+    try {
+      _platform = MethodChannelInteractive3d();
+
+      final result = await _platform!.createTexture(
+        width: (size.width * _renderRatio).toInt(),
+        height: (size.height * _renderRatio).toInt(),
+      );
+
+      final textureId = result['textureId'] as int?;
+      if (textureId == null || textureId < 0) {
+        throw Exception('Failed to create texture');
+      }
+      if (!mounted) {
+        await _platform!.disposeTexture(textureId);
+        return;
+      }
+
+      _textureId = textureId;
+      _currentSize = size;
+      setState(() {});
+
+      _selectionSubscription =
+          _platform!.selectionStream(_textureId!).listen(_onSelectionChanged);
+
+      if (widget.onCacheSelectionChanged != null) {
+        _cacheSelectionSubscription = _platform!
+            .cacheSelectionStream(_textureId!)
+            .listen(widget.onCacheSelectionChanged!);
+      }
+
+      _selectionRejectedSubscription = _platform!
+          .selectionRejectedStream(_textureId!)
+          .listen((name) => widget.onSelectionRejected?.call(name));
+
+      await _loadAndroidModelAndEnvironment();
+    } catch (e, stackTrace) {
+      _failLoad(e, stackTrace);
+    } finally {
+      _isInitializing = false;
+    }
+  }
+
+  Future<void> _loadAndroidModelAndEnvironment() async {
+    if (_platform == null || _textureId == null) return;
+
+    Map<String, ByteData> resources = {};
+    if ((widget.modelPath ?? widget.modelUrl ?? '').endsWith('.gltf')) {
+      resources = await _loadGltfResources();
+      if (!mounted) return;
+    }
+
+    await _platform!.loadModel(
+      textureId: _textureId!,
+      modelPath: widget.modelPath,
+      modelUrl: widget.modelUrl,
+      resources: resources,
+      preselectedEntities: widget.preselectedEntities,
+      selectionColor: widget.selectionColor,
+      patchColors: widget.patchColors,
+      enableCache: widget.enableCache,
+      cacheColor: widget.cacheColor,
+      clearSelectionsOnHighlight: widget.clearSelectionOnHighlight,
+      selectionSequence: widget.selectionSequence,
+      unselectableEntities: widget.unselectableEntities,
+      backgroundColor: widget.solidBackgroundColor,
+      initialMaterialOverrides: widget.initialMaterialOverrides,
+      initialEntityTextures: widget.initialEntityTextures,
+      defaultZoom: _validDefaultZoom,
+      seatMapInitialZ: widget.seatMapInitialZ,
+    );
+    if (!mounted) return;
+
+    await _awaitLighting(_platform!.loadEnvironment(
+      textureId: _textureId!,
+      iblPath: widget.iblPath,
+      iblUrl: widget.iblUrl,
+      skyboxPath: widget.skyboxPath,
+      skyboxUrl: widget.skyboxUrl,
+    ));
+    _completeLoad();
+  }
+
+  void _updateTextureSize(Size size) {
+    if (size.width <= 0 || size.height <= 0) return;
+    // Same scaling as createTexture, so tap and pan coordinates stay in step.
+    unawaited(_platform
+        ?.updateTextureSize(
+          _textureId!,
+          (size.width * _renderRatio).toInt(),
+          (size.height * _renderRatio).toInt(),
+        )
+        .catchError((Object e) => debugPrint('Error resizing view: $e')));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Gesture Handling (Android only; iOS handles natively)
+  // ---------------------------------------------------------------------------
+
+  void _handleTapUp(TapUpDetails details) {
+    if (_platform == null || _textureId == null) return;
+    _platform!.onTouchEvent(
+      textureId: _textureId!,
+      action: 'tap',
+      x: details.localPosition.dx * _renderRatio,
+      y: details.localPosition.dy * _renderRatio,
+    );
+  }
+
+  Offset? _lastFocalPoint;
+
+  void _handleScaleStart(ScaleStartDetails details) {
+    _lastFocalPoint = details.localFocalPoint;
+  }
+
+  void _handleScaleUpdate(ScaleUpdateDetails details) {
+    if (_platform == null || _textureId == null) return;
+
+    if (details.scale != 1.0) {
+      _platform!.onTouchEvent(
+        textureId: _textureId!,
+        action: 'scale',
+        scale: details.scale,
+      );
+    }
+
+    if (_lastFocalPoint != null) {
+      final delta = details.localFocalPoint - _lastFocalPoint!;
+      if (delta.distance > 0.5) {
+        _platform!.onTouchEvent(
+          textureId: _textureId!,
+          action: 'pan',
+          deltaX: delta.dx * _renderRatio,
+          deltaY: delta.dy * _renderRatio,
+        );
+      }
+    }
+    _lastFocalPoint = details.localFocalPoint;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Public API: routes to correct platform
+  // ---------------------------------------------------------------------------
+
+  Future<void> setZoom(double? level) async {
+    if (level == null || !level.isFinite || level <= 0) return;
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('setZoomLevel', {'zoom': level});
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.setCameraZoomLevel(_textureId!, level);
+    }
+  }
+
+  Future<void> setSeatMapCamera(double cameraZ) async {
+    if (!cameraZ.isFinite) return;
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('setSeatMapCamera', {'cameraZ': cameraZ});
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.setSeatMapCamera(_textureId!, cameraZ);
+    }
+  }
+
+  Future<void> triggerTap(double x, double y) async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('triggerTap', {'x': x, 'y': y});
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.onTouchEvent(
+        textureId: _textureId!,
+        action: 'tap',
+        x: x * _renderRatio,
+        y: y * _renderRatio,
+      );
+    }
+  }
+
+  /// [Interactive3d.defaultZoom], or null when unset or invalid.
+  double? get _validDefaultZoom {
+    final zoom = widget.defaultZoom;
+    return zoom != null && zoom.isFinite && zoom > 0 ? zoom : null;
+  }
+
+  Future<void> resetCamera() async {
+    if (_loadPhase != _LoadPhase.loaded) return;
+    final zoom = _validDefaultZoom;
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('resetCamera', {'zoom': zoom});
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.resetCamera(_textureId!, zoom ?? 1.0);
+    }
+  }
+
+  Future<void> zoomBy(double delta) async {
+    if (!delta.isFinite || _loadPhase != _LoadPhase.loaded) return;
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('zoomBy', {'delta': delta});
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.zoomBy(_textureId!, delta);
+    }
+  }
+
+  Future<void> clearCache() async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('clearCache');
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.clearCache(_textureId!);
+    }
+  }
+
+  Future<void> refreshCacheHighlights() async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('refreshCacheHighlights');
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.refreshCacheHighlights(_textureId!);
+    }
+  }
+
+  Future<void> removeFromCache(List<String> names) async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('removeFromCache', names);
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.removeFromCache(_textureId!, names);
+    }
+  }
+
+  Future<void> updatePartGroupConfig({
+    required bool isVisible,
+    required ModelPartGroup group,
+  }) async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('setPartGroupVisibility', {
+        'group': group.toMap(),
+        'visibility': {group.title: isVisible},
+      });
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.updatePartGroupConfig(
+        textureId: _textureId!,
+        isVisible: isVisible,
+        group: group,
+      );
+    }
+  }
+
+  Future<void> unselectEntities({List<int>? entityIds}) async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('unselectEntities', entityIds);
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!
+          .unselectEntities(textureId: _textureId!, entityIds: entityIds);
+    }
+  }
+
+  Future<void> setEntityMaterials(List<MaterialOverride> overrides) async {
+    if (overrides.isEmpty) return;
+    final payload = overrides.map((o) => o.toMap()).toList();
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('setEntityMaterials', payload);
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.setEntityMaterials(
+        textureId: _textureId!,
+        overrides: overrides,
+      );
+    }
+  }
+
+  /// Null [names] resets every active override.
+  Future<void> resetEntityMaterials(List<String>? names) async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('resetEntityMaterials', names);
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.resetEntityMaterials(
+        textureId: _textureId!,
+        names: names,
+      );
+    }
+  }
+
+  Future<void> setEntityTextures(List<EntityTexture> textures) async {
+    if (textures.isEmpty) return;
+    final payload = textures.map((t) => t.toMap()).toList();
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('setEntityTextures', payload);
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.setEntityTextures(
+        textureId: _textureId!,
+        textures: textures,
+      );
+    }
+  }
+
+  /// Null [names] resets every active texture.
+  Future<void> resetEntityTextures(List<String>? names) async {
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('resetEntityTextures', names);
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.resetEntityTextures(
+        textureId: _textureId!,
+        names: names,
+      );
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+
+  Future<Map<String, ByteData>> _loadGltfResources() async {
+    Map<String, ByteData> resources = {};
+
+    String baseDir = '';
+    if (widget.modelPath != null) {
+      baseDir = widget.modelPath!
+          .substring(0, widget.modelPath!.lastIndexOf('/') + 1);
+    } else if (widget.modelUrl != null) {
+      baseDir =
+          widget.modelUrl!.substring(0, widget.modelUrl!.lastIndexOf('/') + 1);
+    }
+
+    for (final file in widget.resources) {
+      try {
+        if (widget.modelPath != null) {
+          resources[file] = await rootBundle.load('$baseDir$file');
+        } else if (widget.modelUrl != null) {
+          final uri = Uri.parse('$baseDir$file');
+          resources[file] = await _loadNetworkResource(uri.toString());
+        }
+      } catch (e) {
+        debugPrint('Optional resource not found: $file ($e)');
+      }
+    }
+
+    return resources;
+  }
+
+  Future<ByteData> _loadNetworkResource(String url) async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return ByteData.view(response.bodyBytes.buffer);
+    }
+    throw Exception('Failed to load resource: $url (${response.statusCode})');
+  }
+
+  void _onSelectionChanged(List<EntityData> selectedEntities) {
+    widget.onSelectionChanged?.call(selectedEntities);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Dispose
+  // ---------------------------------------------------------------------------
+
+  @override
+  void dispose() {
+    _selectionSubscription?.cancel();
+    _cacheSelectionSubscription?.cancel();
+    _selectionRejectedSubscription?.cancel();
+    _iosEventSubscription?.cancel();
+    widget.controller?.detach(this);
+
+    if (Platform.isIOS) {
+      _iosMethodChannel?.invokeMethod('dispose');
+      _iosMethodChannel = null;
+    } else {
+      if (_platform != null && _textureId != null) {
+        _platform!.disposeTexture(_textureId!);
+      }
+    }
+
+    super.dispose();
+  }
+}

@@ -476,10 +476,12 @@ function createRoundedBox(width, height, depth, radius = 0.022) {
   shape.lineTo(-width / 2, -hh);
   shape.quadraticCurveTo(-width / 2, -height / 2, -hw, -height / 2);
 
+  const isSmall = Math.max(width, height, depth) < 0.12;
   const geo = new THREE.ExtrudeGeometry(shape, {
     depth: Math.max(depth - r * 2, 0.008),
     bevelEnabled: true,
-    bevelSegments: 3,
+    bevelSegments: isSmall ? 1 : 2,
+    curveSegments: isSmall ? 2 : 4,
     steps: 1,
     bevelSize: r,
     bevelThickness: r
@@ -493,9 +495,32 @@ function createRoundedBox(width, height, depth, radius = 0.022) {
     const v = (pos.getY(i) + height / 2) / height;
     uv.setXY(i, Math.max(0, Math.min(1, u)), Math.max(0, Math.min(1, v)));
   }
-  geo.computeVertexNormals();
-  roundedBoxCache.set(key, geo);
-  return geo;
+
+  // Weld duplicate vertices so ExtrudeGeometry becomes a compact indexed mesh with true smooth normals!
+  const vMap = new Map();
+  const newPos = [];
+  const newUv = [];
+  const indices = [];
+  for (let i = 0; i < pos.count; i++) {
+    const px = pos.getX(i), py = pos.getY(i), pz = pos.getZ(i);
+    const u = uv.getX(i), v = uv.getY(i);
+    const vKey = `${Math.round(px * 2000)},${Math.round(py * 2000)},${Math.round(pz * 2000)},${Math.round(u * 500)},${Math.round(v * 500)}`;
+    let idx = vMap.get(vKey);
+    if (idx === undefined) {
+      idx = newPos.length / 3;
+      vMap.set(vKey, idx);
+      newPos.push(px, py, pz);
+      newUv.push(u, v);
+    }
+    indices.push(idx);
+  }
+  const indexedGeo = new THREE.BufferGeometry();
+  indexedGeo.setAttribute('position', new THREE.Float32BufferAttribute(newPos, 3));
+  indexedGeo.setAttribute('uv', new THREE.Float32BufferAttribute(newUv, 2));
+  indexedGeo.setIndex(indices);
+  indexedGeo.computeVertexNormals();
+  roundedBoxCache.set(key, indexedGeo);
+  return indexedGeo;
 }
 
 function createUnavailableBadge() {
