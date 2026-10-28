@@ -62,6 +62,7 @@ class Interactive3dPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
       "loadEnvironment" -> handleLoadEnvironment(call, result)
       "setZoomLevel" -> handleSetZoomLevel(call, result)
       "setSeatMapCamera" -> handleSetSeatMapCamera(call, result)
+      "setPreviewPose" -> handleSetPreviewPose(call, result)
       "resetCamera" -> handleResetCamera(call, result)
       "zoomBy" -> handleZoomBy(call, result)
       "setPartGroupVisibility" -> handleSetPartGroupVisibility(call, result)
@@ -164,6 +165,7 @@ class Interactive3dPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
         backgroundColor = backgroundColor,
         defaultZoom = call.argument<Double>("defaultZoom")?.toFloat(),
         seatMapInitialZ = call.argument<Double>("seatMapInitialZ")?.toFloat(),
+        previewSnapMode = call.argument<Boolean>("previewSnapMode") ?: false,
         result = result
       )
     } catch (e: Exception) {
@@ -222,6 +224,21 @@ class Interactive3dPlugin : FlutterPlugin, MethodChannel.MethodCallHandler {
       ?: return result.error("TEXTURE_NOT_FOUND", "Texture $textureId not found", null)
 
     entry.setSeatMapCamera(cameraZ)
+    result.success(null)
+  }
+
+  private fun handleSetPreviewPose(call: MethodCall, result: MethodChannel.Result) {
+    val textureId = call.argument<Number>("textureId")?.toLong()
+    val yaw = call.argument<Double>("yaw")?.toFloat()
+    val scale = call.argument<Double>("scale")?.toFloat()
+
+    if (textureId == null || yaw == null || scale == null)
+      return result.error("INVALID_ARGUMENT", "textureId, yaw, and scale required", null)
+
+    val entry = textureEntries[textureId]
+      ?: return result.error("TEXTURE_NOT_FOUND", "Texture $textureId not found", null)
+
+    entry.setPreviewPose(yaw, scale)
     result.success(null)
   }
 

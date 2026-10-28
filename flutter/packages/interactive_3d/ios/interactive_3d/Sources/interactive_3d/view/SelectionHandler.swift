@@ -9,6 +9,7 @@ class SelectionHandler {
 
     var selectedNodes: Set<SCNNode> = []
     var originalMaterials: [SCNNode: SCNMaterial] = [:]
+    var originalTransforms: [SCNNode: simd_float4x4] = [:]
     var selectionColor: [Double]?
     var patchColors: [[String: Any]]?
     var clearSelectionsOnHighlight: Bool = false
@@ -59,7 +60,24 @@ class SelectionHandler {
         return UIColor.red
     }
 
-    /// Applies the selection highlight color to a node and all of its descendant geometry nodes.
+    private static func buildReclineLocalMatrix(_ t: Float) -> simd_float4x4 {
+        let theta: Float = -0.22 * t
+        let c = cos(theta)
+        let s = sin(theta)
+        let sx: Float = 1.0 + 0.035 * t
+        let sy: Float = 1.0 + 0.045 * t
+        let sz: Float = 1.0 + 0.075 * t
+        let py: Float = 0.22
+        let pz: Float = -0.06
+        return simd_float4x4(
+            simd_float4(sx, 0, 0, 0),
+            simd_float4(0, sy * c, sz * s, 0),
+            simd_float4(0, -sy * s, sz * c, 0),
+            simd_float4(0, py - sy * (c * py - s * pz), pz - sz * (s * py + c * pz) - 0.04 * t, 1)
+        )
+    }
+
+    /// Applies the selection highlight color & recline/stretch animation to a node and its descendants.
     func applyHighlight(to node: SCNNode, forNodeName nodeName: String?) {
         let color = resolveColor(for: nodeName)
         var geoNodes: [SCNNode] = []
@@ -72,9 +90,18 @@ class SelectionHandler {
             if originalMaterials[gNode] == nil {
                 originalMaterials[gNode] = material.copy() as? SCNMaterial
             }
-            material.diffuse.contents = color
-            material.emission.contents = color.withAlphaComponent(0.15)
-            material.multiply.contents = UIColor.white
+            material.multiply.contents = color
+            material.emission.contents = color.withAlphaComponent(0.32)
+        }
+        if let name = nodeName, name.starts(with: "seat_") {
+            let orig = originalTransforms[node] ?? node.simdTransform
+            originalTransforms[node] = orig
+            let reclined = simd_mul(orig, Self.buildReclineLocalMatrix(1.0))
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.21
+            SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
+            node.simdTransform = reclined
+            SCNTransaction.commit()
         }
     }
 
@@ -107,6 +134,13 @@ class SelectionHandler {
             if overrideParams[gNode] == nil {
                 originalMaterials.removeValue(forKey: gNode)
             }
+        }
+        if let orig = originalTransforms[node] {
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.17
+            SCNTransaction.animationTimingFunction = CAMediaTimingFunction(name: .easeOut)
+            node.simdTransform = orig
+            SCNTransaction.commit()
         }
     }
 

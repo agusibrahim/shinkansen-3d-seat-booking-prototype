@@ -50,6 +50,7 @@ abstract class Interactive3dPlatform extends PlatformInterface {
     List<EntityTexture>? initialEntityTextures,
     double? defaultZoom,
     double? seatMapInitialZ,
+    bool previewSnapMode = false,
   });
 
   /// Loads IBL lighting and a skybox; either one may be omitted.
@@ -73,6 +74,9 @@ abstract class Interactive3dPlatform extends PlatformInterface {
 
   /// Positions the camera in SeatMap mode at [cameraZ].
   Future<void> setSeatMapCamera(int textureId, double cameraZ);
+
+  /// Updates the horizontal yaw and scale in Confirmation preview mode.
+  Future<void> setPreviewPose(int textureId, double yaw, double scale);
 
   /// Returns the camera to its framing after load, at [zoom].
   Future<void> resetCamera(int textureId, double zoom);

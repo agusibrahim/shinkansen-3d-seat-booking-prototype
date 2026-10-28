@@ -125,6 +125,9 @@ class Interactive3d extends StatefulWidget {
   /// When non-null, initializes the camera in 64-degree FOV SeatMap mode at [seatMapInitialZ].
   final double? seatMapInitialZ;
 
+  /// When true, locks camera to Confirmation preview mode (controlled via [setPreviewPose]).
+  final bool previewSnapMode;
+
   const Interactive3d({
     super.key,
     this.modelPath,
@@ -158,6 +161,7 @@ class Interactive3d extends StatefulWidget {
     this.initialMaterialOverrides,
     this.initialEntityTextures,
     this.seatMapInitialZ,
+    this.previewSnapMode = false,
   });
 
   @override
@@ -386,6 +390,7 @@ class Interactive3dState extends State<Interactive3d> {
         'initialEntityTextures':
             widget.initialEntityTextures?.map((t) => t.toMap()).toList(),
         'seatMapInitialZ': widget.seatMapInitialZ,
+        'previewSnapMode': widget.previewSnapMode,
       });
       if (!mounted) return;
 
@@ -424,7 +429,7 @@ class Interactive3dState extends State<Interactive3d> {
   // ---------------------------------------------------------------------------
 
   Widget _buildTextureWidget() {
-    if (widget.seatMapInitialZ != null) {
+    if (widget.seatMapInitialZ != null || widget.previewSnapMode) {
       return Texture(textureId: _textureId!);
     }
     return GestureDetector(
@@ -508,6 +513,7 @@ class Interactive3dState extends State<Interactive3d> {
       initialEntityTextures: widget.initialEntityTextures,
       defaultZoom: _validDefaultZoom,
       seatMapInitialZ: widget.seatMapInitialZ,
+      previewSnapMode: widget.previewSnapMode,
     );
     if (!mounted) return;
 
@@ -599,6 +605,19 @@ class Interactive3dState extends State<Interactive3d> {
     } else {
       if (_platform == null || _textureId == null) return;
       await _platform!.setSeatMapCamera(_textureId!, cameraZ);
+    }
+  }
+
+  Future<void> setPreviewPose(double yaw, double scale) async {
+    if (!yaw.isFinite || !scale.isFinite) return;
+    if (Platform.isIOS) {
+      await _iosMethodChannel?.invokeMethod('setPreviewPose', {
+        'yaw': yaw,
+        'scale': scale,
+      });
+    } else {
+      if (_platform == null || _textureId == null) return;
+      await _platform!.setPreviewPose(_textureId!, yaw, scale);
     }
   }
 

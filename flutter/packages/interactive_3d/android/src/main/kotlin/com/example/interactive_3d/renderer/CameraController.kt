@@ -43,6 +43,12 @@ internal class CameraController {
         private set
     var seatMapZ = 0.0f
         private set
+    var previewSnapMode = false
+        private set
+    var previewYaw = 0.0f
+        private set
+    var previewScale = 1.0f
+        private set
 
     // Adaptive frame pacing
     var isInteracting = false
@@ -79,6 +85,20 @@ internal class CameraController {
             )
             return
         }
+        if (previewSnapMode) {
+            val s = previewScale.coerceIn(0.08f, 2.5f).toDouble()
+            val dist = 6.2 / s
+            val targetY = 0.50
+            val eyeX = dist * sin((-previewYaw).toDouble())
+            val eyeY = targetY + (0.76 / s)
+            val eyeZ = dist * cos((-previewYaw).toDouble())
+            camera.lookAt(
+                eyeX, eyeY, eyeZ,
+                0.0, targetY, 0.0,
+                0.0, 1.0, 0.0
+            )
+            return
+        }
         val radius = orbitRadius / zoomLevel
         val x = radius * cos(orbitAngleX.toDouble()) * sin(orbitAngleY.toDouble())
         val y = radius * sin(orbitAngleX.toDouble())
@@ -109,6 +129,16 @@ internal class CameraController {
             )
             return
         }
+        if (previewSnapMode) {
+            camera.setProjection(
+                16.0,
+                if (height > 0) width.toDouble() / height.toDouble() else 1.0,
+                0.4,
+                60.0,
+                Camera.Fov.VERTICAL
+            )
+            return
+        }
         camera.setProjection(
             DEFAULT_FOV / zoomLevel,
             if (height > 0) width.toDouble() / height.toDouble() else 1.0,
@@ -120,17 +150,36 @@ internal class CameraController {
 
     fun enableSeatMapMode(initialZ: Float) {
         seatMapMode = true
+        previewSnapMode = false
         seatMapZ = initialZ
         markInteracting()
     }
 
     fun disableSeatMapMode() {
         seatMapMode = false
+        previewSnapMode = false
     }
 
     fun setSeatMapZ(z: Float) {
         seatMapMode = true
+        previewSnapMode = false
         seatMapZ = z
+        markInteracting()
+    }
+
+    fun enablePreviewSnapMode() {
+        previewSnapMode = true
+        seatMapMode = false
+        previewYaw = 0.0f
+        previewScale = 0.1f
+        markInteracting()
+    }
+
+    fun setPreviewPose(yaw: Float, scale: Float) {
+        previewSnapMode = true
+        seatMapMode = false
+        previewYaw = yaw
+        previewScale = scale
         markInteracting()
     }
 

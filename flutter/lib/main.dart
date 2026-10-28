@@ -1077,6 +1077,7 @@ class _RootPrototypeContainerState extends State<RootPrototypeContainer> {
                                 key: _seatMapKey,
                                 seatMap: seatMap,
                                 currentEntity: currentEntity,
+                                initialSelectedSeat: _selectedReservableEntity,
                                 fromStation: _headerInfo.fromStation,
                                 toStation: _headerInfo.toStation,
                                 onSeatSelected: (rev) {

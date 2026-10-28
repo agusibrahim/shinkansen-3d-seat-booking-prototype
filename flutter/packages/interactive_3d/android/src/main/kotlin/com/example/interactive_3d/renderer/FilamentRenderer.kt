@@ -259,7 +259,8 @@ class FilamentRenderer(
         initialMaterialOverrides: List<Map<String, Any>>? = null,
         initialEntityTextures: List<Map<String, Any>>? = null,
         defaultZoom: Float? = null,
-        seatMapInitialZ: Float? = null
+        seatMapInitialZ: Float? = null,
+        previewSnapMode: Boolean = false
     ): Boolean {
         val eng = engine ?: return false
         val scn = scene ?: return false
@@ -268,6 +269,7 @@ class FilamentRenderer(
 
         // Clean up previous model
         selection.cleanup(eng)
+        selection.onTransformAnimated = { requestRender() }
         selection.iblLoaded = environment.iblLoaded
         modelLoader.cleanupCurrentModel(scn, loader)
 
@@ -295,9 +297,15 @@ class FilamentRenderer(
         val asset = modelLoader.loadModel(eng, scn, loader, resLoader, buffer, fileName, resources)
             ?: return false
 
-        // Fit camera to model or initialize SeatMap top-down camera
+        // Fit camera to model or initialize SeatMap / PreviewSnap camera
         if (seatMapInitialZ != null) {
             cameraController.enableSeatMapMode(seatMapInitialZ)
+            camera?.let {
+                cameraController.applyProjection(it, width, height)
+                cameraController.applyToCamera(it)
+            }
+        } else if (previewSnapMode) {
+            cameraController.enablePreviewSnapMode()
             camera?.let {
                 cameraController.applyProjection(it, width, height)
                 cameraController.applyToCamera(it)
@@ -474,6 +482,14 @@ class FilamentRenderer(
     fun setSeatMapCamera(cameraZ: Float) {
         cameraController.setSeatMapZ(cameraZ)
         camera?.let { cameraController.applyToCamera(it) }
+    }
+
+    fun setPreviewPose(yaw: Float, scale: Float) {
+        cameraController.setPreviewPose(yaw, scale)
+        camera?.let {
+            cameraController.applyProjection(it, width, height)
+            cameraController.applyToCamera(it)
+        }
     }
 
     /** Returns to the framing used right after load, at [zoom]. */

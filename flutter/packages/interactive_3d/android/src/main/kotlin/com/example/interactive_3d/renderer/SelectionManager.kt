@@ -1,8 +1,10 @@
 package com.example.interactive_3d.renderer
 
+import android.animation.ValueAnimator
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import android.view.animation.DecelerateInterpolator
 import com.google.android.filament.Engine
 import com.google.android.filament.MaterialInstance
 import com.google.android.filament.Texture
@@ -10,8 +12,10 @@ import com.google.android.filament.TextureSampler
 import com.google.android.filament.android.TextureHelper
 import com.google.android.filament.gltfio.FilamentAsset
 import com.example.interactive_3d.Interactive3dCacheManager
+import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.log2
+import kotlin.math.sin
 
 /**
  * Handles entity selection, highlighting, and cache coloring.
@@ -74,6 +78,86 @@ internal class SelectionManager {
     // Event listeners
     var onSelectionChanged: ((List<Map<String, Any>>) -> Unit)? = null
     var onCacheSelectionChanged: ((List<Map<String, Any>>) -> Unit)? = null
+    var onTransformAnimated: (() -> Unit)? = null
+
+    // Seat recline/stretch animation state
+    private val originalTransforms = mutableMapOf<Int, FloatArray>()
+    private val activeAnimators = mutableMapOf<Int, ValueAnimator>()
+    private val currentReclineProgress = mutableMapOf<Int, Float>()
+
+    private fun animateSeatRecline(entity: Int, engine: Engine, toReclined: Boolean) {
+        val tm = engine.transformManager
+        if (!tm.hasComponent(entity)) return
+        val ti = tm.getInstance(entity)
+        val orig = originalTransforms.getOrPut(entity) {
+            val m = FloatArray(16)
+            tm.getTransform(ti, m)
+            m
+        }
+        activeAnimators.remove(entity)?.cancel()
+        val startT = currentReclineProgress[entity] ?: if (toReclined) 0f else 1f
+        val endT = if (toReclined) 1f else 0f
+        if (kotlin.math.abs(startT - endT) < 0.005f) {
+            applyReclineTransform(entity, engine, orig, endT)
+            return
+        }
+        val anim = ValueAnimator.ofFloat(startT, endT).apply {
+            duration = if (toReclined) 210L else 170L
+            interpolator = DecelerateInterpolator(1.6f)
+            addUpdateListener { va ->
+                val t = va.animatedValue as Float
+                currentReclineProgress[entity] = t
+                applyReclineTransform(entity, engine, orig, t)
+                onTransformAnimated?.invoke()
+            }
+        }
+        activeAnimators[entity] = anim
+        anim.start()
+    }
+
+    private fun applyReclineTransform(entity: Int, engine: Engine, orig: FloatArray, t: Float) {
+        try {
+            val tm = engine.transformManager
+            if (!tm.hasComponent(entity)) return
+            val ti = tm.getInstance(entity)
+            if (t <= 0.001f) {
+                tm.setTransform(ti, orig)
+                return
+            }
+            // Local seat recline around lower lumbar pivot (0, 0.22, -0.06) + subtle stretch
+            val theta = -0.22f * t
+            val c = cos(theta.toDouble()).toFloat()
+            val s = sin(theta.toDouble()).toFloat()
+            val sx = 1.0f + 0.035f * t
+            val sy = 1.0f + 0.045f * t
+            val sz = 1.0f + 0.075f * t
+            val py = 0.22f
+            val pz = -0.06f
+
+            val local = FloatArray(16)
+            local[0] = sx
+            local[5] = sy * c
+            local[6] = sz * s
+            local[9] = -sy * s
+            local[10] = sz * c
+            local[12] = 0f
+            local[13] = py - sy * (c * py - s * pz)
+            local[14] = pz - sz * (s * py + c * pz) - 0.04f * t
+            local[15] = 1f
+
+            val out = FloatArray(16)
+            for (col in 0..3) {
+                for (row in 0..3) {
+                    var sum = 0f
+                    for (k in 0..3) {
+                        sum += orig[k * 4 + row] * local[col * 4 + k]
+                    }
+                    out[col * 4 + row] = sum
+                }
+            }
+            tm.setTransform(ti, out)
+        } catch (_: Exception) {}
+    }
 
     /**
      * Processes a tap on [entity]. Toggles selection state and applies or
@@ -130,24 +214,18 @@ internal class SelectionManager {
             originalMaterials[entity] = backup
         }
 
-        // Create solid-color instances
+        // Duplicate original material instances so woven fabric / quilted seam textures are preserved!
         for (i in 0 until count) {
             var created: MaterialInstance? = null
             try {
                 val originalMat = originalMaterials[entity]?.get(i)
                     ?: rcm.getMaterialInstanceAt(ri, i)
-                val selectionMat = originalMat.material.createInstance().also { created = it }
-
-                // Disable texture sampling so baseColorFactor is the sole color source
-                selectionMat.setParameter("baseColorIndex", -1)
-                selectionMat.setParameter("metallicRoughnessIndex", -1)
-                selectionMat.setParameter("normalIndex", -1)
-                selectionMat.setParameter("emissiveIndex", -1)
+                val selectionMat = MaterialInstance.duplicate(originalMat, "selection").also { created = it }
 
                 selectionMat.setParameter("baseColorFactor", color[0], color[1], color[2], color[3])
-                selectionMat.setParameter("emissiveFactor", 0.0f, 0.0f, 0.0f)
-                selectionMat.setParameter("metallicFactor", 0.0f)
-                selectionMat.setParameter("roughnessFactor", 1.0f)
+                selectionMat.setParameter("emissiveFactor", color[0] * 0.28f, color[1] * 0.28f, color[2] * 0.28f)
+                selectionMat.setParameter("metallicFactor", 0.04f)
+                selectionMat.setParameter("roughnessFactor", 0.55f)
 
                 rcm.setMaterialInstanceAt(ri, i, selectionMat)
                 trackHighlight(entity, i, selectionMat, engine)
@@ -157,8 +235,8 @@ internal class SelectionManager {
             }
         }
         entitiesWithSelectionColor.add(entity)
-        // Selection takes over visually; override is no longer rendered.
         entitiesWithOverrideApplied.remove(entity)
+        animateSeatRecline(entity, engine, toReclined = true)
     }
 
     /**
@@ -523,6 +601,7 @@ internal class SelectionManager {
         val ri = rcm.getInstance(entity)
 
         if (entitiesWithSelectionColor.contains(entity) || entitiesWithCacheColor.contains(entity)) {
+            animateSeatRecline(entity, engine, toReclined = false)
             // Restore to override material if one exists, otherwise GLB original.
             val restoreTo = overrideMaterials[entity] ?: originalMaterials[entity]
             if (restoreTo != null) {
@@ -775,6 +854,10 @@ internal class SelectionManager {
 
     /** Destroys all selection and override state; [cleanup] unbinds everything first. */
     private fun reset(engine: Engine) {
+        activeAnimators.values.forEach { it.cancel() }
+        activeAnimators.clear()
+        originalTransforms.clear()
+        currentReclineProgress.clear()
         selectedEntities.clear()
         entityVisibilities.clear()
         destroyHighlightInstances(engine)

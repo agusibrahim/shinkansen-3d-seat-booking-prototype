@@ -123,6 +123,7 @@ class MethodChannelInteractive3d extends Interactive3dPlatform {
     List<EntityTexture>? initialEntityTextures,
     double? defaultZoom,
     double? seatMapInitialZ,
+    bool previewSnapMode = false,
   }) async {
     Uint8List modelBytes;
     String modelName;
@@ -168,6 +169,7 @@ class MethodChannelInteractive3d extends Interactive3dPlatform {
           initialEntityTextures?.map((t) => t.toMap()).toList(),
       'defaultZoom': defaultZoom,
       'seatMapInitialZ': seatMapInitialZ,
+      'previewSnapMode': previewSnapMode,
     });
   }
 
@@ -176,6 +178,15 @@ class MethodChannelInteractive3d extends Interactive3dPlatform {
     await _pluginChannel.invokeMethod('setSeatMapCamera', {
       'textureId': textureId,
       'cameraZ': cameraZ,
+    });
+  }
+
+  @override
+  Future<void> setPreviewPose(int textureId, double yaw, double scale) async {
+    await _pluginChannel.invokeMethod('setPreviewPose', {
+      'textureId': textureId,
+      'yaw': yaw,
+      'scale': scale,
     });
   }
 

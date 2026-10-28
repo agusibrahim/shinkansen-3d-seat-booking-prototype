@@ -130,6 +130,7 @@ class Interactive3dTextureEntry(
         backgroundColor: List<Double>? = null,
         defaultZoom: Float? = null,
         seatMapInitialZ: Float? = null,
+        previewSnapMode: Boolean = false,
         result: MethodChannel.Result
     ) {
         replyLoad { it.error("LOAD_SUPERSEDED", "A newer model load replaced this one", null) }
@@ -146,7 +147,7 @@ class Interactive3dTextureEntry(
                     buffer, fileName, resources, preselectedEntities,
                     selectionColor, patchColors, enableCache, cacheColor,
                     clearSelectionsOnHighlight, selectionSequence, unselectableEntities,
-                    initialMaterialOverrides, initialEntityTextures, defaultZoom, seatMapInitialZ
+                    initialMaterialOverrides, initialEntityTextures, defaultZoom, seatMapInitialZ, previewSnapMode
                 )
                 replyLoad {
                     if (loaded) it.success(null)
@@ -189,6 +190,9 @@ class Interactive3dTextureEntry(
 
     fun setSeatMapCamera(cameraZ: Float) =
         mainHandler.post { filamentRenderer?.setSeatMapCamera(cameraZ) }
+
+    fun setPreviewPose(yaw: Float, scale: Float) =
+        mainHandler.post { filamentRenderer?.setPreviewPose(yaw, scale) }
 
     fun resetCamera(zoom: Float) =
         mainHandler.post { filamentRenderer?.resetCamera(zoom) }

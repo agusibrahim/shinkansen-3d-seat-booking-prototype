@@ -118,6 +118,32 @@ async () => {
     return new THREE.Group();
   }
 
+  // Build a crisp 3D vector Unavailable Badge (⊘) with ZERO transparent PNG texture
+  // so Android Filament & iOS SceneKit never show a black square background!
+  function create3DVectorUnavailableBadge() {
+    const group = new THREE.Group();
+    const badgeMat = new THREE.MeshBasicMaterial({
+      color: 0xcb3a64,
+      side: THREE.DoubleSide
+    });
+    const ringGeo = new THREE.RingGeometry(0.068, 0.096, 28);
+    const ringMesh = new THREE.Mesh(ringGeo, badgeMat);
+    const slashGeo = new THREE.PlaneGeometry(0.165, 0.026);
+    const slashMesh = new THREE.Mesh(slashGeo, badgeMat);
+    slashMesh.rotation.z = -Math.PI / 4;
+    slashMesh.position.z = 0.001;
+    group.add(ringMesh, slashMesh);
+    group.rotation.x = -Math.PI / 3;
+    group.position.set(0, 0.69, 0.085);
+    return group;
+  }
+
+  function removePngUnavailableBadge(root) {
+    root.children = root.children.filter(
+      (c) => !(c.isMesh && c.geometry && c.geometry.type === 'PlaneGeometry' && Math.abs(c.position.y - 0.69) < 0.05)
+    );
+  }
+
   // Downscale canvas textures to 256x256 PNG so GLBs stay super fast & lightweight (~300KB)
   function canvasToPngDataUrl(img) {
     if (!img || !img.toDataURL) return null;
@@ -483,6 +509,7 @@ async () => {
   for (const sc of seatClasses) {
     const builder = new GLBBuilder();
     const built = createSeatByModelName(sc.model);
+    removePngUnavailableBadge(built.root);
     built.root.children = built.root.children.filter(
       (c) => !(c.isMesh && c.geometry.type === 'PlaneGeometry' && c.position.y < 0.05)
     );
@@ -543,6 +570,7 @@ async () => {
         const protoSeat = createSeatByModelName(modelKey);
         if (!protoSeat) continue;
         protoSeat.applyCustomState(stateKey);
+        removePngUnavailableBadge(protoSeat.root);
 
         if (isAvail) {
           // Separate upholstery (selectable node `seat_<id>`) from static frame/armrest (`frame_<id>`)
@@ -562,12 +590,17 @@ async () => {
           );
           builder.addNode(`frame_${rev.id}`, frmMeshIdx, pos, rot);
         } else {
-          // Unavailable or adjacent car seat: instanced as non-selectable static node
+          // Unavailable seat in current car gets the crisp 3D vector ⊘ badge; adjacent car seats are just dimmed
+          const showBadge = !rev.isAvailable && isCurrent;
+          if (showBadge) {
+            protoSeat.root.add(create3DVectorUnavailableBadge());
+          }
+          const cacheTag = `dis:${modelKey}:${showBadge ? 'badge' : 'dim'}`;
           const disMap = collectMatMap(protoSeat.root);
           const disMeshIdx = builder.buildMesh(
-            `dis_${modelKey}`,
+            `dis_${modelKey}_${showBadge ? 'b' : 'd'}`,
             disMap,
-            `dis:${modelKey}`
+            cacheTag
           );
           builder.addNode(`unavail_${rev.id}`, disMeshIdx, pos, rot);
         }

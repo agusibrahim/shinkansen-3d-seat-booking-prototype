@@ -97,6 +97,8 @@ class Interactive3DPlatformView: NSObject, FlutterPlatformView, FlutterStreamHan
             handleSetZoomLevel(call, result: result)
         case "setSeatMapCamera":
             handleSetSeatMapCamera(call, result: result)
+        case "setPreviewPose":
+            handleSetPreviewPose(call, result: result)
         case "triggerTap":
             handleTriggerTap(call, result: result)
         case "resetCamera":
@@ -195,6 +197,7 @@ class Interactive3DPlatformView: NSObject, FlutterPlatformView, FlutterStreamHan
 
         let modelName = (args["name"] as? String) ?? ""
         let seatMapInitialZ = args["seatMapInitialZ"] as? Double
+        let previewSnapMode = (args["previewSnapMode"] as? Bool) ?? false
         let resources = ((args["resources"] as? [String: FlutterStandardTypedData]) ?? [:])
             .mapValues { $0.data }
 
@@ -209,6 +212,8 @@ class Interactive3DPlatformView: NSObject, FlutterPlatformView, FlutterStreamHan
 
                 if let initialZ = seatMapInitialZ {
                     self.sceneManager.setSeatMapCamera(Float(initialZ))
+                } else if previewSnapMode {
+                    self.sceneManager.setPreviewPose(yaw: 0.0, scale: 0.1)
                 } else {
                     self.sceneManager.seatMapMode = false
                     self.scnView.allowsCameraControl = true
@@ -274,6 +279,19 @@ class Interactive3DPlatformView: NSObject, FlutterPlatformView, FlutterStreamHan
         }
         DispatchQueue.main.async { [weak self] in
             self?.sceneManager.setSeatMapCamera(Float(cameraZ))
+            result(nil)
+        }
+    }
+
+    private func handleSetPreviewPose(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let args = call.arguments as? [String: Any],
+              let yaw = args["yaw"] as? Double,
+              let scale = args["scale"] as? Double else {
+            result(FlutterError(code: "INVALID_ARGUMENT", message: "yaw and scale required", details: nil))
+            return
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.sceneManager.setPreviewPose(yaw: Float(yaw), scale: Float(scale))
             result(nil)
         }
     }

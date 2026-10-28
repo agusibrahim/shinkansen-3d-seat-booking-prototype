@@ -67,6 +67,12 @@ class Interactive3dController {
     await _state!.setSeatMapCamera(cameraZ);
   }
 
+  /// Updates the horizontal yaw and scale of the 3D seat in Confirmation preview mode.
+  Future<void> setPreviewPose(double yaw, double scale) async {
+    if (_state == null) return;
+    await _state!.setPreviewPose(yaw, scale);
+  }
+
   /// Forwards a tap at local widget coordinates ([x], [y]) to the 3D picker.
   Future<void> triggerTap(double x, double y) async {
     if (_state == null) return;

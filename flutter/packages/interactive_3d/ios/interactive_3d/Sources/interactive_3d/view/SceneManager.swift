@@ -95,6 +95,28 @@ class SceneManager {
         view.setNeedsDisplay()
     }
 
+    /// Positions the camera in Confirmation preview mode at horizontal [yaw] and [scale].
+    func setPreviewPose(yaw: Float, scale: Float) {
+        guard let view = scnView, let scene = view.scene else { return }
+        seatMapMode = false
+        view.allowsCameraControl = false
+        let s = max(0.08, min(scale, 2.5))
+        let dist: Float = 6.2 / s
+        let target = simd_float3(0.0, 0.50, 0.0)
+        let eyeX = dist * sin(-yaw)
+        let eyeY: Float = 0.50 + (0.76 / s)
+        let eyeZ = dist * cos(-yaw)
+        let pov = view.pointOfView ?? makeCamera(in: scene)
+        pov.camera?.fieldOfView = 16.0
+        pov.camera?.projectionDirection = .vertical
+        pov.camera?.zNear = 0.4
+        pov.camera?.zFar = 60.0
+        pov.camera?.automaticallyAdjustsZRange = false
+        pov.simdWorldPosition = simd_float3(eyeX, eyeY, eyeZ)
+        pov.simdLook(at: target, up: simd_float3(0, 1, 0), localFront: SCNNode.simdLocalFront)
+        view.setNeedsDisplay()
+    }
+
     /// Frames the model the way the Android renderer does at [zoomLevel].
     func setCameraZoomLevel(_ zoomLevel: Float) {
         seatMapMode = false

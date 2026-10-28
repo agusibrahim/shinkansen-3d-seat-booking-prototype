@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:interactive_3d/interactive_3d.dart';
 import 'package:vector_math/vector_math_64.dart' as vm;
 import '../models/booking_models.dart';
@@ -16,6 +17,7 @@ bool get _isFlutterTest => Platform.environment.containsKey('FLUTTER_TEST');
 class SeatMap3DView extends StatefulWidget {
   final SeatMapModel seatMap;
   final SeatClassEntity currentEntity;
+  final ReservableEntity? initialSelectedSeat;
   final String fromStation;
   final String toStation;
   final ValueChanged<ReservableEntity> onSeatSelected;
@@ -30,6 +32,7 @@ class SeatMap3DView extends StatefulWidget {
     super.key,
     required this.seatMap,
     required this.currentEntity,
+    this.initialSelectedSeat,
     required this.fromStation,
     required this.toStation,
     required this.onSeatSelected,
@@ -78,6 +81,7 @@ class SeatMap3DViewState extends State<SeatMap3DView>
   @override
   void initState() {
     super.initState();
+    _selectedSeat = widget.initialSelectedSeat;
     _ticker = createTicker(_onTick);
     _initEntityBounds(playEntrance: true);
   }
@@ -86,9 +90,12 @@ class SeatMap3DViewState extends State<SeatMap3DView>
   void didUpdateWidget(covariant SeatMap3DView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.currentEntity.seatClass != widget.currentEntity.seatClass) {
-      _selectedSeat = null;
+      _selectedSeat = widget.initialSelectedSeat;
       _seatNavState = 'hide';
       _initEntityBounds(playEntrance: true);
+    } else if (widget.initialSelectedSeat != null &&
+        _selectedSeat?.id != widget.initialSelectedSeat?.id) {
+      _selectedSeat = widget.initialSelectedSeat;
     }
   }
 
@@ -123,7 +130,7 @@ class SeatMap3DViewState extends State<SeatMap3DView>
     final seatZ = _selectedSeat!.transformedModelEntity.position.z;
     const centerFloorZ = -4.92;
     final targetZ = (-seatZ + centerFloorZ).clamp(_lowerZ, _upperZ);
-    animateToZ(targetZ, durationSec: 0.65);
+    animateToZ(targetZ, durationSec: 0.70);
   }
 
   void animateToZ(double targetZ, {double durationSec = 0.6}) {
@@ -262,17 +269,23 @@ class SeatMap3DViewState extends State<SeatMap3DView>
 
     for (final rev in widget.currentEntity.reservableEntities) {
       if (rev.id == seatId && rev.isAvailable) {
+        final isNewSelection = _selectedSeat?.id != rev.id;
         setState(() {
           _selectedSeat = rev;
           _seatNavState = 'visible';
         });
+        HapticFeedback.lightImpact();
         widget.onSeatSelected(rev);
-        widget.onBadgeUpdate(
-          message:
-              'Seat ${rev.name} in ${rev.carNumber.toLowerCase()} has been selected.',
-          visible: true,
-          autoHideMs: 2200,
-        );
+        if (isNewSelection) {
+          widget.onBadgeUpdate(
+            message:
+                'Seat ${rev.name} in ${rev.carNumber.toLowerCase()} has been selected.',
+            visible: true,
+            autoHideMs: 4000,
+          );
+        }
+        // Smoothly center the newly selected seat in the viewport (SeatMapSceneView.swift line 131)
+        scrollToSelectedSeat();
         break;
       }
     }
@@ -360,7 +373,10 @@ class SeatMap3DViewState extends State<SeatMap3DView>
                   seatMapInitialZ: -_currentContentZ,
                   backgroundColor: bgCol,
                   solidBackgroundColor: bgRgba,
-                  selectionColor: const [0.118, 0.620, 0.322, 1.0],
+                  preselectedEntities: _selectedSeat != null
+                      ? ['seat_${_selectedSeat!.id}']
+                      : null,
+                  selectionColor: const [0.14, 0.72, 0.38, 1.0],
                   onSelectionChanged: _handleNativeSelectionChanged,
                   onModelLoaded: _syncNativeCamera,
                 ),
@@ -430,11 +446,12 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
     final halfW = w * 0.5;
     final halfH = h * 0.5;
 
-    // 1. Draw 3D-projected Row Numbers along left & right walls
+    // 1. Draw 3D-projected Row Numbers along left & right walls at (x = ±1.74, y = 2.65)
     for (final tn in seatMap.transformedTextModelEntities) {
       final wz = tn.position.z + currentContentZ;
       if (wz < -19.5 || wz > 1.0) continue;
-      final worldPt = vm.Vector3(tn.position.x, tn.position.y, wz);
+      final rowX = tn.position.x < 0 ? -1.74 : 1.74;
+      final worldPt = vm.Vector3(rowX, 2.65, wz);
       final proj = _projectPoint(worldPt, viewMatrix, f, aspect, halfW, halfH);
       if (proj == null) continue;
       final scale = (8.0 / proj.z).clamp(0.55, 1.35);
@@ -442,7 +459,7 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
         text: TextSpan(
           text: tn.text,
           style: TextStyle(
-            fontSize: 11.0 * scale,
+            fontSize: 11.5 * scale,
             fontWeight: FontWeight.w800,
             color: DesignSystem.basicGray,
           ),
@@ -457,9 +474,9 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
       tp.paint(canvas, Offset(dx, proj.y - tp.height * 0.5));
     }
 
-    // 2. Draw Station Direction Text along left side ("← Surabaya     Gambir →")
+    // 2. Draw Bold Station Direction Text on the same y = 2.65 plane at x = -2.16 (parallel ray outside row numbers -> ZERO overlap!)
     final dirStart = _projectPoint(
-      vm.Vector3(-2.35, 1.2, -7.8),
+      vm.Vector3(-2.16, 2.65, -3.8),
       viewMatrix,
       f,
       aspect,
@@ -467,7 +484,7 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
       halfH,
     );
     final dirEnd = _projectPoint(
-      vm.Vector3(-2.35, 1.2, -13.5),
+      vm.Vector3(-2.16, 2.65, -8.2),
       viewMatrix,
       f,
       aspect,
@@ -484,7 +501,7 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
           text: '← $toStation     $fromStation →',
           style: const TextStyle(
             fontSize: 13.5,
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w700,
             color: DesignSystem.basicGray,
             letterSpacing: 0.3,
           ),
@@ -505,9 +522,12 @@ class _SeatMapLabelsOverlayPainter extends CustomPainter {
 }
 
 // ============================================================================
-// 2. SummaryPreview3DView — Powered by interactive_3d (.glb from Web!)
+// 2. SummaryPreview3DView — Exact port of SummaryPreviewView.swift:
+//    - Plays 2-stage entrance spin + scale pop animation (0.1 -> 1.066 -> 1.0)
+//    - Horizontal-only drag rotation (locked pitch)
+//    - Smooth spring snap-back to yaw = 0 when finger is released!
 // ============================================================================
-class SummaryPreview3DView extends StatelessWidget {
+class SummaryPreview3DView extends StatefulWidget {
   final String seatClassType;
 
   const SummaryPreview3DView({
@@ -515,8 +535,74 @@ class SummaryPreview3DView extends StatelessWidget {
     required this.seatClassType,
   });
 
+  @override
+  State<SummaryPreview3DView> createState() => _SummaryPreview3DViewState();
+}
+
+class _SummaryPreview3DViewState extends State<SummaryPreview3DView>
+    with TickerProviderStateMixin {
+  final Interactive3dController _controller = Interactive3dController();
+  late AnimationController _entranceCtrl;
+  late AnimationController _snapBackCtrl;
+  double _dragYaw = 0.0;
+  double _snapStartYaw = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _entranceCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 760),
+    )..addListener(_syncPreviewCamera);
+
+    _snapBackCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 280),
+    )..addListener(() {
+        final t = Curves.easeOutCubic.transform(_snapBackCtrl.value);
+        _dragYaw = _snapStartYaw * (1.0 - t);
+        _syncPreviewCamera();
+      });
+  }
+
+  @override
+  void didUpdateWidget(covariant SummaryPreview3DView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.seatClassType != widget.seatClassType) {
+      _dragYaw = 0.0;
+      _snapBackCtrl.stop();
+      _entranceCtrl.forward(from: 0.0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _entranceCtrl.dispose();
+    _snapBackCtrl.dispose();
+    super.dispose();
+  }
+
+  void _syncPreviewCamera() {
+    if (_isFlutterTest) return;
+    final t = _entranceCtrl.value;
+    double scale;
+    double entranceYaw;
+    if (t < 0.68) {
+      final p = Curves.easeOutCubic.transform((t / 0.68).clamp(0.0, 1.0));
+      scale = 0.1 + (1.066 - 0.1) * p;
+      entranceYaw =
+          math.pi * 1.5 + (-0.066 * math.pi - math.pi * 1.5) * p;
+    } else {
+      final p =
+          Curves.easeInOut.transform(((t - 0.68) / 0.32).clamp(0.0, 1.0));
+      scale = 1.066 + (1.0 - 1.066) * p;
+      entranceYaw = -0.066 * math.pi * (1.0 - p);
+    }
+    _controller.setPreviewPose(entranceYaw + _dragYaw, scale);
+  }
+
   String get _glbAssetPath {
-    switch (seatClassType) {
+    switch (widget.seatClassType) {
       case 'granClass':
       case 'eksekutifDualTone':
       case 'green':
@@ -524,7 +610,7 @@ class SummaryPreview3DView extends StatelessWidget {
       case 'ekonomiPremium':
       case 'ekonomiTosca':
       case 'ordinary':
-        return 'assets/models/seat_$seatClassType.glb';
+        return 'assets/models/seat_${widget.seatClassType}.glb';
       default:
         return 'assets/models/seat_granClass.glb';
     }
@@ -543,15 +629,66 @@ class SummaryPreview3DView extends StatelessWidget {
       return ColoredBox(color: bgCol);
     }
 
-    return Interactive3d(
-      key: ValueKey(_glbAssetPath),
-      modelPath: _glbAssetPath,
-      defaultZoom: 1.55,
-      backgroundColor: bgCol,
-      solidBackgroundColor: bgRgba,
-      unselectableEntities: [
-        'seat_$seatClassType',
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxDim = math.max(constraints.maxWidth, constraints.maxHeight);
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onHorizontalDragStart: (_) {
+            _snapBackCtrl.stop();
+          },
+          onHorizontalDragUpdate: (details) {
+            _dragYaw += (details.delta.dx / maxDim) * (math.pi * 0.65);
+            _syncPreviewCamera();
+          },
+          onHorizontalDragEnd: (_) {
+            _snapStartYaw = _dragYaw;
+            final durMs =
+                ((_dragYaw.abs() / math.pi) * 520.0).round().clamp(160, 440);
+            _snapBackCtrl.duration = Duration(milliseconds: durMs);
+            _snapBackCtrl.forward(from: 0.0);
+          },
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Interactive3d(
+                key: ValueKey(_glbAssetPath),
+                controller: _controller,
+                modelPath: _glbAssetPath,
+                previewSnapMode: true,
+                backgroundColor: bgCol,
+                solidBackgroundColor: bgRgba,
+                unselectableEntities: [
+                  'seat_${widget.seatClassType}',
+                ],
+                onModelLoaded: () {
+                  _entranceCtrl.forward(from: 0.0);
+                },
+              ),
+              // Subtle ground contact shadow beneath the 3D seat
+              IgnorePointer(
+                child: Align(
+                  alignment: const Alignment(0.0, 0.62),
+                  child: Container(
+                    width: constraints.maxWidth * 0.46,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                       gradient: RadialGradient(
+                        colors: [
+                          Colors.black.withValues(alpha: 0.16),
+                          Colors.black.withValues(alpha: 0.05),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -616,7 +753,7 @@ class DesignSystem3DAssetView extends StatelessWidget {
               ? ['seat_$_seatClassKey']
               : null,
       selectionColor: stateName == 'selected'
-          ? const [0.118, 0.620, 0.322, 1.0]
+          ? const [0.14, 0.72, 0.38, 1.0]
           : const [0.36, 0.13, 0.19, 1.0],
     );
   }
